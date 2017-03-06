@@ -7,7 +7,9 @@ LETTER = [a-zA-Z]
 NONZERO_DIGIT = [1-9]
 DIGIT = "0"|{NONZERO_DIGIT}
 NUMCONST = "#"{DIGIT}+
-
+REALCONST = "#"{DIGIT}{"\."}{DIGIT}+
+CHARCONST = {LETTER}+
+BOOLCONST = (true)|(false)
 
 /* Main & Program Keywords */
 PROGRAM_KW = (program)
@@ -29,6 +31,8 @@ DO_KW = (do)
 WHILE_KW = (while)
 SWITCH_KW = (switch)
 CASE_KW = (case)
+END_KW = (end)
+WHEN_KW = (when)
 
 /* Utility Keywords */
 FOR_KW = (for)
@@ -37,7 +41,10 @@ EXIT_KW = (exit)
 UPTO_KW = (upto)
 DOWNTO_KW = (downto)
 
-
+/* Logical Operations Keywords */
+AND_KW = (and)
+OR_KW = (or)
+NOT_KW = (not)
 
 
 %%
