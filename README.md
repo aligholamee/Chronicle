@@ -17,3 +17,10 @@ We can use any programming language to write our grammer code and pass it to tha
 
 ##OK! LETS GET TO CODE :D
 The very first code we'll work on is PH1_Lexical_Analyzer which it's name stands for "Phase 1 - Lexical Analyzer". This code will consist of three parts, or it's better to say that the JFlex which is reading our .lex code (written in java language) will look for these three parts and they must exist! Each of these parts are separated from each other by "%%" (Double Percentage Sign). The first part is the "User Code" part which we'll discuss later. The second part is the declaration of our grammer and the third part is the rules for the grammer we have written and shows "What is being done" by each expression.
+
+##Notes to Consider
+In the first phase, the only job we need to get done is specifying *KEYWORDS* and *TOKENS* and define some rules to do something if any of these keywords or tokens are met. Specification of these keywords and tokens is in the *DECLARATION* entry and the rules are in the *RULES* entry.
+Example:
+		ID = [a-zA-Z]+
+		
+The above code will create the ID token.
