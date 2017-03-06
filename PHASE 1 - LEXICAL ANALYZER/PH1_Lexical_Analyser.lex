@@ -2,6 +2,8 @@
 
 %%
 /* Declaration Section */
+/* Identifier */
+ID = {LETTER}+
 /* Tokens */
 LETTER = [a-zA-Z]
 NONZERO_DIGIT = [1-9]
@@ -10,6 +12,7 @@ NUMCONST = "#"{DIGIT}+
 REALCONST = "#"{DIGIT}+({"\."}{DIGIT})?
 CHARCONST = {LETTER}+
 BOOLCONST = (true)|(false)
+
 
 /* Main & Program Keywords */
 PROGRAM_KW = (program)
@@ -210,6 +213,9 @@ MOD_KW = [%]
 }
 {MOD_KW} {
 	System.out.println(yytext() + "\t" + "MOD_KW\t" + '-');
+}
+{ID} {
+	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry");
 }
 
 
