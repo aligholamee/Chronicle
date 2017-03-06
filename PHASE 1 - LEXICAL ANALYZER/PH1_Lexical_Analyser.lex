@@ -1,6 +1,9 @@
 
 
 %%
+LETTER = [a-zA-Z]
+NONZERO_DIGIT = [1-9]
+DIGIT = "0"|{NONZERO_DIGIT}
 
 
 
