@@ -58,4 +58,19 @@ OPENPARENTHESIS_KW = [(]
 CLOSEPARENTHESIS_KW = [)]
 COMMA_KW = [,]
 
+/* Relational Operators */
+LT_KW = [<]
+GT_KW = [>]
+EQ_KW = [=]
+NEQ_KW = (<>)
+GTE_KW = (>=)
+LTE_KW = (<=)
+
+/* Arithmetic Operators */
+ADD_KW = [+]
+DIF_KW = [-]
+MUL_KW = [*]
+DIV_KW = [/]
+MOD_KW = [%]
+
 %%
