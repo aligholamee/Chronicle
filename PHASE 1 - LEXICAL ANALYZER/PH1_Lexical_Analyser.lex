@@ -23,7 +23,7 @@ ELSE_KW = (else)
 
 DO_KW = (do)
 WHILE_KW = (while)
-SWITCG_KW = (switch)
+SWITCH_KW = (switch)
 
 
 
