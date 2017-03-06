@@ -46,5 +46,16 @@ AND_KW = (and)
 OR_KW = (or)
 NOT_KW = (not)
 
+/* Separator Keywords */
+SEMICOLON_KW = [;]
+COLON_KW = [:]
+ASSIGN_KW = (:=)
+OPENBRACKET_KW = "["
+CLOSEBRACKET_KW = "]"
+OPENACCOLADE_KW = [{]
+CLOSEACCOLADE_KW = [}]
+OPENPARENTHESIS_KW = [(]
+CLOSEPARENTHESIS_KW = [)]
+COMMA_KW = [,]
 
 %%
