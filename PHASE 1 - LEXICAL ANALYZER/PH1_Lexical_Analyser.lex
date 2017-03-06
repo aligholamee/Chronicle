@@ -1,13 +1,13 @@
 
 
 %%
-
+/* Declaration Section */
 /* Tokens */
 LETTER = [a-zA-Z]
 NONZERO_DIGIT = [1-9]
 DIGIT = "0"|{NONZERO_DIGIT}
 NUMCONST = "#"{DIGIT}+
-REALCONST = "#"{DIGIT}{"\."}{DIGIT}+
+REALCONST = "#"{DIGIT}+({"\."}{DIGIT})?
 CHARCONST = {LETTER}+
 BOOLCONST = (true)|(false)
 
@@ -74,3 +74,6 @@ DIV_KW = [/]
 MOD_KW = [%]
 
 %%
+/* Rules Section */
+
+
