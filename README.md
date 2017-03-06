@@ -8,3 +8,7 @@ In this project, I'll show you how to build a new programming language with any 
 
 ##Starting Point
 In this section I'll provide a quick tutorial on how a grammer is written and how everything goes together to build a compiler.
+
+##How a compiler works?
+The procedure that takes place in order to build a executable file from a written program in an specific programming language is provided here:
+![alt tag](http://uupload.ir/files/8oi6_target.png)
