@@ -1,4 +1,7 @@
-
+class userCode 
+{
+	
+}
 
 %%
 /* Declaration Section */
