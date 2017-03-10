@@ -9,6 +9,13 @@ class userCode
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+        System.out.println("Lexeme\tToken\tAttribute");
+        Yylex yylex = new Yylex(fr);
+        try {
+            yylex.yylex();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 }
 
