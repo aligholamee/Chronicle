@@ -119,17 +119,17 @@ DOT_KW = "/."
 
 /* Arithmetic Operators */
 ADD_KW = [+]
-DIF_KW = [-]
+SUB_KW = [-]
 MUL_KW = [*]
 DIV_KW = [/]
 MOD_KW = [%]
 
-NUMCONST = "#"{DIGIT}+
-BOOLCONST = (true)|(false)
-REALCONST = "#"{DIGIT}+({DOT_KW}{DIGIT})?
-CHARCONST = {LETTER}+
-ID = {LETTER}+
 
+BOOLCONST = (true)|(false)
+CHARCONST = {LETTER}+
+REALCONST = "#"{DIGIT}+({DOT_KW}{DIGIT})?
+NUMCONST = "#"{DIGIT}+
+ID = {LETTER}({LETTER})*
 %%
 /* Rules Section */
 
@@ -229,6 +229,10 @@ ID = {LETTER}+
 	System.out.println(yytext() + "\t" + "COLON_KW\t" + '-');
 }
 
+{COMMA_KW} {
+	System.out.println(yytext() + "\t" + "COMMA_KW\t" + '-');
+}
+
 {UPTO_KW} {
 	System.out.println(yytext() + "\t" + "UPTO_KW\t" + '-');
 }
@@ -237,9 +241,16 @@ ID = {LETTER}+
 	System.out.println(yytext() + "\t" + "DOWNTO_KW\t" + '-');
 }
 
-
 {ASSIGN_KW} {
 	System.out.println(yytext() + "\t" + "ASSIGN_KW\t" + '-');
+}
+
+{OPENPARENTHESIS_KW} {
+	System.out.println(yytext() + "\t" + "OPENPARENTHESIS_KW\t" + '-');
+}
+
+{CLOSEPARENTHESIS_KW} {
+	System.out.println(yytext() + "\t" + "CLOSEPARENTHESIS_KW\t" + '-');
 }
 
 {OPENBRACKET_KW} {
@@ -258,16 +269,8 @@ ID = {LETTER}+
 	System.out.println(yytext() + "\t" + "CLOSEACCOLADE_KW\t" + '-');
 }
 
-{OPENPARENTHESIS_KW} {
-	System.out.println(yytext() + "\t" + "OPENPARENTHESIS_KW\t" + '-');
-}
-
-{CLOSEPARENTHESIS_KW} {
-	System.out.println(yytext() + "\t" + "CLOSEPARENTHESIS_KW\t" + '-');
-}
-
-{COMMA_KW} {
-	System.out.println(yytext() + "\t" + "COMMA_KW\t" + '-');
+{DOT_KW} {
+	System.out.println(yytext() + "\t" + "DOT_KW\t" + '-');
 }
 
 {LT_KW} {
@@ -298,8 +301,8 @@ ID = {LETTER}+
 	System.out.println(yytext() + "\t" + "ADD_KW\t" + '-');
 }
 
-{DIF_KW} {
-	System.out.println(yytext() + "\t" + "DIF_KW\t" + '-');
+{SUB_KW} {
+	System.out.println(yytext() + "\t" + "SUB_KW\t" + '-');
 }
 {MUL_KW} {
 	System.out.println(yytext() + "\t" + "MUL_KW\t" + '-');
@@ -313,27 +316,28 @@ ID = {LETTER}+
 	System.out.println(yytext() + "\t" + "MOD_KW\t" + '-');
 }
 
-{DOT_KW} {
-	System.out.println(yytext() + "\t" + "DOT_KW\t" + '-');
-}
-
-{NUMCONST} {
-	System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
-}
-
 {BOOLCONST} {
 	System.out.println(yytext() + "\t" + "BOOLCONST\t" + '-');
-}
-
-{REALCONST} {
-	System.out.println(yytext() + "\t" + "REALCONST\t" + '-');
 }
 
 {CHARCONST} {
 	System.out.println(yytext() + "\t" + "CHARCONST\t" + '-');
 }
 
+{REALCONST} {
+	System.out.println(yytext() + "\t" + "REALCONST\t" + '-');
+}
+
+{NUMCONST} {
+	System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
+}
+
 {ID} {
 	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry" + install_id(yytext()));
 }
 
+"\s"|"\n"|"\r"|"\t" {
+}
+
+. {
+}
