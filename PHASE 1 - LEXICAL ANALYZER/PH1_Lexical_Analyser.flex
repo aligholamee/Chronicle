@@ -83,6 +83,7 @@ DO_KW = (do)
 WHILE_KW = (while)
 SWITCH_KW = (switch)
 CASE_KW = (case)
+DEFAULT_KW = (default)
 END_KW = (end)
 WHEN_KW = (when)
 
@@ -195,6 +196,10 @@ ID = {LETTER}({LETTER})*
 
 {CASE_KW} {
 	System.out.println(yytext() + "\t" + "CASE_KW\t" + '-');
+}
+
+{DEFAULT_KW} {
+	System.out.println(yytext() + "\t" + "DEFAULT_KW\t" + '-');
 }
 
 {END_KW} {
