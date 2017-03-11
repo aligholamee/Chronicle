@@ -3,25 +3,31 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.*;
 
-class userCode 
+int symbol_table_size = 100;
+public string [] symbol_table = new string[symbol_table_size];
+int entry_position = 0;
+boolean exists = false;
+
+public int install_id(String string)
 {
-	public static void main(String args[])
+	int ret_index;
+	for(int i=0; i<symbol_table_size; i++)
 	{
-		FileReader fr = null;
-        String input = ".\\files\\Code.shl";
-        try {
-            fr = new FileReader(input);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Lexeme\tToken\tAttribute");
-        Yylex yylex = new Yylex(fr);
-        try {
-            yylex.yylex();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+		if(symbol_table[i] == string)
+		{
+			ret_index = i;
+			exists = true;
+			return ret_index;
+		}
 	}
+
+	if(!exists)
+	{
+		symbol_table[entry_position] = string;
+		entry_position++;
+	}
+
+	return entry_position;
 }
 
 %%
@@ -239,7 +245,7 @@ MOD_KW = [%]
 	System.out.println(yytext() + "\t" + "MOD_KW\t" + '-');
 }
 {ID} {
-	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry");
+	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry" + install_id(yytext()));
 }
 
 
