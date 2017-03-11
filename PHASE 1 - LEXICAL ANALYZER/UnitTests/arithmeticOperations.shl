@@ -1,10 +1,27 @@
-program arthmeticOperations main
-		int int_t1;
-		int int_t2;
-		real real_r1;
-		real real_r2;
-		char char_r1;
-		char char_r2;
-		bool bool_b1;
-		bool bool_b2;
+program arthmeticOperations
+		int firstInt;
+		int secondInt;
+		int resultInt;
+
+		real firstReal;
+		real secondReal;
+		real resultReal;
+
+		char firstChar;
+		char secondChar;
+		char resultChar;
+
+		int thirdInt:=10,fourthInt:=15;
+		int secondResultInt;
+
+		real third_real:=10.000,fourth_real:=000.15;
+		real secondResultReal;
+
+		char third_char:='a',fourth_char='b';
+		char secondResultReal;
+
+		main {
+			
+		}
+
 
