@@ -339,3 +339,9 @@ ID = {LETTER}({LETTER})*
 {ID} {
 	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry" + install_id(yytext()));
 }
+
+"\s"|"\n"|"\r"|"\t" {
+}
+
+. {
+}
