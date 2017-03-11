@@ -1,0 +1,10 @@
+program arthmeticOperations main
+		int int_t1;
+		int int_t2;
+		real real_r1;
+		real real_r2;
+		char char_r1;
+		char char_r2;
+		bool bool_b1;
+		bool bool_b2;
+
