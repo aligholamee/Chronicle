@@ -125,9 +125,9 @@ DIV_KW = [/]
 MOD_KW = [%]
 
 NUMCONST = "#"{DIGIT}+
+BOOLCONST = (true)|(false)
 REALCONST = "#"{DIGIT}+({DOT_KW}{DIGIT})?
 CHARCONST = {LETTER}+
-BOOLCONST = (true)|(false)
 ID = {LETTER}+
 
 %%
@@ -229,10 +229,6 @@ ID = {LETTER}+
 	System.out.println(yytext() + "\t" + "COLON_KW\t" + '-');
 }
 
-{NUMCONST} {
-	System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
-}
-
 {UPTO_KW} {
 	System.out.println(yytext() + "\t" + "UPTO_KW\t" + '-');
 }
@@ -319,6 +315,10 @@ ID = {LETTER}+
 
 {DOT_KW} {
 	System.out.println(yytext() + "\t" + "DOT_KW\t" + '-');
+}
+
+{NUMCONST} {
+	System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
 }
 
 {BOOLCONST} {
