@@ -10,6 +10,25 @@ public string [] symbol_table = new string[symbol_table_size];
 int entry_position = 0;
 boolean exists = false;
 
+public static void main(String args[])
+{
+		FileReader fr = null;
+        String input = ".\\files\\Code.shl";
+        try {
+            fr = new FileReader(input);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Lexeme\tToken\tAttribute");
+        Yylex yylex = new Yylex(fr);
+        try {
+            yylex.yylex();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+}
+
 public int install_id(String string)
 {
 	int ret_index;

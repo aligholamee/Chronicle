@@ -8,6 +8,25 @@ public string [] symbol_table = new string[symbol_table_size];
 int entry_position = 0;
 boolean exists = false;
 
+public static void main(String args[])
+{
+		FileReader fr = null;
+        String input = ".\\files\\Code.shl";
+        try {
+            fr = new FileReader(input);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Lexeme\tToken\tAttribute");
+        Yylex yylex = new Yylex(fr);
+        try {
+            yylex.yylex();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+	}
+}
+
 public int install_id(String string)
 {
 	int ret_index;
@@ -111,6 +130,27 @@ DOT_KW = "/."
 
 %%
 /* Rules Section */
+{LETTER} {
+	System.out.println(yytext() + "\t" + "LETTER\t" + '-');
+}
+{NONZERO_DIGIT} {
+	System.out.println(yytext() + "\t" + "NONZERO_DIGIT\t" + '-');
+}
+{DIGIT} {
+	System.out.println(yytext() + "\t" + "DIGIT\t" + '-');
+}
+{NUMCONST} {
+	System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
+}
+{REALCONST} {
+	System.out.println(yytext() + "\t" + "REALCONST\t" + '-');
+}
+{CHARCONST} {
+	System.out.println(yytext() + "\t" + "CHARCONST\t" + '-');
+}
+{BOOLCONST} {
+	System.out.println(yytext() + "\t" + "BOOLCONST\t" + '-');
+}
 
 {PROGRAM_KW} {
 	System.out.println(yytext() + "\t" + "PROGRAM_KW\t" + '-');
@@ -247,6 +287,7 @@ DOT_KW = "/."
 {MOD_KW} {
 	System.out.println(yytext() + "\t" + "MOD_KW\t" + '-');
 }
+
 {DOT_KW} {
 	System.out.println(yytext() + "\t" + "DOT_KW\t" + '-');
 }
