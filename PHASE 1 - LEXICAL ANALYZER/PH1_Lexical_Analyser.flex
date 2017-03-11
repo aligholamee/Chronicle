@@ -3,52 +3,56 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.*;
 
-int symbol_table_size = 100;
-public string [] symbol_table = new string[symbol_table_size];
-int entry_position = 0;
-boolean exists = false;
 
-public static void main(String args[])
-{
-		FileReader fr = null;
-        String input = ".\\files\\Code.shl";
-        try {
-            fr = new FileReader(input);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println("Lexeme\tToken\tAttribute");
-        Yylex yylex = new Yylex(fr);
-        try {
-            yylex.yylex();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-	}
-}
 
-public int install_id(String string)
+class class_main
 {
-	int ret_index;
-	for(int i=0; i<symbol_table_size; i++)
+	int symbol_table_size = 100;
+	public String [] symbol_table = new String[symbol_table_size];
+	int entry_position = 0;
+	boolean exists = false;
+
+	public static void main(String args[])
 	{
-		if(symbol_table[i] == string)
+			FileReader fr = null;
+	        String input = ".\\files\\Code.shl";
+	        try {
+	            fr = new FileReader(input);
+	        } catch (FileNotFoundException e) {
+	            e.printStackTrace();
+	        }
+	        System.out.println("Lexeme\tToken\tAttribute");
+	        Yylex yylex = new Yylex(fr);
+	        try {
+	            yylex.yylex();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
+	}
+
+
+	public int install_id(String string)
+	{
+		int ret_index;
+		for(int i=0; i<symbol_table_size; i++)
 		{
-			ret_index = i;
-			exists = true;
-			return ret_index;
+			if(symbol_table[i] == string)
+			{
+				ret_index = i;
+				exists = true;
+				return ret_index;
+			}
 		}
-	}
 
-	if(!exists)
-	{
-		symbol_table[entry_position] = string;
-		entry_position++;
-	}
+		if(!exists)
+		{
+			symbol_table[entry_position] = string;
+			entry_position++;
+		}
 
-	return entry_position;
+		return entry_position;
+	}
 }
-
 %%
 /* Declaration Section */
 /* Identifier */
