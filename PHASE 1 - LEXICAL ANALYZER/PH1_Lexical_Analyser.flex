@@ -39,7 +39,7 @@ LETTER = [a-zA-Z]
 NONZERO_DIGIT = [1-9]
 DIGIT = "0"|{NONZERO_DIGIT}
 NUMCONST = "#"{DIGIT}+
-REALCONST = "#"{DIGIT}+({"\."}{DIGIT})?
+REALCONST = "#"{DIGIT}+({DOT_KW}{DIGIT})?
 CHARCONST = {LETTER}+
 BOOLCONST = (true)|(false)
 
@@ -105,6 +105,9 @@ DIF_KW = [-]
 MUL_KW = [*]
 DIV_KW = [/]
 MOD_KW = [%]
+
+/* Other Keywords */
+DOT_KW = "/."
 
 %%
 /* Rules Section */
@@ -243,6 +246,9 @@ MOD_KW = [%]
 }
 {MOD_KW} {
 	System.out.println(yytext() + "\t" + "MOD_KW\t" + '-');
+}
+{DOT_KW} {
+	System.out.println(yytext() + "\t" + "DOT_KW\t" + '-');
 }
 {ID} {
 	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry" + install_id(yytext()));
