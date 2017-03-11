@@ -1,0 +1,58 @@
+program globalTest
+
+	int iONE := 10;
+	int iTWO := 20;
+
+	real rONE := 00.10;
+	real rTWO := 00.20;
+
+	char cONE := 'A';
+	char cTWO := 'B';
+
+	bool boooo := false;
+	bool foooo := true;
+
+procedure foo {
+	
+	int numConst := /(+(*(iTWO,iONE),iONE),iTWO);
+	switch numConst {
+		case 10: boooo := true;
+		case 20: foooo := false;
+		case 30: iONE := *(iONE,iONE);
+		case 40: iTWO := *(iTWO,iTWO);
+		case 50: if =(boooo,true) then foooo := true;
+		case 60: if =(boooo,false) then foooo := false else foooo := true;
+		default: boooo := false;
+	}
+}
+
+main {
+
+	int iADDRESULT;
+	iADDRESULT := +(iONE,iTWO);
+	int iSUBRESULT := -(iTWO,iONE);
+	int iMULRESULT;
+	iMULRESULT := *(iTWO,iONE);
+	int iDIVRESULT := /(iTWO,iONE);
+	int iMODRESULT := %(iTWO,iONE);
+
+
+	real rADDRESULT;
+	rADDRESULT := +(rONE,rTWO);
+	real rSUBRESULT := -(rTWO,rONE);
+	real rMULRESULT;
+	rMULRESULT := *(rTWO,rONE);
+	real rDIVRESULT := /(rTWO,rONE);
+	real rMODRESULT := %(rTWO,rONE);
+
+	
+	int iFINALRESULT;
+	do
+		for CNT := 1 upto 10 do 
+		iFINALRESULT := +(+(+(+(iMODRESULT,iDIVRESULT),iMULRESULT),iSUBRESULT),iADDRESULT);
+		foooo = false;
+	while and(<>(foooo,false),<=(CNT,10))
+
+	exit when >(iMODRESULT,iDIVRESULT);
+
+}
