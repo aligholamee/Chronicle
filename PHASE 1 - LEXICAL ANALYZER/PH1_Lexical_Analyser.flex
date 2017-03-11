@@ -52,15 +52,11 @@ public int install_id(String string)
 %%
 /* Declaration Section */
 /* Identifier */
-ID = {LETTER}+
+%byaccj
 /* Tokens */
 LETTER = [a-zA-Z]
 NONZERO_DIGIT = [1-9]
 DIGIT = "0"|{NONZERO_DIGIT}
-NUMCONST = "#"{DIGIT}+
-REALCONST = "#"{DIGIT}+({DOT_KW}{DIGIT})?
-CHARCONST = {LETTER}+
-BOOLCONST = (true)|(false)
 
 
 /* Main & Program Keywords */
@@ -118,6 +114,9 @@ NEQ_KW = (<>)
 GTE_KW = (>=)
 LTE_KW = (<=)
 
+/* Other Keywords */
+DOT_KW = "/."
+
 /* Arithmetic Operators */
 ADD_KW = [+]
 DIF_KW = [-]
@@ -125,38 +124,14 @@ MUL_KW = [*]
 DIV_KW = [/]
 MOD_KW = [%]
 
-/* Other Keywords */
-DOT_KW = "/."
+NUMCONST = "#"{DIGIT}+
+REALCONST = "#"{DIGIT}+({DOT_KW}{DIGIT})?
+CHARCONST = {LETTER}+
+BOOLCONST = (true)|(false)
+ID = {LETTER}+
 
 %%
 /* Rules Section */
-{LETTER} {
-	System.out.println(yytext() + "\t" + "LETTER\t" + '-');
-}
-
-{NONZERO_DIGIT} {
-	System.out.println(yytext() + "\t" + "NONZERO_DIGIT\t" + '-');
-}
-
-{DIGIT} {
-	System.out.println(yytext() + "\t" + "DIGIT\t" + '-');
-}
-
-{NUMCONST} {
-	System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
-}
-
-{REALCONST} {
-	System.out.println(yytext() + "\t" + "REALCONST\t" + '-');
-}
-
-{CHARCONST} {
-	System.out.println(yytext() + "\t" + "CHARCONST\t" + '-');
-}
-
-{BOOLCONST} {
-	System.out.println(yytext() + "\t" + "BOOLCONST\t" + '-');
-}
 
 {PROGRAM_KW} {
 	System.out.println(yytext() + "\t" + "PROGRAM_KW\t" + '-');
@@ -165,6 +140,11 @@ DOT_KW = "/."
 {MAIN_KW} {
 	System.out.println(yytext() + "\t" + "MAIN_KW\t" + '-');
 }
+
+{PROCEDURE_KW} {
+	System.out.println(yytext() + "\t" + "PROCEDURE_KW\t" + '-');
+}
+
 {INTEGER_KW} {
 	System.out.println(yytext() + "\t" + "INTEGER_KW\t" + '-');
 }
@@ -179,10 +159,6 @@ DOT_KW = "/."
 
 {BOOLEAN_KW} {
 	System.out.println(yytext() + "\t" + "BOOLEAN_KW\t" + '-');
-}
-
-{PROCEDURE_KW} {
-	System.out.println(yytext() + "\t" + "PROCEDURE_KW\t" + '-');
 }
 
 {IF_KW} {
@@ -205,6 +181,10 @@ DOT_KW = "/."
 	System.out.println(yytext() + "\t" + "WHILE_KW\t" + '-');
 }
 
+{FOR_KW} {
+	System.out.println(yytext() + "\t" + "FOR_KW\t" + '-');
+}
+
 {SWITCH_KW} {
 	System.out.println(yytext() + "\t" + "SWITCH_KW\t" + '-');
 }
@@ -217,14 +197,6 @@ DOT_KW = "/."
 	System.out.println(yytext() + "\t" + "END_KW\t" + '-');
 }
 
-{WHEN_KW} {
-	System.out.println(yytext() + "\t" + "WHEN_KW\t" + '-');
-}
-
-{FOR_KW} {
-	System.out.println(yytext() + "\t" + "FOR_KW\t" + '-');
-}
-
 {RETURN_KW} {
 	System.out.println(yytext() + "\t" + "RETURN_KW\t" + '-');
 }
@@ -233,12 +205,8 @@ DOT_KW = "/."
 	System.out.println(yytext() + "\t" + "EXIT_KW\t" + '-');
 }
 
-{UPTO_KW} {
-	System.out.println(yytext() + "\t" + "UPTO_KW\t" + '-');
-}
-
-{DOWNTO_KW} {
-	System.out.println(yytext() + "\t" + "DOWNTO_KW\t" + '-');
+{WHEN_KW} {
+	System.out.println(yytext() + "\t" + "WHEN_KW\t" + '-');
 }
 
 {AND_KW} {
@@ -260,6 +228,19 @@ DOT_KW = "/."
 {COLON_KW} {
 	System.out.println(yytext() + "\t" + "COLON_KW\t" + '-');
 }
+
+{NUMCONST} {
+	System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
+}
+
+{UPTO_KW} {
+	System.out.println(yytext() + "\t" + "UPTO_KW\t" + '-');
+}
+
+{DOWNTO_KW} {
+	System.out.println(yytext() + "\t" + "DOWNTO_KW\t" + '-');
+}
+
 
 {ASSIGN_KW} {
 	System.out.println(yytext() + "\t" + "ASSIGN_KW\t" + '-');
@@ -340,8 +321,19 @@ DOT_KW = "/."
 	System.out.println(yytext() + "\t" + "DOT_KW\t" + '-');
 }
 
+{BOOLCONST} {
+	System.out.println(yytext() + "\t" + "BOOLCONST\t" + '-');
+}
+
+{REALCONST} {
+	System.out.println(yytext() + "\t" + "REALCONST\t" + '-');
+}
+
+{CHARCONST} {
+	System.out.println(yytext() + "\t" + "CHARCONST\t" + '-');
+}
+
 {ID} {
 	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry" + install_id(yytext()));
 }
-
 
