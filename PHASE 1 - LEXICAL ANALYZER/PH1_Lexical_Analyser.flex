@@ -15,7 +15,7 @@ class class_main
 	public static void main(String args[])
 	{
 			FileReader fr = null;
-	        String input = ".\\files\\Code.shl";
+	        String input = "C:\Users\Ali Gholami\Desktop\globalTest2.shl";
 	        try {
 	            fr = new FileReader(input);
 	        } catch (FileNotFoundException e) {
@@ -121,6 +121,7 @@ LTE_KW = (<=)
 
 /* Other Keywords */
 DOT_KW = "/."
+SINGLE_QUOTE_KW = "\u0027"
 
 /* Arithmetic Operators */
 ADD_KW = [+]
@@ -131,10 +132,10 @@ MOD_KW = [%]
 
 
 BOOLCONST = (true)|(false)
-CHARCONST = {LETTER}+
+CHARCONST = {SINGLE_QUOTE_KW} ({LETTER} | {DIGIT}) {SINGLE_QUOTE_KW}
 REALCONST = "#"{DIGIT}+({DOT_KW}{DIGIT})?
 NUMCONST = "#"{DIGIT}+
-ID = {LETTER}({LETTER})*
+ID = {LETTER}+
 %%
 /* Rules Section */
 
@@ -242,6 +243,9 @@ ID = {LETTER}({LETTER})*
 	System.out.println(yytext() + "\t" + "COMMA_KW\t" + '-');
 }
 
+{SINGLE_QUOTE_KW} {
+	System.out.println(yytext() + "\t" + "SINGLE_QUOTE_KW\t" + '-');
+}
 {UPTO_KW} {
 	System.out.println(yytext() + "\t" + "UPTO_KW\t" + '-');
 }
