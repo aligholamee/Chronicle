@@ -1,58 +1,42 @@
-program globalTest
+program globaltest 
+		int a;
+		int b:=#3;
+		real f;
+		real k:=#00.4;
+		real l:=#4.00;
+		char c:='w';
+		char h;
+		bool s;
+		bool g:=true;
+		int array[#2]:={#1,#7};
+		char chars [i..k]:={'c','d','7'};
+		procedure p ( int w , char t){
+			switch w 
+				case #10 :{
+					w:=+(w,w);
+					w:=-(+(*(w,w),w),w);
 
-	int iONE := 10;
-	int iTWO := 20;
-
-	real rONE := 00.10;
-	real rTWO := 00.20;
-
-	char cONE := 'A';
-	char cTWO := 'B';
-
-	bool boooo := false;
-	bool foooo := true;
-
-procedure foo {
-	
-	int numConst := /(+(*(iTWO,iONE),iONE),iTWO);
-	switch numConst {
-		case 10: boooo := true;
-		case 20: foooo := false;
-		case 30: iONE := *(iONE,iONE);
-		case 40: iTWO := *(iTWO,iTWO);
-		case 50: if =(boooo,true) then foooo := true;
-		case 60: if =(boooo,false) then foooo := false else foooo := true;
-		default: boooo := false;
-	}
-}
-
-main {
-
-	int iADDRESULT;
-	iADDRESULT := +(iONE,iTWO);
-	int iSUBRESULT := -(iTWO,iONE);
-	int iMULRESULT;
-	iMULRESULT := *(iTWO,iONE);
-	int iDIVRESULT := /(iTWO,iONE);
-	int iMODRESULT := %(iTWO,iONE);
-
-
-	real rADDRESULT;
-	rADDRESULT := +(rONE,rTWO);
-	real rSUBRESULT := -(rTWO,rONE);
-	real rMULRESULT;
-	rMULRESULT := *(rTWO,rONE);
-	real rDIVRESULT := /(rTWO,rONE);
-	real rMODRESULT := %(rTWO,rONE);
-
-	
-	int iFINALRESULT;
-	do
-		for CNT := 1 upto 10 do 
-		iFINALRESULT := +(+(+(+(iMODRESULT,iDIVRESULT),iMULRESULT),iSUBRESULT),iADDRESULT);
-		foooo = false;
-	while and(<>(foooo,false),<=(CNT,10))
-
-	exit when >(iMODRESULT,iDIVRESULT);
-
-}
+				}
+				case #20:{
+					t:= and (t,t);
+					w:= or(w,w);
+					do
+						for i:=#1 upto #10 do
+							 w:=%(w,#32);
+					while <>(w,#1);
+				}	
+				case #30:{
+					if not =(w,#4) then w:=5; else w:=#9;
+				}
+			default :{
+				if and (t,t) and then or(t,#0)
+					then w:=-w;
+			}
+			end;
+		};
+		main{
+				array [#2] := array [#2] - (char [#2] = 'd');
+				k := and (or else (+(*(#2,k),false),true), array[#1]),#1);
+				return -(l,k);
+				exit when not(>(array[#2],#0));
+		}
