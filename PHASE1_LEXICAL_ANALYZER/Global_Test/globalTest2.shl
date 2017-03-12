@@ -2,14 +2,14 @@ program globaltest
 		int a;
 		int b:=#3;
 		real f;
-		real k:=#00.4;
-		real l:=#4.00;
+		real k:=#0.4;
+		real l:=#3.5000;
 		char c:='w';
 		char h;
 		bool s;
 		bool g:=true;
 		int array[#2]:={#1,#7};
-		char chars [i..k]:={'c','d','7'};
+		char chars [0..2]:={'c','d','7'};
 		procedure p ( int w , char t){
 			switch w 
 				case #10 :{

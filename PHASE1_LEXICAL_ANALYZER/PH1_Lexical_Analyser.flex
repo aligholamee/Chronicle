@@ -15,7 +15,7 @@ class class_main
 	public static void main(String args[])
 	{
 			FileReader fr = null;
-	        String input = "C:\Users\Ali Gholami\Desktop\globalTest2.shl";
+	        String input = "C:\\Users\\Ali Gholami\\Documents\\Amirkabir\\COMPILER\\Chronicle\\PHASE1_LEXICAL_ANALYZER\Global_Test\\globalTest2.shl";
 	        try {
 	            fr = new FileReader(input);
 	        } catch (FileNotFoundException e) {
@@ -97,7 +97,7 @@ GTE_KW = (>=)
 LTE_KW = (<=)
 
 /* Other Keywords */
-DOT_KW = "/."
+DOT_KW = "\."
 SINGLE_QUOTE_KW = "\u0027"
 
 /* Arithmetic Operators */
@@ -106,12 +106,13 @@ SUB_KW = [-]
 MUL_KW = [*]
 DIV_KW = [/]
 MOD_KW = [%]
+SHARP_KW = [#]
 
 
 BOOLCONST = (true)|(false)
 CHARCONST = {SINGLE_QUOTE_KW} ({LETTER} | {DIGIT}) {SINGLE_QUOTE_KW}
-REALCONST = "#"(({DIGIT})|({NONZERO_DIGIT}({DIGIT})*))({DOT_KW})({DIGIT})*{NONZERO_DIGIT}
-NUMCONST = "#"{DIGIT}|{NONZERO_DIGIT}{DIGIT}*
+REALCONST = {SHARP_KW}((({DIGIT})|({NONZERO_DIGIT}({DIGIT})*))({DOT_KW})({DIGIT})*{NONZERO_DIGIT})
+NUMCONST = {SHARP_KW}({DIGIT}|{NONZERO_DIGIT}{DIGIT}*)
 ID = {LETTER}+
 %%
 /* Rules Section */
@@ -304,6 +305,10 @@ ID = {LETTER}+
 
 {MOD_KW} {
 	System.out.println(yytext() + "\t" + "MOD_KW\t" + '-');
+}
+
+{SHARP_KW} {
+	System.out.println(yytext() + "\t" + "SHARP_KW\t" + '-');
 }
 
 {BOOLCONST} {
