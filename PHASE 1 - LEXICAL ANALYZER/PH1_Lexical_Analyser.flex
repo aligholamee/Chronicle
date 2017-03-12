@@ -29,29 +29,6 @@ class class_main
 	            e.printStackTrace();
 	        }
 	}
-
-
-	public int install_id(String string)
-	{
-		int ret_index;
-		for(int i=0; i<symbol_table_size; i++)
-		{
-			if(symbol_table[i] == string)
-			{
-				ret_index = i;
-				exists = true;
-				return ret_index;
-			}
-		}
-
-		if(!exists)
-		{
-			symbol_table[entry_position] = string;
-			entry_position++;
-		}
-
-		return entry_position;
-	}
 }
 %%
 /* Declaration Section */
@@ -346,7 +323,7 @@ ID = {LETTER}+
 }
 
 {ID} {
-	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry" + install_id(yytext()));
+	System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry");
 }
 
 "\s"|"\n"|"\r"|"\t" {
