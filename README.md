@@ -15,7 +15,7 @@ The procedure that takes place in order to build a executable file from a writte
 In the first phase, I'll Implement a Lexical Analyser. Building a lexical analyser which is fully executable can take weeks to complete, so there are some softwares that provide some GUI for us to simply declare the desired grammer for the language we are going to build, and then passing this grammer to that software, and finally the output of that software is that Lexical Analyser. 
 We can use any programming language to write our grammer code and pass it to that software. But the most common programming languages are Java and C. The software which is used for each is JFlex and Flex respectively. You can download Flex or JFlex from the directories above.
 
-## OK! LETS GET TO CODE :D
+## Phase 1 - Lexical Analyzer
 The very first code we'll work on is PH1_Lexical_Analyzer which it's name stands for "Phase 1 - Lexical Analyzer". This code will consist of three parts, or it's better to say that the JFlex which is reading our .lex code (written in java language) will look for these three parts and they must exist! Each of these parts are separated from each other by "%%" (Double Percentage Sign). The first part is the "User Code" part which we'll discuss later. The second part is the declaration of our grammer and the third part is the rules for the grammer we have written and shows "What is being done" by each expression.
 
 ## Notes to Consider
@@ -24,3 +24,5 @@ Example:
 		ID = [a-zA-Z]+
 		
 The above code will create the ID token.
+
+## Phase 2 - Syntax Analyzer
