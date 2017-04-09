@@ -52,4 +52,6 @@ declarations_list:
 	declarations {
 	System.out.println("Rule 2.1: declarations_list -> declarations");
 	}
-	|
+	| declarations_list declarations {
+	System.out.println("Rule 2.2: declarations_list -> declarations_list declarations");
+	}
