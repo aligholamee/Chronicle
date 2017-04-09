@@ -74,3 +74,12 @@ type_specifiers:
 	| BOOLEAN_KW {
 	System.out.println("Rule 4.4: BOOLEAN_KW")
 	}
+
+declarator_list:
+	declarator_list COMMA_KW declarator {
+	System.out.println("Rule 5.1: declarator_list COMMA_KW declarator")
+	}
+	| declarator {
+	System.out.println("Rule 5.2: declarator")
+	}
+	
