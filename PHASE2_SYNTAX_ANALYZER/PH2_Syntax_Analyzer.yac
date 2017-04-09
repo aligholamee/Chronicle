@@ -108,7 +108,16 @@ range:
 	}
 	| NUMCONST DOT_KW NUMCONST {
 	System.out.println("Rule 8.2: range -> NUMCONST DOT_KW NUMCONST");
-	}d
-	arithmetic_expressions DOT_KW arithmetic_expressions {
-	System.out.println("Rule 8.3: range -> arithmetic_expressions DOT_KW arithmetic_expressions")
 	}
+	arithmetic_expressions DOT_KW arithmetic_expressions {
+	System.out.println("Rule 8.3: range -> arithmetic_expressions DOT_KW arithmetic_expressions");
+	}
+
+initializer:
+	constant_expressions {
+	System.out.println("Rule 9.1: initializer -> constant_expressions");
+	}
+	| OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW {
+	System.out.println("Rule 9.2: intitializer -> OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW");
+	}
+
