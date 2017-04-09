@@ -88,6 +88,16 @@ declarator:
 	System.out.println("Rule 6.1: dec EQ_KW initializer");
 	}
 	| dec {
-	System.out.println("Rule 6.2: dec")
+	System.out.println("Rule 6.2: dec");
 	}
-	
+
+dec:
+	ID {
+	System.out.println("Rule 7.1: ID")
+	}
+	| ID OPENBRACKET_KW range CLOSEBRACKET_KW {
+	System.out.println("Rule 7.2: ID OPENBRACKET_KW range CLOSEBRACKET_KW");
+	}
+	| ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW {
+	System.out.println("Rule 7.3: ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
+	}
