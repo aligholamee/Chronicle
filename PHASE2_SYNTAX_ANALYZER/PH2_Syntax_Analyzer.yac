@@ -121,3 +121,11 @@ initializer:
 	System.out.println("Rule 9.2: intitializer -> OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW");
 	}
 
+initializer_list: 
+	constant_expressions COMMA_KW initializer_list {
+	System.out.println("Rule 10.1: initializer_list -> constant_expressions COMMA_KW initializer_list");
+	}
+	| constant_expressions {
+	System.out.println("Rule 10.2: initializer_list -> constant_expressions");
+	}
+	
