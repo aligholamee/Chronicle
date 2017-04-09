@@ -63,32 +63,32 @@ declarations:
 
 type_specifiers:
 	INTEGER_KW{
-	System.out.println("Rule 4.1: INTEGER_KW");
+	System.out.println("Rule 4.1: type_specifiers -> INTEGER_KW");
 	}
 	| REAL_KW {
-	System.out.println("Rule 4.2: REAL_KW");
+	System.out.println("Rule 4.2: type_specifiers -> REAL_KW");
 	}
 	| CHRACTER_KW {
-	System.out.println("Rule 4.3: CHRACTER_KW");
+	System.out.println("Rule 4.3: type_specifiers -> CHRACTER_KW");
 	}
 	| BOOLEAN_KW {
-	System.out.println("Rule 4.4: BOOLEAN_KW");
+	System.out.println("Rule 4.4: type_specifiers -> BOOLEAN_KW");
 	}
 
 declarator_list:
 	declarator_list COMMA_KW declarator {
-	System.out.println("Rule 5.1: declarator_list COMMA_KW declarator");
+	System.out.println("Rule 5.1: declarator_list -> declarator_list COMMA_KW declarator");
 	}
 	| declarator {
-	System.out.println("Rule 5.2: declarator");
+	System.out.println("Rule 5.2: declarator_list -> declarator");
 	}
 
 declarator:
 	dec EQ_KW initializer{
-	System.out.println("Rule 6.1: dec EQ_KW initializer");
+	System.out.println("Rule 6.1: declarator -> dec EQ_KW initializer");
 	}
 	| dec {
-	System.out.println("Rule 6.2: dec");
+	System.out.println("Rule 6.2: declarator -> dec");
 	}
 
 dec:
