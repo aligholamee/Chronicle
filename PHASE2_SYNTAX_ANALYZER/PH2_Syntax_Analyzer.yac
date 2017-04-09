@@ -1,0 +1,42 @@
+
+%token ID NUMCONST REALCONST CHARCONST BOOLCONST SHARP_KW MOD_KW DIV_KW MUL_KW SUB_KW ADD_KW SINGLE_QUOTE_KW DOT_KW LTE_KW GTE_KW NEQ_KW EQ_KW GT_KW LT_KW COMMA_KW CLOSEPARENTHESIS_KW OPENPARENTHESIS_KW CLOSEACCOLADE_KW OPENACCOLADE_KW CLOSEBRACKET_KW OPENBRACKET_KW ASSIGN_KW COLON_KW SEMICOLON_KW NOT_KW OR_KW AND_KW DOWNTO_KW UPTO_KW EXIT_KW RETURN_KW FOR_KW WHEN_KW END_KW DEFAULT_KW CASE_KW SWITCH_KW WHILE_KW DO_KW ELSE_KW THEN_KW IF_KW PROCEDURE_KW BOOLEAN_KW CHRACTER_KW REAL_KW INTEGER_KW MAIN_KW PROGRAM_KW DIGIT NONZERO_DIGIT LETTER
+
+%code {
+    static PrintStream writer;
+
+    public static void main(String args[]) throws IOException, FileNotFoundException {
+        YYParser yyparser;
+        final Yylex lexer;
+
+        writer = new PrintStream(new File("yacc_tool_output.txt"));
+        lexer = new Yylex(new InputStreamReader(new FileInputStream(".\\Global_Test\\globalTest2.shl")));
+
+        yyparser = new YYParser(new Lexer() {
+
+            @Override
+            public int yylex() {
+                int yyl_return = -1;
+                try {
+
+                    yyl_return = lexer.yylex();
+                } catch (IOException e) {
+                    System.err.println("IO error :" + e);
+                }
+                return yyl_return;
+            }
+
+            @Override
+            public void yyerror(String error) {
+                System.err.println("Error : " + error);
+            }
+
+            @Override
+            public Object getLVal() {
+                return null;
+            }
+        });
+        yyparser.parse();
+
+        return;
+    }
+}
