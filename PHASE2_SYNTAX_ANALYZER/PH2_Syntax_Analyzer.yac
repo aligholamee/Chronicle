@@ -61,3 +61,16 @@ declarations:
 	System.out.println("Rule 3.1: declarations -> type_specifiers declarator_list SEMICOLON_KW");
 	}
 
+type_specifiers:
+	INTEGER_KW{
+	System.out.println("Rule 4.1: INTEGER_KW")
+	}
+	| REAL_KW {
+	System.out.println("Rule 4.2: REAL_KW")
+	}
+	| CHRACTER_KW {
+	System.out.println("Rule 4.3: CHRACTER_KW")
+	}
+	| BOOLEAN_KW {
+	System.out.println("Rule 4.4: BOOLEAN_KW")
+	}
