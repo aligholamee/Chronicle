@@ -27,3 +27,6 @@ The above code will create the ID token.
 
 ## Phase 2 - Syntax Analyzer
 In this section, we'll create a syntax analyzer in order to be able to match the input with the grammar. The matching process starts where the Syntax Analyzer builds a table called **Shift-Reduce**. In this table, the tokens and everything which is recognized in the previous section(**Lexical Analyser**) will be included. We also need to include the full grammar of our language here. What makes this part a bit tricky is that 
+
+## What is the .yac source file and what are the contents?
+The .yac file is the main source program used by **YACC** tool to create a syntax analyzer. This file will be sent to the **YACC** tool and will be integrated with the **main program** and the **syntax analyser** and will produce the whole **Lexical-Syntax-Analyser** together.
