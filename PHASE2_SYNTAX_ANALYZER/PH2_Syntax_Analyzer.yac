@@ -43,3 +43,7 @@
 
 
 %%
+program:
+	PROGRAM_KW ID declarations_list procedure_list MAIN_KW block {
+	System.out.println("Rule 1: program -> program ID declarations_list procedure_list main block");
+	}
