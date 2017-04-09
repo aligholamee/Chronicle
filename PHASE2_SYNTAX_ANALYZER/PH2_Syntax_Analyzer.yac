@@ -128,4 +128,8 @@ initializer_list:
 	| constant_expressions {
 	System.out.println("Rule 10.2: initializer_list -> constant_expressions");
 	}
-	
+
+procedure_list:
+	procedure_list PROCEDURE_KW {
+	System.out.println("Rule 11.1: procedure_list -> procedure_list PROCEDURE_KW");
+	} 
