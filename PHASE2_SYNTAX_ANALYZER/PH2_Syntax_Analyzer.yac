@@ -93,13 +93,13 @@ declarator:
 
 dec:
 	ID {
-	System.out.println("Rule 7.1: ID")
+	System.out.println("Rule 7.1: dec -> ID")
 	}
 	| ID OPENBRACKET_KW range CLOSEBRACKET_KW {
-	System.out.println("Rule 7.2: ID OPENBRACKET_KW range CLOSEBRACKET_KW");
+	System.out.println("Rule 7.2: dec -> ID OPENBRACKET_KW range CLOSEBRACKET_KW");
 	}
 	| ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW {
-	System.out.println("Rule 7.3: ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
+	System.out.println("Rule 7.3: dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
 	}
 
 range: 
@@ -108,7 +108,7 @@ range:
 	}
 	| NUMCONST DOT_KW NUMCONST {
 	System.out.println("Rule 8.2: range -> NUMCONST DOT_KW NUMCONST");
-	}
+	}d
 	arithmetic_expressions DOT_KW arithmetic_expressions {
 	System.out.println("Rule 8.3: range -> arithmetic_expressions DOT_KW arithmetic_expressions")
 	}
