@@ -162,4 +162,6 @@ statement:
 	ID EQ_KW expressions {
 	System.out.println("Rule 16.1: statement -> ID EQ_KW expressions");
 	}
-	
+	| IF_KW bool_expressions THEN_KW statement {
+	System.out.println("Rule 16.2: statement -> IF_KW bool_expressions THEN_KW statement");
+	}
