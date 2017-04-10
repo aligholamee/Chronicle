@@ -139,3 +139,8 @@ procedure:
 	{
 	System.out.println("Rule 12: procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW");
 	}
+
+parameters:
+	OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW {
+	System.out.println("Rule 13: parameters -> OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW");
+	}
