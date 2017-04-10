@@ -200,3 +200,8 @@ arguments_list:
 	| expressions {
 	System.out.println("Rule 17.2: arguments_list -> multi_arguments");
 	}
+
+multi_arguments:
+	multi_arguments COMMA_KW expressions {
+	System.out.println("Rule 18.1: multi_arguments -> multi_arguments COMMA_KW expressions");
+	}
