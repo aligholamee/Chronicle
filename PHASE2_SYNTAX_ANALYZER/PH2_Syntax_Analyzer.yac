@@ -150,3 +150,8 @@ block:
 	System.out.println("Rule 14: block -> OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW");
 	}
 
+statement_list:
+	statement_list statement SEMICOLON_KW {
+	System.out.println("Rule 15.1: statemen_list -> statement_list statement SEMICOLON_KW");
+	}
+	
