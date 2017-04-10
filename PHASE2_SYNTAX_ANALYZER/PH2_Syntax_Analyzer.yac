@@ -171,4 +171,6 @@ statement:
 	| DO_KW statement WHILE_KW bool_expressions {
 	System.out.println("Rule 16.4: statement -> DO_KW statement WHILE_KW bool_expressions");
 	}
-	
+	| FOR_KW ID ASSIGN_KW counter DO_KW statement {
+	System.out.println("Rule 16.5: statement -> FOR_KW ID ASSIGN_KW counter DO_KW statement");
+	}
