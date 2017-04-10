@@ -205,3 +205,6 @@ multi_arguments:
 	multi_arguments COMMA_KW expressions {
 	System.out.println("Rule 18.1: multi_arguments -> multi_arguments COMMA_KW expressions");
 	}
+	| expressios {
+	System.out.println("Rule 18.2: multi_arguments -> expressions");
+	}
