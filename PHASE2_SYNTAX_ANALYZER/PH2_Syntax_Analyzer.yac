@@ -174,3 +174,6 @@ statement:
 	| FOR_KW ID ASSIGN_KW counter DO_KW statement {
 	System.out.println("Rule 16.5: statement -> FOR_KW ID ASSIGN_KW counter DO_KW statement");
 	}
+	| SWITCH_KW expressions case_element default END_KW {
+	System.out.println("Rule 16.6: statement -> SWITCH_KW expressions case_element default END_KW");
+	}
