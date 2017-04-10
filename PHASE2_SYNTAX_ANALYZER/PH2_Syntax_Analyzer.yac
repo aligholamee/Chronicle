@@ -208,3 +208,8 @@ multi_arguments:
 	| expressios {
 	System.out.println("Rule 18.2: multi_arguments -> expressions");
 	}
+
+counter:
+	NUMCONST UPTO_KW NUMCONST {
+	System.out.println("Rule 19.1: counter -> NUMCONST UPTO_KW NUMCONST");
+	}
