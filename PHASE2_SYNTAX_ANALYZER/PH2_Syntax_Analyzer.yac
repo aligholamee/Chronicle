@@ -180,3 +180,6 @@ statement:
 	| ID OPENPARENTHESIS_KW arguments CLOSEPARENTHESIS_KW {
 	System.out.println("Rule 16.7: statement -> ID OPENPARENTHESIS_KW arguments");
 	}
+	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions {
+	System.out.println("Rule 16.8: statement -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions");
+	}
