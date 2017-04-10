@@ -192,3 +192,8 @@ statement:
 	| block	{
 	System.out.println("Rule 16.11: statement -> block");
 	}
+
+arguments_list:
+	multi_arguments {
+	System.out.println("Rule 17.1: arguments_list -> multi_arguments");
+	}
