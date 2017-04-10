@@ -177,3 +177,6 @@ statement:
 	| SWITCH_KW expressions case_element default END_KW {
 	System.out.println("Rule 16.6: statement -> SWITCH_KW expressions case_element default END_KW");
 	}
+	| ID OPENPARENTHESIS_KW arguments CLOSEPARENTHESIS_KW {
+	System.out.println("Rule 16.7: statement -> ID OPENPARENTHESIS_KW arguments");
+	}
