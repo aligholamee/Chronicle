@@ -197,3 +197,6 @@ arguments_list:
 	multi_arguments {
 	System.out.println("Rule 17.1: arguments_list -> multi_arguments");
 	}
+	| expressions {
+	System.out.println("Rule 17.2: arguments_list -> multi_arguments");
+	}
