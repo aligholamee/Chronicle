@@ -157,4 +157,9 @@ statement_list:
 	| statement SEMICOLON_KW {
 	System.out.println("Rule 15.2: statement_list -> statement SEMICOLON_KW");
 	}
+
+statement:
+	ID EQ_KW expressions {
+	System.out.println("Rule 16.1: statement -> ID EQ_KW expressions");
+	}
 	
