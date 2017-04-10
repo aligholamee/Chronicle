@@ -183,3 +183,7 @@ statement:
 	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions {
 	System.out.println("Rule 16.8: statement -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions");
 	}
+	| RETURN_KW expressions {
+	System.out.println("Rule 16.9: statement -> RETURN_KW expressions");
+	}
+	
