@@ -186,4 +186,6 @@ statement:
 	| RETURN_KW expressions {
 	System.out.println("Rule 16.9: statement -> RETURN_KW expressions");
 	}
-	
+	| EXIT_KW WHEN_KW bool_expressions {
+	System.out.println("Rule 16.10: statement -> EXIT_KW WHEN_KW bool_expressions");
+	}
