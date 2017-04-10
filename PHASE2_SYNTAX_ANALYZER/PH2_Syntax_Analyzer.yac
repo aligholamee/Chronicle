@@ -165,3 +165,6 @@ statement:
 	| IF_KW bool_expressions THEN_KW statement {
 	System.out.println("Rule 16.2: statement -> IF_KW bool_expressions THEN_KW statement");
 	}
+	| IF_KW bool_expressions THEN_KW statement ELSE_KW statement {
+	System.out.println("Rule 16.3: statement -> IF_KW bool_expressions THEN_KW statement ELSE_KW statement");
+	}	
