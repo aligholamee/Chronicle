@@ -213,3 +213,6 @@ counter:
 	NUMCONST UPTO_KW NUMCONST {
 	System.out.println("Rule 19.1: counter -> NUMCONST UPTO_KW NUMCONST");
 	}
+	| NUMCONST DOWNTO_KW NUMCONST {
+	System.out.println("Rule 19.2: counter -> NUMCONST DOWNTO_KW NUMCONST");
+	}
