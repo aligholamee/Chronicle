@@ -152,6 +152,9 @@ block:
 
 statement_list:
 	statement_list statement SEMICOLON_KW {
-	System.out.println("Rule 15.1: statemen_list -> statement_list statement SEMICOLON_KW");
+	System.out.println("Rule 15.1: statement_list -> statement_list statement SEMICOLON_KW");
+	}
+	| statement SEMICOLON_KW {
+	System.out.println("Rule 15.2: statement_list -> statement SEMICOLON_KW");
 	}
 	
