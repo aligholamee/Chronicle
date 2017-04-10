@@ -189,3 +189,6 @@ statement:
 	| EXIT_KW WHEN_KW bool_expressions {
 	System.out.println("Rule 16.10: statement -> EXIT_KW WHEN_KW bool_expressions");
 	}
+	| block	{
+	System.out.println("Rule 16.11: statement -> block");
+	}
