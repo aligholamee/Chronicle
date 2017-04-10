@@ -144,3 +144,9 @@ parameters:
 	OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW {
 	System.out.println("Rule 13: parameters -> OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW");
 	}
+
+block:
+	OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW {
+	System.out.println("Rule 14: block -> OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW");
+	}
+
