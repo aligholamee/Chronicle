@@ -321,3 +321,8 @@ arithmetic_expressions:
 	| SUB_KW expressions {
 		System.out.println("Rule 25.6: arithmetic_expressions -> SUB_KW expressions");
 	}
+
+pair:
+	OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
+		System.out.println("Rule 26: pair -> OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW")
+	}
