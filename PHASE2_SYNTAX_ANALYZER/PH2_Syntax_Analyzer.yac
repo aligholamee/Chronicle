@@ -246,6 +246,10 @@ expressions:
 	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW {
 		System.out.println("Rule 22.5: expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
 	}
-	| ID OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 22.6: expressions -> ID OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
+	| ID OPENPARENTHESIS_KW arguments CLOSEPARENTHESIS_KW {
+		System.out.println("Rule 22.6: expressions -> ID OPENPARENTHESIS_KW arguments CLOSEPARENTHESIS_KW");
 	}
+	| OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
+		System.out.println("Rule 22.7: expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
+	}
+	
