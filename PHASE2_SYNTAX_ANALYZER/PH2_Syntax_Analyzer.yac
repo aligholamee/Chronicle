@@ -252,4 +252,17 @@ expressions:
 	| OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.7: expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
 	}
-	
+
+constant_expressions: 
+	NUMCONST {
+		System.out.println("Rule 23.1: constant_expressions -> NUMCONST");
+	}
+	| REALCONST {
+		System.out.println("Rule 23.2: constant_expressions -> REALCONST");
+	}
+	| CHARCONST {
+		System.out.println("Rule 23.3: constant_expressions -> CHARCONST");
+	}
+	| BOOLCONST {
+		System.out.println("Rule 23.4: constant_expressions -> BOOLCONST");
+	}
