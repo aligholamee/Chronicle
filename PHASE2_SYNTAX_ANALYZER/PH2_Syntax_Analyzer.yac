@@ -229,3 +229,8 @@ default:
 	DEFAULT_KW SEMICOLON_KW block {
 		System.out.println("Rule 21: default -> DEFAULT_KW SEMICOLON_KW block");
 	}
+
+expressions:
+	constant_expressions {
+		System.out.println("Rule 22.1: expressions -> constant_expressions");
+	}
