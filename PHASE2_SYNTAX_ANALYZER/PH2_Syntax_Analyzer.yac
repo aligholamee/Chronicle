@@ -268,7 +268,22 @@ constant_expressions:
 	}
 
 bool_expressions:
-	LT_KW pair {
-		System.out.println("Rule 24.1: bool_expressions -> LT_KW pair");
+	GT_KW pair {
+		System.out.println("Rule 24.1: bool_expressions -> GT_KW pair");
 	}
-	| 
+	| GTE_KW pair {
+		System.out.println("Rule 24.2: bool_expressions -> GTE_KW pair");
+	}
+	| LT_KW pair {
+		System.out.println("Rule 24.3: bool_expressions -> LT_KW pair");
+	}
+	| LTE_KW pair {
+		System.out.println("Rule 24.4: bool_expressions -> LTE_KW pair");
+	}
+	| EQ_KW pair {
+		System.out.println("Rule 24.5: bool_expressions -> EQ_KW pair");
+	}
+	| NEQ_KW pair {
+		System.out.println("Rule 24.6: bool_expressions -> NEQ_KW pair");
+	}
+	
