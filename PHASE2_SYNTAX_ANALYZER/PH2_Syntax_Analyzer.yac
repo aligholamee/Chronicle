@@ -240,3 +240,12 @@ expressions:
 	| arithmetic_expressions {
 		System.out.println("Rule 22.3: expressions -> arithmetic_expressions");
 	}
+	| ID {
+		System.out.println("RULE 22.4: expressions -> ID");
+	}
+	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW {
+		System.out.println("Rule 22.5: expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
+	}
+	| ID OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
+		System.out.println("Rule 22.6: expressions -> ID OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
+	}
