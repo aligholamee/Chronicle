@@ -301,4 +301,23 @@ bool_expressions:
 	| NOT_KW expressions {
 		System.out.println("Rule 24.11: bool_expressions -> NOT_KW expressions");
 	}
-	
+
+arithmetic_expressions:
+	ADD_KW pair {
+		System.out.println("Rule 25.1: arithmetic_expressions -> ADD_KW pair");	
+	}
+	| SUB_KW pair {
+		System.out.println("Rule 25.2: arithmetic_expressions -> SUB_KW pair");
+	}
+	| MUL_KW pair {
+		System.out.println("Rule 25.3: arithmetic_expressions -> MUL_KW pair");
+	}
+	| DIV_KW pair {
+		System.out.println("Rule 25.4: arithmetic_expressions -> DIV_KW pair");
+	}
+	| MOD_KW pair {
+		System.out.println("Rule 25.5: arithmetic_expressions -> MOD_KW pair");
+	}
+	| SUB_KW expressions {
+		System.out.println("Rule 25.6: arithmetic_expressions -> SUB_KW expressions");
+	}
