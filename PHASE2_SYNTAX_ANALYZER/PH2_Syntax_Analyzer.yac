@@ -237,3 +237,6 @@ expressions:
 	| bool_expressions {
 		System.out.println("Rule 22.2: expressions -> bool_expressions");
 	}
+	| arithmetic_expressions {
+		System.out.println("Rule 22.3: expressions -> arithmetic_expressions");
+	}
