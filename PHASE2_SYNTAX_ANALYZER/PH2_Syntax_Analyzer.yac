@@ -286,4 +286,19 @@ bool_expressions:
 	| NEQ_KW pair {
 		System.out.println("Rule 24.6: bool_expressions -> NEQ_KW pair");
 	}
+	| AND_KW pair {
+		System.out.println("Rule 24.7: bool_expressions -> AND_KW pair");
+	}
+	| OR pair {
+		System.out.println("Rule 24.8: bool_expressions -> OR_KW pair");
+	}
+	| AND_KW THEN_KW pair {
+		System.out.println("Rule 24.9: bool_expressions -> AND_KW THEN_KW pair");
+	}
+	| OR_KW ELSE_KW pair {
+		System.out.println("Rule 24.10: bool_expressions -> OR_KW ELSE_KW pair");
+	}
+	| NOT_KW expressions {
+		System.out.println("Rule 24.11: bool_expressions -> NOT_KW expressions");
+	}
 	
