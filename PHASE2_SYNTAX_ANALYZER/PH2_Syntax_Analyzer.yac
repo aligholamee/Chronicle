@@ -266,3 +266,9 @@ constant_expressions:
 	| BOOLCONST {
 		System.out.println("Rule 23.4: constant_expressions -> BOOLCONST");
 	}
+
+bool_expressions:
+	LT_KW pair {
+		System.out.println("Rule 24.1: bool_expressions -> LT_KW pair");
+	}
+	| 
