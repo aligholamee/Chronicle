@@ -224,3 +224,8 @@ case_element:
 	| case_element CASE_KW NUMCONST SEMICOLON_KW block {
 		System.out.println("Rule 20.2: case_element -> case_element CASE_KW NUMCONST SEMICOLON_KW block");
 	}
+
+default:
+	DEFAULT_KW SEMICOLON_KW block {
+		System.out.println("Rule 21: default -> DEFAULT_KW SEMICOLON_KW block");
+	}
