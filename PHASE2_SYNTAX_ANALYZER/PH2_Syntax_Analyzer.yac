@@ -234,3 +234,6 @@ expressions:
 	constant_expressions {
 		System.out.println("Rule 22.1: expressions -> constant_expressions");
 	}
+	| bool_expressions {
+		System.out.println("Rule 22.2: expressions -> bool_expressions");
+	}
