@@ -289,7 +289,7 @@ bool_expressions:
 	| AND_KW pair {
 		System.out.println("Rule 24.7: bool_expressions -> AND_KW pair");
 	}
-	| OR pair {
+	| OR_KW pair {
 		System.out.println("Rule 24.8: bool_expressions -> OR_KW pair");
 	}
 	| AND_KW THEN_KW pair {
