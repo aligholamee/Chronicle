@@ -1,0 +1,7 @@
+> run jflex/lib/jflex-1.6.0.jar and generate the lexer
+> bison -L JAVA parser.y
+> Run generated .java files via an IDE like Netbeans 
+
+
+for debugging:
+> bison -L JAVA --verbose parser.y

@@ -1,0 +1,8 @@
+> flex lexer.l
+> bison -d parser.y
+> gcc lex.yy.c parser.tab.h parser.tab.c -o a.out
+> a.out
+
+
+for dubugging:
+> bison --verbose parser.y
