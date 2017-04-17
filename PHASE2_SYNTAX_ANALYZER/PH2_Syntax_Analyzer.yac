@@ -46,6 +46,9 @@
     }
 }
 
+// Precedences go increasing, so "then" < "else".
+%nonassoc "THEN_KW"
+%nonassoc "ELSE_KW"
 
 %%
 program:
