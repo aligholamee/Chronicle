@@ -54,13 +54,12 @@ program:
 	}
 
 declarations_list:
-	declarations {
-	System.out.println("Rule 2.1: declarations_list -> declarations");
+  declarations_list declarations {
+	System.out.println("Rule 2.1: declarations_list -> declarations_list declarations");
 	}
-	| declarations_list declarations {
-	System.out.println("Rule 2.2: declarations_list -> declarations_list declarations");
-	}
-
+  | {
+  System.out.println("Rule 2.2: declarations -> epsilon");
+  }
 
 declarations:
 	type_specifiers declarator_list SEMICOLON_KW {
@@ -139,12 +138,12 @@ initializer_list:
 	}
 
 procedure_list:
-	procedure_list PROCEDURE_KW {
+	procedure_list procedure {
 	System.out.println("Rule 11: procedure_list -> procedure_list PROCEDURE_KW");
 	}
-  | {
-  System.out.println("Rule 11.1: procedure_list -> epsilon");
-  }
+    | {
+ 	 System.out.println("Rule 11.1: procedure_list -> epsilon");
+  	}
 
 procedure:
 	PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
