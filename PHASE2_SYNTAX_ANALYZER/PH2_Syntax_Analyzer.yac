@@ -138,17 +138,17 @@ initializer_list:
 	}
 
 procedure_list:
-	procedure_list procedure {
-	System.out.println("Rule 11: procedure_list -> procedure_list PROCEDURE_KW");
+	procedure_list p_procedure {
+	System.out.println("Rule 11: procedure_list -> procedure_list p_procedure");
 	}
     | {
  	 System.out.println("Rule 11.1: procedure_list -> epsilon");
   	}
 
-procedure:
+p_procedure:
 	PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
 	{
-	System.out.println("Rule 12: procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW");
+	System.out.println("Rule 12: p_procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW");
 	}
 
 parameters:
