@@ -61,10 +61,14 @@ declarations_list:
 	System.out.println("Rule 2.2: declarations_list -> declarations_list declarations");
 	}
 
+
 declarations:
 	type_specifiers declarator_list SEMICOLON_KW {
 	System.out.println("Rule 3.1: declarations -> type_specifiers declarator_list SEMICOLON_KW");
 	}
+  | {
+  System.out.println("Rule 3.2: declarations -> epsilon");
+  }
 
 type_specifiers:
 	INTEGER_KW {
@@ -107,7 +111,7 @@ dec:
 	System.out.println("Rule 7.3: dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
 	}
 
-range: 
+range:
 	ID DOT_KW ID {
 	System.out.println("Rule 8.1: range -> ID DOT_KW ID");
 	}
@@ -126,7 +130,7 @@ initializer:
 	System.out.println("Rule 9.2: intitializer -> OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW");
 	}
 
-initializer_list: 
+initializer_list:
 	constant_expressions COMMA_KW initializer_list {
 	System.out.println("Rule 10.1: initializer_list -> constant_expressions COMMA_KW initializer_list");
 	}
@@ -137,9 +141,12 @@ initializer_list:
 procedure_list:
 	procedure_list PROCEDURE_KW {
 	System.out.println("Rule 11: procedure_list -> procedure_list PROCEDURE_KW");
-	} 
+	}
+  | {
+  System.out.println("Rule 11.1: procedure_list -> epsilon");
+  }
 
-procedure: 
+procedure:
 	PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
 	{
 	System.out.println("Rule 12: procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW");
@@ -197,6 +204,9 @@ statement:
 	| block	{
 	System.out.println("Rule 16.11: statement -> block");
 	}
+  | {
+  System.out.println("Rule 16.12: statement -> epsilon");
+  }
 
 arguments_list:
 	multi_arguments {
@@ -204,7 +214,9 @@ arguments_list:
 	}
 	| expressions {
 	System.out.println("Rule 17.2: arguments_list -> multi_arguments");
-	}
+	} {
+  System.out.println("Rule 17.3: statement -> epsilon");
+  }
 
 multi_arguments:
 	multi_arguments COMMA_KW expressions {
@@ -234,6 +246,9 @@ default:
 	DEFAULT_KW SEMICOLON_KW block {
 		System.out.println("Rule 21: default -> DEFAULT_KW SEMICOLON_KW block");
 	}
+  | {
+  System.out.println("Rule 21.1: statement -> epsilon");
+  }
 
 expressions:
 	constant_expressions {
@@ -258,7 +273,7 @@ expressions:
 		System.out.println("Rule 22.7: expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
 	}
 
-constant_expressions: 
+constant_expressions:
 	NUMCONST {
 		System.out.println("Rule 23.1: constant_expressions -> NUMCONST");
 	}
@@ -309,7 +324,7 @@ bool_expressions:
 
 arithmetic_expressions:
 	ADD_KW pair {
-		System.out.println("Rule 25.1: arithmetic_expressions -> ADD_KW pair");	
+		System.out.println("Rule 25.1: arithmetic_expressions -> ADD_KW pair");
 	}
 	| SUB_KW pair {
 		System.out.println("Rule 25.2: arithmetic_expressions -> SUB_KW pair");
