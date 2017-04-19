@@ -1,0 +1,2201 @@
+Terminals unused in grammar
+
+   SHARP_KW
+   SINGLE_QUOTE_KW
+   DIGIT
+   NONZERO_DIGIT
+   LETTER
+   "THEN_KW"
+   "ELSE_KW"
+
+
+Rules useless in parser due to conflicts
+
+    5 declarations: /* empty */
+
+
+State 5 conflicts: 5 shift/reduce
+State 30 conflicts: 5 shift/reduce
+State 54 conflicts: 5 shift/reduce
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: PROGRAM_KW ID declarations_list procedure_list MAIN_KW block
+
+    2 declarations_list: declarations_list declarations
+    3                  | /* empty */
+
+    4 declarations: type_specifiers declarator_list SEMICOLON_KW
+    5             | /* empty */
+
+    6 type_specifiers: INTEGER_KW
+    7                | REAL_KW
+    8                | CHRACTER_KW
+    9                | BOOLEAN_KW
+
+   10 declarator_list: declarator_list COMMA_KW declarator
+   11                | declarator
+
+   12 declarator: dec EQ_KW initializer
+   13           | dec
+
+   14 dec: ID
+   15    | ID OPENBRACKET_KW range CLOSEBRACKET_KW
+   16    | ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW
+
+   17 range: ID DOT_KW ID
+
+   18 $@1: /* empty */
+
+   19 range: NUMCONST DOT_KW NUMCONST $@1 arithmetic_expressions DOT_KW arithmetic_expressions
+
+   20 initializer: constant_expressions
+   21            | OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW
+
+   22 initializer_list: constant_expressions COMMA_KW initializer_list
+   23                 | constant_expressions
+
+   24 procedure_list: procedure_list procedure
+   25               | procedure
+
+   26 procedure: PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
+
+   27 parameters: OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW
+
+   28 block: OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW
+
+   29 statement_list: statement_list statement SEMICOLON_KW
+   30               | statement SEMICOLON_KW
+
+   31 statement: ID EQ_KW expressions
+   32          | IF_KW bool_expressions THEN_KW statement ENDIF_KW
+   33          | IF_KW bool_expressions THEN_KW statement ELSE_KW statement ENDIF_KW
+   34          | DO_KW statement WHILE_KW bool_expressions
+   35          | FOR_KW ID ASSIGN_KW counter DO_KW statement
+   36          | SWITCH_KW expressions case_element default END_KW
+   37          | ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW
+   38          | ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions
+   39          | RETURN_KW expressions
+   40          | EXIT_KW WHEN_KW bool_expressions
+   41          | block
+   42          | /* empty */
+
+   43 arguments_list: multi_arguments
+   44               | /* empty */
+
+   45 multi_arguments: multi_arguments COMMA_KW expressions
+   46                | expressions
+
+   47 counter: NUMCONST UPTO_KW NUMCONST
+   48        | NUMCONST DOWNTO_KW NUMCONST
+
+   49 case_element: CASE_KW NUMCONST COLON_KW block
+   50             | case_element CASE_KW NUMCONST SEMICOLON_KW block
+
+   51 default: DEFAULT_KW SEMICOLON_KW block
+   52        | /* empty */
+
+   53 expressions: constant_expressions
+   54            | bool_expressions
+   55            | arithmetic_expressions
+   56            | ID
+   57            | ID OPENBRACKET_KW expressions CLOSEBRACKET_KW
+   58            | ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW
+   59            | OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW
+
+   60 constant_expressions: NUMCONST
+   61                     | REALCONST
+   62                     | CHARCONST
+   63                     | BOOLCONST
+
+   64 bool_expressions: GT_KW pair
+   65                 | GTE_KW pair
+   66                 | LT_KW pair
+   67                 | LTE_KW pair
+   68                 | EQ_KW pair
+   69                 | NEQ_KW pair
+   70                 | AND_KW pair
+   71                 | OR_KW pair
+   72                 | AND_KW THEN_KW pair
+   73                 | OR_KW ELSE_KW pair
+   74                 | NOT_KW expressions
+
+   75 arithmetic_expressions: ADD_KW pair
+   76                       | SUB_KW pair
+   77                       | MUL_KW pair
+   78                       | DIV_KW pair
+   79                       | MOD_KW pair
+   80                       | SUB_KW expressions
+
+   81 pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+ENDIF_KW (258) 32 33
+ID (259) 1 14 15 16 17 26 31 35 37 38 56 57 58
+NUMCONST (260) 16 19 47 48 49 50 60
+REALCONST (261) 61
+CHARCONST (262) 62
+BOOLCONST (263) 63
+SHARP_KW (264)
+MOD_KW (265) 79
+DIV_KW (266) 78
+MUL_KW (267) 77
+SUB_KW (268) 76 80
+ADD_KW (269) 75
+SINGLE_QUOTE_KW (270)
+DOT_KW (271) 17 19
+LTE_KW (272) 67
+GTE_KW (273) 65
+NEQ_KW (274) 69
+EQ_KW (275) 12 31 38 68
+GT_KW (276) 64
+LT_KW (277) 66
+COMMA_KW (278) 10 22 45 81
+CLOSEPARENTHESIS_KW (279) 37 58 59 81
+OPENPARENTHESIS_KW (280) 37 58 59 81
+CLOSEACCOLADE_KW (281) 21 26 27 28
+OPENACCOLADE_KW (282) 21 26 27 28
+CLOSEBRACKET_KW (283) 15 16 38 57
+OPENBRACKET_KW (284) 15 16 38 57
+ASSIGN_KW (285) 35
+COLON_KW (286) 49
+SEMICOLON_KW (287) 4 26 29 30 50 51
+NOT_KW (288) 74
+OR_KW (289) 71 73
+AND_KW (290) 70 72
+DOWNTO_KW (291) 48
+UPTO_KW (292) 47
+EXIT_KW (293) 40
+RETURN_KW (294) 39
+FOR_KW (295) 35
+WHEN_KW (296) 40
+END_KW (297) 36
+DEFAULT_KW (298) 51
+CASE_KW (299) 49 50
+SWITCH_KW (300) 36
+WHILE_KW (301) 34
+DO_KW (302) 34 35
+ELSE_KW (303) 33 73
+THEN_KW (304) 32 33 72
+IF_KW (305) 32 33
+PROCEDURE_KW (306) 26
+BOOLEAN_KW (307) 9
+CHRACTER_KW (308) 8
+REAL_KW (309) 7
+INTEGER_KW (310) 6
+MAIN_KW (311) 1
+PROGRAM_KW (312) 1
+DIGIT (313)
+NONZERO_DIGIT (314)
+LETTER (315)
+"THEN_KW" (316)
+"ELSE_KW" (317)
+
+
+Nonterminals, with rules where they appear
+
+$accept (63)
+    on left: 0
+program (64)
+    on left: 1, on right: 0
+declarations_list (65)
+    on left: 2 3, on right: 1 2 26 27
+declarations (66)
+    on left: 4 5, on right: 2
+type_specifiers (67)
+    on left: 6 7 8 9, on right: 4
+declarator_list (68)
+    on left: 10 11, on right: 4 10
+declarator (69)
+    on left: 12 13, on right: 10 11
+dec (70)
+    on left: 14 15 16, on right: 12 13
+range (71)
+    on left: 17 19, on right: 15
+$@1 (72)
+    on left: 18, on right: 19
+initializer (73)
+    on left: 20 21, on right: 12
+initializer_list (74)
+    on left: 22 23, on right: 21 22
+procedure_list (75)
+    on left: 24 25, on right: 1 24
+procedure (76)
+    on left: 26, on right: 24 25
+parameters (77)
+    on left: 27, on right: 26
+block (78)
+    on left: 28, on right: 1 26 41 49 50 51
+statement_list (79)
+    on left: 29 30, on right: 28 29
+statement (80)
+    on left: 31 32 33 34 35 36 37 38 39 40 41 42, on right: 29 30 32
+    33 34 35
+arguments_list (81)
+    on left: 43 44, on right: 37 58
+multi_arguments (82)
+    on left: 45 46, on right: 43 45
+counter (83)
+    on left: 47 48, on right: 35
+case_element (84)
+    on left: 49 50, on right: 36 50
+default (85)
+    on left: 51 52, on right: 36
+expressions (86)
+    on left: 53 54 55 56 57 58 59, on right: 31 36 38 39 45 46 57 59
+    74 80 81
+constant_expressions (87)
+    on left: 60 61 62 63, on right: 20 22 23 53
+bool_expressions (88)
+    on left: 64 65 66 67 68 69 70 71 72 73 74, on right: 32 33 34 40
+    54
+arithmetic_expressions (89)
+    on left: 75 76 77 78 79 80, on right: 19 55
+pair (90)
+    on left: 81, on right: 64 65 66 67 68 69 70 71 72 73 75 76 77 78
+    79
+
+
+state 0
+
+    0 $accept: . program $end
+
+    PROGRAM_KW  shift, and go to state 1
+
+    program  go to state 2
+
+
+state 1
+
+    1 program: PROGRAM_KW . ID declarations_list procedure_list MAIN_KW block
+
+    ID  shift, and go to state 3
+
+
+state 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 4
+
+
+state 3
+
+    1 program: PROGRAM_KW ID . declarations_list procedure_list MAIN_KW block
+
+    $default  reduce using rule 3 (declarations_list)
+
+    declarations_list  go to state 5
+
+
+state 4
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+state 5
+
+    1 program: PROGRAM_KW ID declarations_list . procedure_list MAIN_KW block
+    2 declarations_list: declarations_list . declarations
+
+    PROCEDURE_KW  shift, and go to state 6
+    BOOLEAN_KW    shift, and go to state 7
+    CHRACTER_KW   shift, and go to state 8
+    REAL_KW       shift, and go to state 9
+    INTEGER_KW    shift, and go to state 10
+
+    PROCEDURE_KW  [reduce using rule 5 (declarations)]
+    BOOLEAN_KW    [reduce using rule 5 (declarations)]
+    CHRACTER_KW   [reduce using rule 5 (declarations)]
+    REAL_KW       [reduce using rule 5 (declarations)]
+    INTEGER_KW    [reduce using rule 5 (declarations)]
+
+    declarations     go to state 11
+    type_specifiers  go to state 12
+    procedure_list   go to state 13
+    procedure        go to state 14
+
+
+state 6
+
+   26 procedure: PROCEDURE_KW . ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
+
+    ID  shift, and go to state 15
+
+
+state 7
+
+    9 type_specifiers: BOOLEAN_KW .
+
+    $default  reduce using rule 9 (type_specifiers)
+
+
+state 8
+
+    8 type_specifiers: CHRACTER_KW .
+
+    $default  reduce using rule 8 (type_specifiers)
+
+
+state 9
+
+    7 type_specifiers: REAL_KW .
+
+    $default  reduce using rule 7 (type_specifiers)
+
+
+state 10
+
+    6 type_specifiers: INTEGER_KW .
+
+    $default  reduce using rule 6 (type_specifiers)
+
+
+state 11
+
+    2 declarations_list: declarations_list declarations .
+
+    $default  reduce using rule 2 (declarations_list)
+
+
+state 12
+
+    4 declarations: type_specifiers . declarator_list SEMICOLON_KW
+
+    ID  shift, and go to state 16
+
+    declarator_list  go to state 17
+    declarator       go to state 18
+    dec              go to state 19
+
+
+state 13
+
+    1 program: PROGRAM_KW ID declarations_list procedure_list . MAIN_KW block
+   24 procedure_list: procedure_list . procedure
+
+    PROCEDURE_KW  shift, and go to state 6
+    MAIN_KW       shift, and go to state 20
+
+    procedure  go to state 21
+
+
+state 14
+
+   25 procedure_list: procedure .
+
+    $default  reduce using rule 25 (procedure_list)
+
+
+state 15
+
+   26 procedure: PROCEDURE_KW ID . parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
+
+    OPENACCOLADE_KW  shift, and go to state 22
+
+    parameters  go to state 23
+
+
+state 16
+
+   14 dec: ID .
+   15    | ID . OPENBRACKET_KW range CLOSEBRACKET_KW
+   16    | ID . OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW
+
+    OPENBRACKET_KW  shift, and go to state 24
+
+    $default  reduce using rule 14 (dec)
+
+
+state 17
+
+    4 declarations: type_specifiers declarator_list . SEMICOLON_KW
+   10 declarator_list: declarator_list . COMMA_KW declarator
+
+    COMMA_KW      shift, and go to state 25
+    SEMICOLON_KW  shift, and go to state 26
+
+
+state 18
+
+   11 declarator_list: declarator .
+
+    $default  reduce using rule 11 (declarator_list)
+
+
+state 19
+
+   12 declarator: dec . EQ_KW initializer
+   13           | dec .
+
+    EQ_KW  shift, and go to state 27
+
+    $default  reduce using rule 13 (declarator)
+
+
+state 20
+
+    1 program: PROGRAM_KW ID declarations_list procedure_list MAIN_KW . block
+
+    OPENACCOLADE_KW  shift, and go to state 28
+
+    block  go to state 29
+
+
+state 21
+
+   24 procedure_list: procedure_list procedure .
+
+    $default  reduce using rule 24 (procedure_list)
+
+
+state 22
+
+   27 parameters: OPENACCOLADE_KW . declarations_list CLOSEACCOLADE_KW
+
+    $default  reduce using rule 3 (declarations_list)
+
+    declarations_list  go to state 30
+
+
+state 23
+
+   26 procedure: PROCEDURE_KW ID parameters . OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
+
+    OPENACCOLADE_KW  shift, and go to state 31
+
+
+state 24
+
+   15 dec: ID OPENBRACKET_KW . range CLOSEBRACKET_KW
+   16    | ID OPENBRACKET_KW . NUMCONST CLOSEBRACKET_KW
+
+    ID        shift, and go to state 32
+    NUMCONST  shift, and go to state 33
+
+    range  go to state 34
+
+
+state 25
+
+   10 declarator_list: declarator_list COMMA_KW . declarator
+
+    ID  shift, and go to state 16
+
+    declarator  go to state 35
+    dec         go to state 19
+
+
+state 26
+
+    4 declarations: type_specifiers declarator_list SEMICOLON_KW .
+
+    $default  reduce using rule 4 (declarations)
+
+
+state 27
+
+   12 declarator: dec EQ_KW . initializer
+
+    NUMCONST         shift, and go to state 36
+    REALCONST        shift, and go to state 37
+    CHARCONST        shift, and go to state 38
+    BOOLCONST        shift, and go to state 39
+    OPENACCOLADE_KW  shift, and go to state 40
+
+    initializer           go to state 41
+    constant_expressions  go to state 42
+
+
+state 28
+
+   28 block: OPENACCOLADE_KW . statement_list CLOSEACCOLADE_KW
+
+    ID               shift, and go to state 43
+    OPENACCOLADE_KW  shift, and go to state 28
+    EXIT_KW          shift, and go to state 44
+    RETURN_KW        shift, and go to state 45
+    FOR_KW           shift, and go to state 46
+    SWITCH_KW        shift, and go to state 47
+    DO_KW            shift, and go to state 48
+    IF_KW            shift, and go to state 49
+
+    $default  reduce using rule 42 (statement)
+
+    block           go to state 50
+    statement_list  go to state 51
+    statement       go to state 52
+
+
+state 29
+
+    1 program: PROGRAM_KW ID declarations_list procedure_list MAIN_KW block .
+
+    $default  reduce using rule 1 (program)
+
+
+state 30
+
+    2 declarations_list: declarations_list . declarations
+   27 parameters: OPENACCOLADE_KW declarations_list . CLOSEACCOLADE_KW
+
+    CLOSEACCOLADE_KW  shift, and go to state 53
+    BOOLEAN_KW        shift, and go to state 7
+    CHRACTER_KW       shift, and go to state 8
+    REAL_KW           shift, and go to state 9
+    INTEGER_KW        shift, and go to state 10
+
+    CLOSEACCOLADE_KW  [reduce using rule 5 (declarations)]
+    BOOLEAN_KW        [reduce using rule 5 (declarations)]
+    CHRACTER_KW       [reduce using rule 5 (declarations)]
+    REAL_KW           [reduce using rule 5 (declarations)]
+    INTEGER_KW        [reduce using rule 5 (declarations)]
+
+    declarations     go to state 11
+    type_specifiers  go to state 12
+
+
+state 31
+
+   26 procedure: PROCEDURE_KW ID parameters OPENACCOLADE_KW . declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
+
+    $default  reduce using rule 3 (declarations_list)
+
+    declarations_list  go to state 54
+
+
+state 32
+
+   17 range: ID . DOT_KW ID
+
+    DOT_KW  shift, and go to state 55
+
+
+state 33
+
+   16 dec: ID OPENBRACKET_KW NUMCONST . CLOSEBRACKET_KW
+   19 range: NUMCONST . DOT_KW NUMCONST $@1 arithmetic_expressions DOT_KW arithmetic_expressions
+
+    DOT_KW           shift, and go to state 56
+    CLOSEBRACKET_KW  shift, and go to state 57
+
+
+state 34
+
+   15 dec: ID OPENBRACKET_KW range . CLOSEBRACKET_KW
+
+    CLOSEBRACKET_KW  shift, and go to state 58
+
+
+state 35
+
+   10 declarator_list: declarator_list COMMA_KW declarator .
+
+    $default  reduce using rule 10 (declarator_list)
+
+
+state 36
+
+   60 constant_expressions: NUMCONST .
+
+    $default  reduce using rule 60 (constant_expressions)
+
+
+state 37
+
+   61 constant_expressions: REALCONST .
+
+    $default  reduce using rule 61 (constant_expressions)
+
+
+state 38
+
+   62 constant_expressions: CHARCONST .
+
+    $default  reduce using rule 62 (constant_expressions)
+
+
+state 39
+
+   63 constant_expressions: BOOLCONST .
+
+    $default  reduce using rule 63 (constant_expressions)
+
+
+state 40
+
+   21 initializer: OPENACCOLADE_KW . initializer_list CLOSEACCOLADE_KW
+
+    NUMCONST   shift, and go to state 36
+    REALCONST  shift, and go to state 37
+    CHARCONST  shift, and go to state 38
+    BOOLCONST  shift, and go to state 39
+
+    initializer_list      go to state 59
+    constant_expressions  go to state 60
+
+
+state 41
+
+   12 declarator: dec EQ_KW initializer .
+
+    $default  reduce using rule 12 (declarator)
+
+
+state 42
+
+   20 initializer: constant_expressions .
+
+    $default  reduce using rule 20 (initializer)
+
+
+state 43
+
+   31 statement: ID . EQ_KW expressions
+   37          | ID . OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW
+   38          | ID . OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions
+
+    EQ_KW               shift, and go to state 61
+    OPENPARENTHESIS_KW  shift, and go to state 62
+    OPENBRACKET_KW      shift, and go to state 63
+
+
+state 44
+
+   40 statement: EXIT_KW . WHEN_KW bool_expressions
+
+    WHEN_KW  shift, and go to state 64
+
+
+state 45
+
+   39 statement: RETURN_KW . expressions
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 81
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 46
+
+   35 statement: FOR_KW . ID ASSIGN_KW counter DO_KW statement
+
+    ID  shift, and go to state 85
+
+
+state 47
+
+   36 statement: SWITCH_KW . expressions case_element default END_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 86
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 48
+
+   34 statement: DO_KW . statement WHILE_KW bool_expressions
+
+    ID               shift, and go to state 43
+    OPENACCOLADE_KW  shift, and go to state 28
+    EXIT_KW          shift, and go to state 44
+    RETURN_KW        shift, and go to state 45
+    FOR_KW           shift, and go to state 46
+    SWITCH_KW        shift, and go to state 47
+    DO_KW            shift, and go to state 48
+    IF_KW            shift, and go to state 49
+
+    $default  reduce using rule 42 (statement)
+
+    block      go to state 50
+    statement  go to state 87
+
+
+state 49
+
+   32 statement: IF_KW . bool_expressions THEN_KW statement ENDIF_KW
+   33          | IF_KW . bool_expressions THEN_KW statement ELSE_KW statement ENDIF_KW
+
+    LTE_KW  shift, and go to state 71
+    GTE_KW  shift, and go to state 72
+    NEQ_KW  shift, and go to state 73
+    EQ_KW   shift, and go to state 74
+    GT_KW   shift, and go to state 75
+    LT_KW   shift, and go to state 76
+    NOT_KW  shift, and go to state 78
+    OR_KW   shift, and go to state 79
+    AND_KW  shift, and go to state 80
+
+    bool_expressions  go to state 88
+
+
+state 50
+
+   41 statement: block .
+
+    $default  reduce using rule 41 (statement)
+
+
+state 51
+
+   28 block: OPENACCOLADE_KW statement_list . CLOSEACCOLADE_KW
+   29 statement_list: statement_list . statement SEMICOLON_KW
+
+    ID                shift, and go to state 43
+    CLOSEACCOLADE_KW  shift, and go to state 89
+    OPENACCOLADE_KW   shift, and go to state 28
+    EXIT_KW           shift, and go to state 44
+    RETURN_KW         shift, and go to state 45
+    FOR_KW            shift, and go to state 46
+    SWITCH_KW         shift, and go to state 47
+    DO_KW             shift, and go to state 48
+    IF_KW             shift, and go to state 49
+
+    $default  reduce using rule 42 (statement)
+
+    block      go to state 50
+    statement  go to state 90
+
+
+state 52
+
+   30 statement_list: statement . SEMICOLON_KW
+
+    SEMICOLON_KW  shift, and go to state 91
+
+
+state 53
+
+   27 parameters: OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW .
+
+    $default  reduce using rule 27 (parameters)
+
+
+state 54
+
+    2 declarations_list: declarations_list . declarations
+   26 procedure: PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list . block CLOSEACCOLADE_KW SEMICOLON_KW
+
+    OPENACCOLADE_KW  shift, and go to state 28
+    BOOLEAN_KW       shift, and go to state 7
+    CHRACTER_KW      shift, and go to state 8
+    REAL_KW          shift, and go to state 9
+    INTEGER_KW       shift, and go to state 10
+
+    OPENACCOLADE_KW  [reduce using rule 5 (declarations)]
+    BOOLEAN_KW       [reduce using rule 5 (declarations)]
+    CHRACTER_KW      [reduce using rule 5 (declarations)]
+    REAL_KW          [reduce using rule 5 (declarations)]
+    INTEGER_KW       [reduce using rule 5 (declarations)]
+
+    declarations     go to state 11
+    type_specifiers  go to state 12
+    block            go to state 92
+
+
+state 55
+
+   17 range: ID DOT_KW . ID
+
+    ID  shift, and go to state 93
+
+
+state 56
+
+   19 range: NUMCONST DOT_KW . NUMCONST $@1 arithmetic_expressions DOT_KW arithmetic_expressions
+
+    NUMCONST  shift, and go to state 94
+
+
+state 57
+
+   16 dec: ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW .
+
+    $default  reduce using rule 16 (dec)
+
+
+state 58
+
+   15 dec: ID OPENBRACKET_KW range CLOSEBRACKET_KW .
+
+    $default  reduce using rule 15 (dec)
+
+
+state 59
+
+   21 initializer: OPENACCOLADE_KW initializer_list . CLOSEACCOLADE_KW
+
+    CLOSEACCOLADE_KW  shift, and go to state 95
+
+
+state 60
+
+   22 initializer_list: constant_expressions . COMMA_KW initializer_list
+   23                 | constant_expressions .
+
+    COMMA_KW  shift, and go to state 96
+
+    $default  reduce using rule 23 (initializer_list)
+
+
+state 61
+
+   31 statement: ID EQ_KW . expressions
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 97
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 62
+
+   37 statement: ID OPENPARENTHESIS_KW . arguments_list CLOSEPARENTHESIS_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    $default  reduce using rule 44 (arguments_list)
+
+    arguments_list          go to state 98
+    multi_arguments         go to state 99
+    expressions             go to state 100
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 63
+
+   38 statement: ID OPENBRACKET_KW . expressions CLOSEBRACKET_KW EQ_KW expressions
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 101
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 64
+
+   40 statement: EXIT_KW WHEN_KW . bool_expressions
+
+    LTE_KW  shift, and go to state 71
+    GTE_KW  shift, and go to state 72
+    NEQ_KW  shift, and go to state 73
+    EQ_KW   shift, and go to state 74
+    GT_KW   shift, and go to state 75
+    LT_KW   shift, and go to state 76
+    NOT_KW  shift, and go to state 78
+    OR_KW   shift, and go to state 79
+    AND_KW  shift, and go to state 80
+
+    bool_expressions  go to state 102
+
+
+state 65
+
+   56 expressions: ID .
+   57            | ID . OPENBRACKET_KW expressions CLOSEBRACKET_KW
+   58            | ID . OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW
+
+    OPENPARENTHESIS_KW  shift, and go to state 103
+    OPENBRACKET_KW      shift, and go to state 104
+
+    $default  reduce using rule 56 (expressions)
+
+
+state 66
+
+   79 arithmetic_expressions: MOD_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 106
+
+
+state 67
+
+   78 arithmetic_expressions: DIV_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 107
+
+
+state 68
+
+   77 arithmetic_expressions: MUL_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 108
+
+
+state 69
+
+   76 arithmetic_expressions: SUB_KW . pair
+   80                       | SUB_KW . expressions
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 109
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 110
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+    pair                    go to state 111
+
+
+state 70
+
+   75 arithmetic_expressions: ADD_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 112
+
+
+state 71
+
+   67 bool_expressions: LTE_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 113
+
+
+state 72
+
+   65 bool_expressions: GTE_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 114
+
+
+state 73
+
+   69 bool_expressions: NEQ_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 115
+
+
+state 74
+
+   68 bool_expressions: EQ_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 116
+
+
+state 75
+
+   64 bool_expressions: GT_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 117
+
+
+state 76
+
+   66 bool_expressions: LT_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 118
+
+
+state 77
+
+   59 expressions: OPENPARENTHESIS_KW . expressions CLOSEPARENTHESIS_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 119
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 78
+
+   74 bool_expressions: NOT_KW . expressions
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 120
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 79
+
+   71 bool_expressions: OR_KW . pair
+   73                 | OR_KW . ELSE_KW pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+    ELSE_KW             shift, and go to state 121
+
+    pair  go to state 122
+
+
+state 80
+
+   70 bool_expressions: AND_KW . pair
+   72                 | AND_KW . THEN_KW pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+    THEN_KW             shift, and go to state 123
+
+    pair  go to state 124
+
+
+state 81
+
+   39 statement: RETURN_KW expressions .
+
+    $default  reduce using rule 39 (statement)
+
+
+state 82
+
+   53 expressions: constant_expressions .
+
+    $default  reduce using rule 53 (expressions)
+
+
+state 83
+
+   54 expressions: bool_expressions .
+
+    $default  reduce using rule 54 (expressions)
+
+
+state 84
+
+   55 expressions: arithmetic_expressions .
+
+    $default  reduce using rule 55 (expressions)
+
+
+state 85
+
+   35 statement: FOR_KW ID . ASSIGN_KW counter DO_KW statement
+
+    ASSIGN_KW  shift, and go to state 125
+
+
+state 86
+
+   36 statement: SWITCH_KW expressions . case_element default END_KW
+
+    CASE_KW  shift, and go to state 126
+
+    case_element  go to state 127
+
+
+state 87
+
+   34 statement: DO_KW statement . WHILE_KW bool_expressions
+
+    WHILE_KW  shift, and go to state 128
+
+
+state 88
+
+   32 statement: IF_KW bool_expressions . THEN_KW statement ENDIF_KW
+   33          | IF_KW bool_expressions . THEN_KW statement ELSE_KW statement ENDIF_KW
+
+    THEN_KW  shift, and go to state 129
+
+
+state 89
+
+   28 block: OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW .
+
+    $default  reduce using rule 28 (block)
+
+
+state 90
+
+   29 statement_list: statement_list statement . SEMICOLON_KW
+
+    SEMICOLON_KW  shift, and go to state 130
+
+
+state 91
+
+   30 statement_list: statement SEMICOLON_KW .
+
+    $default  reduce using rule 30 (statement_list)
+
+
+state 92
+
+   26 procedure: PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block . CLOSEACCOLADE_KW SEMICOLON_KW
+
+    CLOSEACCOLADE_KW  shift, and go to state 131
+
+
+state 93
+
+   17 range: ID DOT_KW ID .
+
+    $default  reduce using rule 17 (range)
+
+
+state 94
+
+   19 range: NUMCONST DOT_KW NUMCONST . $@1 arithmetic_expressions DOT_KW arithmetic_expressions
+
+    $default  reduce using rule 18 ($@1)
+
+    $@1  go to state 132
+
+
+state 95
+
+   21 initializer: OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW .
+
+    $default  reduce using rule 21 (initializer)
+
+
+state 96
+
+   22 initializer_list: constant_expressions COMMA_KW . initializer_list
+
+    NUMCONST   shift, and go to state 36
+    REALCONST  shift, and go to state 37
+    CHARCONST  shift, and go to state 38
+    BOOLCONST  shift, and go to state 39
+
+    initializer_list      go to state 133
+    constant_expressions  go to state 60
+
+
+state 97
+
+   31 statement: ID EQ_KW expressions .
+
+    $default  reduce using rule 31 (statement)
+
+
+state 98
+
+   37 statement: ID OPENPARENTHESIS_KW arguments_list . CLOSEPARENTHESIS_KW
+
+    CLOSEPARENTHESIS_KW  shift, and go to state 134
+
+
+state 99
+
+   43 arguments_list: multi_arguments .
+   45 multi_arguments: multi_arguments . COMMA_KW expressions
+
+    COMMA_KW  shift, and go to state 135
+
+    $default  reduce using rule 43 (arguments_list)
+
+
+state 100
+
+   46 multi_arguments: expressions .
+
+    $default  reduce using rule 46 (multi_arguments)
+
+
+state 101
+
+   38 statement: ID OPENBRACKET_KW expressions . CLOSEBRACKET_KW EQ_KW expressions
+
+    CLOSEBRACKET_KW  shift, and go to state 136
+
+
+state 102
+
+   40 statement: EXIT_KW WHEN_KW bool_expressions .
+
+    $default  reduce using rule 40 (statement)
+
+
+state 103
+
+   58 expressions: ID OPENPARENTHESIS_KW . arguments_list CLOSEPARENTHESIS_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    $default  reduce using rule 44 (arguments_list)
+
+    arguments_list          go to state 137
+    multi_arguments         go to state 99
+    expressions             go to state 100
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 104
+
+   57 expressions: ID OPENBRACKET_KW . expressions CLOSEBRACKET_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 138
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 105
+
+   81 pair: OPENPARENTHESIS_KW . expressions COMMA_KW expressions CLOSEPARENTHESIS_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 139
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 106
+
+   79 arithmetic_expressions: MOD_KW pair .
+
+    $default  reduce using rule 79 (arithmetic_expressions)
+
+
+state 107
+
+   78 arithmetic_expressions: DIV_KW pair .
+
+    $default  reduce using rule 78 (arithmetic_expressions)
+
+
+state 108
+
+   77 arithmetic_expressions: MUL_KW pair .
+
+    $default  reduce using rule 77 (arithmetic_expressions)
+
+
+state 109
+
+   59 expressions: OPENPARENTHESIS_KW . expressions CLOSEPARENTHESIS_KW
+   81 pair: OPENPARENTHESIS_KW . expressions COMMA_KW expressions CLOSEPARENTHESIS_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 140
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 110
+
+   80 arithmetic_expressions: SUB_KW expressions .
+
+    $default  reduce using rule 80 (arithmetic_expressions)
+
+
+state 111
+
+   76 arithmetic_expressions: SUB_KW pair .
+
+    $default  reduce using rule 76 (arithmetic_expressions)
+
+
+state 112
+
+   75 arithmetic_expressions: ADD_KW pair .
+
+    $default  reduce using rule 75 (arithmetic_expressions)
+
+
+state 113
+
+   67 bool_expressions: LTE_KW pair .
+
+    $default  reduce using rule 67 (bool_expressions)
+
+
+state 114
+
+   65 bool_expressions: GTE_KW pair .
+
+    $default  reduce using rule 65 (bool_expressions)
+
+
+state 115
+
+   69 bool_expressions: NEQ_KW pair .
+
+    $default  reduce using rule 69 (bool_expressions)
+
+
+state 116
+
+   68 bool_expressions: EQ_KW pair .
+
+    $default  reduce using rule 68 (bool_expressions)
+
+
+state 117
+
+   64 bool_expressions: GT_KW pair .
+
+    $default  reduce using rule 64 (bool_expressions)
+
+
+state 118
+
+   66 bool_expressions: LT_KW pair .
+
+    $default  reduce using rule 66 (bool_expressions)
+
+
+state 119
+
+   59 expressions: OPENPARENTHESIS_KW expressions . CLOSEPARENTHESIS_KW
+
+    CLOSEPARENTHESIS_KW  shift, and go to state 141
+
+
+state 120
+
+   74 bool_expressions: NOT_KW expressions .
+
+    $default  reduce using rule 74 (bool_expressions)
+
+
+state 121
+
+   73 bool_expressions: OR_KW ELSE_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 142
+
+
+state 122
+
+   71 bool_expressions: OR_KW pair .
+
+    $default  reduce using rule 71 (bool_expressions)
+
+
+state 123
+
+   72 bool_expressions: AND_KW THEN_KW . pair
+
+    OPENPARENTHESIS_KW  shift, and go to state 105
+
+    pair  go to state 143
+
+
+state 124
+
+   70 bool_expressions: AND_KW pair .
+
+    $default  reduce using rule 70 (bool_expressions)
+
+
+state 125
+
+   35 statement: FOR_KW ID ASSIGN_KW . counter DO_KW statement
+
+    NUMCONST  shift, and go to state 144
+
+    counter  go to state 145
+
+
+state 126
+
+   49 case_element: CASE_KW . NUMCONST COLON_KW block
+
+    NUMCONST  shift, and go to state 146
+
+
+state 127
+
+   36 statement: SWITCH_KW expressions case_element . default END_KW
+   50 case_element: case_element . CASE_KW NUMCONST SEMICOLON_KW block
+
+    DEFAULT_KW  shift, and go to state 147
+    CASE_KW     shift, and go to state 148
+
+    $default  reduce using rule 52 (default)
+
+    default  go to state 149
+
+
+state 128
+
+   34 statement: DO_KW statement WHILE_KW . bool_expressions
+
+    LTE_KW  shift, and go to state 71
+    GTE_KW  shift, and go to state 72
+    NEQ_KW  shift, and go to state 73
+    EQ_KW   shift, and go to state 74
+    GT_KW   shift, and go to state 75
+    LT_KW   shift, and go to state 76
+    NOT_KW  shift, and go to state 78
+    OR_KW   shift, and go to state 79
+    AND_KW  shift, and go to state 80
+
+    bool_expressions  go to state 150
+
+
+state 129
+
+   32 statement: IF_KW bool_expressions THEN_KW . statement ENDIF_KW
+   33          | IF_KW bool_expressions THEN_KW . statement ELSE_KW statement ENDIF_KW
+
+    ID               shift, and go to state 43
+    OPENACCOLADE_KW  shift, and go to state 28
+    EXIT_KW          shift, and go to state 44
+    RETURN_KW        shift, and go to state 45
+    FOR_KW           shift, and go to state 46
+    SWITCH_KW        shift, and go to state 47
+    DO_KW            shift, and go to state 48
+    IF_KW            shift, and go to state 49
+
+    $default  reduce using rule 42 (statement)
+
+    block      go to state 50
+    statement  go to state 151
+
+
+state 130
+
+   29 statement_list: statement_list statement SEMICOLON_KW .
+
+    $default  reduce using rule 29 (statement_list)
+
+
+state 131
+
+   26 procedure: PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW . SEMICOLON_KW
+
+    SEMICOLON_KW  shift, and go to state 152
+
+
+state 132
+
+   19 range: NUMCONST DOT_KW NUMCONST $@1 . arithmetic_expressions DOT_KW arithmetic_expressions
+
+    MOD_KW  shift, and go to state 66
+    DIV_KW  shift, and go to state 67
+    MUL_KW  shift, and go to state 68
+    SUB_KW  shift, and go to state 69
+    ADD_KW  shift, and go to state 70
+
+    arithmetic_expressions  go to state 153
+
+
+state 133
+
+   22 initializer_list: constant_expressions COMMA_KW initializer_list .
+
+    $default  reduce using rule 22 (initializer_list)
+
+
+state 134
+
+   37 statement: ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW .
+
+    $default  reduce using rule 37 (statement)
+
+
+state 135
+
+   45 multi_arguments: multi_arguments COMMA_KW . expressions
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 154
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 136
+
+   38 statement: ID OPENBRACKET_KW expressions CLOSEBRACKET_KW . EQ_KW expressions
+
+    EQ_KW  shift, and go to state 155
+
+
+state 137
+
+   58 expressions: ID OPENPARENTHESIS_KW arguments_list . CLOSEPARENTHESIS_KW
+
+    CLOSEPARENTHESIS_KW  shift, and go to state 156
+
+
+state 138
+
+   57 expressions: ID OPENBRACKET_KW expressions . CLOSEBRACKET_KW
+
+    CLOSEBRACKET_KW  shift, and go to state 157
+
+
+state 139
+
+   81 pair: OPENPARENTHESIS_KW expressions . COMMA_KW expressions CLOSEPARENTHESIS_KW
+
+    COMMA_KW  shift, and go to state 158
+
+
+state 140
+
+   59 expressions: OPENPARENTHESIS_KW expressions . CLOSEPARENTHESIS_KW
+   81 pair: OPENPARENTHESIS_KW expressions . COMMA_KW expressions CLOSEPARENTHESIS_KW
+
+    COMMA_KW             shift, and go to state 158
+    CLOSEPARENTHESIS_KW  shift, and go to state 141
+
+
+state 141
+
+   59 expressions: OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW .
+
+    $default  reduce using rule 59 (expressions)
+
+
+state 142
+
+   73 bool_expressions: OR_KW ELSE_KW pair .
+
+    $default  reduce using rule 73 (bool_expressions)
+
+
+state 143
+
+   72 bool_expressions: AND_KW THEN_KW pair .
+
+    $default  reduce using rule 72 (bool_expressions)
+
+
+state 144
+
+   47 counter: NUMCONST . UPTO_KW NUMCONST
+   48        | NUMCONST . DOWNTO_KW NUMCONST
+
+    DOWNTO_KW  shift, and go to state 159
+    UPTO_KW    shift, and go to state 160
+
+
+state 145
+
+   35 statement: FOR_KW ID ASSIGN_KW counter . DO_KW statement
+
+    DO_KW  shift, and go to state 161
+
+
+state 146
+
+   49 case_element: CASE_KW NUMCONST . COLON_KW block
+
+    COLON_KW  shift, and go to state 162
+
+
+state 147
+
+   51 default: DEFAULT_KW . SEMICOLON_KW block
+
+    SEMICOLON_KW  shift, and go to state 163
+
+
+state 148
+
+   50 case_element: case_element CASE_KW . NUMCONST SEMICOLON_KW block
+
+    NUMCONST  shift, and go to state 164
+
+
+state 149
+
+   36 statement: SWITCH_KW expressions case_element default . END_KW
+
+    END_KW  shift, and go to state 165
+
+
+state 150
+
+   34 statement: DO_KW statement WHILE_KW bool_expressions .
+
+    $default  reduce using rule 34 (statement)
+
+
+state 151
+
+   32 statement: IF_KW bool_expressions THEN_KW statement . ENDIF_KW
+   33          | IF_KW bool_expressions THEN_KW statement . ELSE_KW statement ENDIF_KW
+
+    ENDIF_KW  shift, and go to state 166
+    ELSE_KW   shift, and go to state 167
+
+
+state 152
+
+   26 procedure: PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW .
+
+    $default  reduce using rule 26 (procedure)
+
+
+state 153
+
+   19 range: NUMCONST DOT_KW NUMCONST $@1 arithmetic_expressions . DOT_KW arithmetic_expressions
+
+    DOT_KW  shift, and go to state 168
+
+
+state 154
+
+   45 multi_arguments: multi_arguments COMMA_KW expressions .
+
+    $default  reduce using rule 45 (multi_arguments)
+
+
+state 155
+
+   38 statement: ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW . expressions
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 169
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 156
+
+   58 expressions: ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW .
+
+    $default  reduce using rule 58 (expressions)
+
+
+state 157
+
+   57 expressions: ID OPENBRACKET_KW expressions CLOSEBRACKET_KW .
+
+    $default  reduce using rule 57 (expressions)
+
+
+state 158
+
+   81 pair: OPENPARENTHESIS_KW expressions COMMA_KW . expressions CLOSEPARENTHESIS_KW
+
+    ID                  shift, and go to state 65
+    NUMCONST            shift, and go to state 36
+    REALCONST           shift, and go to state 37
+    CHARCONST           shift, and go to state 38
+    BOOLCONST           shift, and go to state 39
+    MOD_KW              shift, and go to state 66
+    DIV_KW              shift, and go to state 67
+    MUL_KW              shift, and go to state 68
+    SUB_KW              shift, and go to state 69
+    ADD_KW              shift, and go to state 70
+    LTE_KW              shift, and go to state 71
+    GTE_KW              shift, and go to state 72
+    NEQ_KW              shift, and go to state 73
+    EQ_KW               shift, and go to state 74
+    GT_KW               shift, and go to state 75
+    LT_KW               shift, and go to state 76
+    OPENPARENTHESIS_KW  shift, and go to state 77
+    NOT_KW              shift, and go to state 78
+    OR_KW               shift, and go to state 79
+    AND_KW              shift, and go to state 80
+
+    expressions             go to state 170
+    constant_expressions    go to state 82
+    bool_expressions        go to state 83
+    arithmetic_expressions  go to state 84
+
+
+state 159
+
+   48 counter: NUMCONST DOWNTO_KW . NUMCONST
+
+    NUMCONST  shift, and go to state 171
+
+
+state 160
+
+   47 counter: NUMCONST UPTO_KW . NUMCONST
+
+    NUMCONST  shift, and go to state 172
+
+
+state 161
+
+   35 statement: FOR_KW ID ASSIGN_KW counter DO_KW . statement
+
+    ID               shift, and go to state 43
+    OPENACCOLADE_KW  shift, and go to state 28
+    EXIT_KW          shift, and go to state 44
+    RETURN_KW        shift, and go to state 45
+    FOR_KW           shift, and go to state 46
+    SWITCH_KW        shift, and go to state 47
+    DO_KW            shift, and go to state 48
+    IF_KW            shift, and go to state 49
+
+    $default  reduce using rule 42 (statement)
+
+    block      go to state 50
+    statement  go to state 173
+
+
+state 162
+
+   49 case_element: CASE_KW NUMCONST COLON_KW . block
+
+    OPENACCOLADE_KW  shift, and go to state 28
+
+    block  go to state 174
+
+
+state 163
+
+   51 default: DEFAULT_KW SEMICOLON_KW . block
+
+    OPENACCOLADE_KW  shift, and go to state 28
+
+    block  go to state 175
+
+
+state 164
+
+   50 case_element: case_element CASE_KW NUMCONST . SEMICOLON_KW block
+
+    SEMICOLON_KW  shift, and go to state 176
+
+
+state 165
+
+   36 statement: SWITCH_KW expressions case_element default END_KW .
+
+    $default  reduce using rule 36 (statement)
+
+
+state 166
+
+   32 statement: IF_KW bool_expressions THEN_KW statement ENDIF_KW .
+
+    $default  reduce using rule 32 (statement)
+
+
+state 167
+
+   33 statement: IF_KW bool_expressions THEN_KW statement ELSE_KW . statement ENDIF_KW
+
+    ID               shift, and go to state 43
+    OPENACCOLADE_KW  shift, and go to state 28
+    EXIT_KW          shift, and go to state 44
+    RETURN_KW        shift, and go to state 45
+    FOR_KW           shift, and go to state 46
+    SWITCH_KW        shift, and go to state 47
+    DO_KW            shift, and go to state 48
+    IF_KW            shift, and go to state 49
+
+    $default  reduce using rule 42 (statement)
+
+    block      go to state 50
+    statement  go to state 177
+
+
+state 168
+
+   19 range: NUMCONST DOT_KW NUMCONST $@1 arithmetic_expressions DOT_KW . arithmetic_expressions
+
+    MOD_KW  shift, and go to state 66
+    DIV_KW  shift, and go to state 67
+    MUL_KW  shift, and go to state 68
+    SUB_KW  shift, and go to state 69
+    ADD_KW  shift, and go to state 70
+
+    arithmetic_expressions  go to state 178
+
+
+state 169
+
+   38 statement: ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions .
+
+    $default  reduce using rule 38 (statement)
+
+
+state 170
+
+   81 pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions . CLOSEPARENTHESIS_KW
+
+    CLOSEPARENTHESIS_KW  shift, and go to state 179
+
+
+state 171
+
+   48 counter: NUMCONST DOWNTO_KW NUMCONST .
+
+    $default  reduce using rule 48 (counter)
+
+
+state 172
+
+   47 counter: NUMCONST UPTO_KW NUMCONST .
+
+    $default  reduce using rule 47 (counter)
+
+
+state 173
+
+   35 statement: FOR_KW ID ASSIGN_KW counter DO_KW statement .
+
+    $default  reduce using rule 35 (statement)
+
+
+state 174
+
+   49 case_element: CASE_KW NUMCONST COLON_KW block .
+
+    $default  reduce using rule 49 (case_element)
+
+
+state 175
+
+   51 default: DEFAULT_KW SEMICOLON_KW block .
+
+    $default  reduce using rule 51 (default)
+
+
+state 176
+
+   50 case_element: case_element CASE_KW NUMCONST SEMICOLON_KW . block
+
+    OPENACCOLADE_KW  shift, and go to state 28
+
+    block  go to state 180
+
+
+state 177
+
+   33 statement: IF_KW bool_expressions THEN_KW statement ELSE_KW statement . ENDIF_KW
+
+    ENDIF_KW  shift, and go to state 181
+
+
+state 178
+
+   19 range: NUMCONST DOT_KW NUMCONST $@1 arithmetic_expressions DOT_KW arithmetic_expressions .
+
+    $default  reduce using rule 19 (range)
+
+
+state 179
+
+   81 pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW .
+
+    $default  reduce using rule 81 (pair)
+
+
+state 180
+
+   50 case_element: case_element CASE_KW NUMCONST SEMICOLON_KW block .
+
+    $default  reduce using rule 50 (case_element)
+
+
+state 181
+
+   33 statement: IF_KW bool_expressions THEN_KW statement ELSE_KW statement ENDIF_KW .
+
+    $default  reduce using rule 33 (statement)
