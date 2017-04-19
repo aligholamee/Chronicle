@@ -203,10 +203,10 @@ statement:
 
 arguments_list:
 	multi_arguments {
-	System.out.println("Rule 17.1: arguments_list -> multi_arguments");
+	System.out.println("Rule 16.1: arguments_list -> multi_arguments");
 	}
 	| {
-  System.out.println("Rule 17.3: statement -> epsilon");
+  System.out.println("Rule 16.2: statement -> EMPTY");
   }
 
 multi_arguments:
