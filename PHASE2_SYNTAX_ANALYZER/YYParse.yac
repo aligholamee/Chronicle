@@ -79,10 +79,10 @@ type_specifiers:
 
 declarator_list:
 	declarator_list COMMA_KW declarator {
-	System.out.println("Rule 5.1: declarator_list -> declarator_list COMMA_KW declarator");
+	System.out.println("Rule 4.1: declarator_list -> declarator_list COMMA_KW declarator");
 	}
 	| declarator {
-	System.out.println("Rule 5.2: declarator_list -> declarator");
+	System.out.println("Rule 4.2: declarator_list -> declarator");
 	}
 
 declarator:
