@@ -45,24 +45,19 @@
         return;
     }
 }
-
 // Precedences go increasing, so "then" < "else".
 %nonassoc "THEN_KW"
 %nonassoc "ELSE_KW"
 
+
+
+
 %%
 program:
-	PROGRAM_KW ID declarations_list procedure_list MAIN_KW block {
+	PROGRAM_KW ID declarations procedure_list MAIN_KW block {
 	System.out.println("Rule 1: program -> program ID declarations_list procedure_list main block");
 	}
 
-declarations_list:
-  declarations_list declarations {
-	System.out.println("Rule 2.1: declarations_list -> declarations_list declarations");
-	}
-  | {
-  System.out.println("Rule 2.2: declarations -> epsilon");
-  }
 
 declarations:
 	type_specifiers declarator_list SEMICOLON_KW {
@@ -141,21 +136,21 @@ initializer_list:
 	}
 
 procedure_list:
-	procedure_list p_procedure {
+	procedure_list procedure {
 	System.out.println("Rule 11: procedure_list -> procedure_list p_procedure");
 	}
-    | p_procedure{
- 	 System.out.println("Rule 11.1: procedure_list -> p_procedure");
-  	}
+  | procedure{
+ 	 System.out.println("Rule 11.1: procedure_list -> epsilon");
+  }
 
-p_procedure:
-	PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW
+procedure:
+	PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations block CLOSEACCOLADE_KW SEMICOLON_KW
 	{
 	System.out.println("Rule 12: p_procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW");
 	}
 
 parameters:
-	OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW {
+	OPENACCOLADE_KW declarations CLOSEACCOLADE_KW {
 	System.out.println("Rule 13: parameters -> OPENACCOLADE_KW declarations_list CLOSEACCOLADE_KW");
 	}
 
