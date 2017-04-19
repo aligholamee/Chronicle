@@ -49,15 +49,11 @@
 %nonassoc THEN_KW
 %nonassoc ELSE_KW
 
-
-
-
 %%
 program:
 	PROGRAM_KW ID declarations procedure_list MAIN_KW block {
-	System.out.println("Rule 1: program -> program ID declarations_list procedure_list main block");
+	System.out.println("Rule 1: program -> PROGRAM_KW ID declarations procedure_list MAIN_KW block");
 	}
-
 
 declarations:
 	type_specifiers declarator_list SEMICOLON_KW {
