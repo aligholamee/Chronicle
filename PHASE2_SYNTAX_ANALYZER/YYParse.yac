@@ -106,13 +106,13 @@ dec:
 
 range:
 	ID DOT_KW ID {
-	System.out.println("Rule 8.1: range -> ID DOT_KW ID");
+	System.out.println("Rule 7.1: range -> ID DOT_KW ID");
 	}
 	| NUMCONST DOT_KW NUMCONST {
-	System.out.println("Rule 8.2: range -> NUMCONST DOT_KW NUMCONST");
+	System.out.println("Rule 7.2: range -> NUMCONST DOT_KW NUMCONST");
 	}
 	arithmetic_expressions DOT_KW arithmetic_expressions {
-	System.out.println("Rule 8.3: range -> arithmetic_expressions DOT_KW arithmetic_expressions");
+	System.out.println("Rule 7.3: range -> arithmetic_expressions DOT_KW arithmetic_expressions");
 	}
 
 initializer:
