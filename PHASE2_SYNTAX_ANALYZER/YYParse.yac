@@ -64,7 +64,7 @@ declarations:
 	System.out.println("Rule 3.1: declarations -> type_specifiers declarator_list SEMICOLON_KW");
 	}
   | {
-  System.out.println("Rule 3.2: declarations -> epsilon");
+  System.out.println("Rule 3.2: declarations -> EMPTY");
   }
 
 type_specifiers:
