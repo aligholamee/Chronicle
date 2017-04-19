@@ -144,8 +144,8 @@ procedure_list:
 	procedure_list p_procedure {
 	System.out.println("Rule 11: procedure_list -> procedure_list p_procedure");
 	}
-    | {
- 	 System.out.println("Rule 11.1: procedure_list -> epsilon");
+    | p_procedure{
+ 	 System.out.println("Rule 11.1: procedure_list -> p_procedure");
   	}
 
 p_procedure:
