@@ -219,18 +219,18 @@ multi_arguments:
 
 counter:
 	NUMCONST UPTO_KW NUMCONST {
-	System.out.println("Rule 19.1: counter -> NUMCONST UPTO_KW NUMCONST");
+	System.out.println("Rule 18.1: counter -> NUMCONST UPTO_KW NUMCONST");
 	}
 	| NUMCONST DOWNTO_KW NUMCONST {
-	System.out.println("Rule 19.2: counter -> NUMCONST DOWNTO_KW NUMCONST");
+	System.out.println("Rule 18.2: counter -> NUMCONST DOWNTO_KW NUMCONST");
 	}
 
 case_element:
 	CASE_KW NUMCONST COLON_KW block {
-		System.out.println("Rule 20.1: case_element -> CASE_KW NUMCONST COLON_KW block");
+		System.out.println("Rule 19.1: case_element -> CASE_KW NUMCONST COLON_KW block");
 	}
 	| case_element CASE_KW NUMCONST SEMICOLON_KW block {
-		System.out.println("Rule 20.2: case_element -> case_element CASE_KW NUMCONST SEMICOLON_KW block");
+		System.out.println("Rule 19.2: case_element -> case_element CASE_KW NUMCONST SEMICOLON_KW block");
 	}
 
 default:
