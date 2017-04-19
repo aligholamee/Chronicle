@@ -235,82 +235,82 @@ case_element:
 
 default:
 	DEFAULT_KW SEMICOLON_KW block {
-		System.out.println("Rule 21: default -> DEFAULT_KW SEMICOLON_KW block");
+		System.out.println("Rule 20.1: default -> DEFAULT_KW SEMICOLON_KW block");
 	}
   | {
-  System.out.println("Rule 21.1: statement -> epsilon");
+  System.out.println("Rule 20.2: statement -> EMPTY");
   }
 
 expressions:
 	constant_expressions {
-		System.out.println("Rule 22.1: expressions -> constant_expressions");
+		System.out.println("Rule 21.1: expressions -> constant_expressions");
 	}
 	| bool_expressions {
-		System.out.println("Rule 22.2: expressions -> bool_expressions");
+		System.out.println("Rule 21.2: expressions -> bool_expressions");
 	}
 	| arithmetic_expressions {
-		System.out.println("Rule 22.3: expressions -> arithmetic_expressions");
+		System.out.println("Rule 21.3: expressions -> arithmetic_expressions");
 	}
 	| ID {
-		System.out.println("RULE 22.4: expressions -> ID");
+		System.out.println("RULE 21.4: expressions -> ID");
 	}
 	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW {
-		System.out.println("Rule 22.5: expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
+		System.out.println("Rule 21.5: expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
 	}
 	| ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 22.6: expressions -> ID OPENPARENTHESIS_KW argumentslist CLOSEPARENTHESIS_KW");
+		System.out.println("Rule 21.6: expressions -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
 	}
 	| OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 22.7: expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
+		System.out.println("Rule 21.7: expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
 	}
 
 constant_expressions:
 	NUMCONST {
-		System.out.println("Rule 23.1: constant_expressions -> NUMCONST");
+		System.out.println("Rule 22.1: constant_expressions -> NUMCONST");
 	}
 	| REALCONST {
-		System.out.println("Rule 23.2: constant_expressions -> REALCONST");
+		System.out.println("Rule 22.2: constant_expressions -> REALCONST");
 	}
 	| CHARCONST {
-		System.out.println("Rule 23.3: constant_expressions -> CHARCONST");
+		System.out.println("Rule 22.3: constant_expressions -> CHARCONST");
 	}
 	| BOOLCONST {
-		System.out.println("Rule 23.4: constant_expressions -> BOOLCONST");
+		System.out.println("Rule 22.4: constant_expressions -> BOOLCONST");
 	}
 
 bool_expressions:
 	GT_KW pair {
-		System.out.println("Rule 24.1: bool_expressions -> GT_KW pair");
+		System.out.println("Rule 23.1: bool_expressions -> GT_KW pair");
 	}
 	| GTE_KW pair {
-		System.out.println("Rule 24.2: bool_expressions -> GTE_KW pair");
+		System.out.println("Rule 23.2: bool_expressions -> GTE_KW pair");
 	}
 	| LT_KW pair {
-		System.out.println("Rule 24.3: bool_expressions -> LT_KW pair");
+		System.out.println("Rule 23.3: bool_expressions -> LT_KW pair");
 	}
 	| LTE_KW pair {
-		System.out.println("Rule 24.4: bool_expressions -> LTE_KW pair");
+		System.out.println("Rule 23.4: bool_expressions -> LTE_KW pair");
 	}
 	| EQ_KW pair {
-		System.out.println("Rule 24.5: bool_expressions -> EQ_KW pair");
+		System.out.println("Rule 23.5: bool_expressions -> EQ_KW pair");
 	}
 	| NEQ_KW pair {
-		System.out.println("Rule 24.6: bool_expressions -> NEQ_KW pair");
+		System.out.println("Rule 23.6: bool_expressions -> NEQ_KW pair");
 	}
 	| AND_KW pair {
-		System.out.println("Rule 24.7: bool_expressions -> AND_KW pair");
+		System.out.println("Rule 23.7: bool_expressions -> AND_KW pair");
 	}
 	| OR_KW pair {
-		System.out.println("Rule 24.8: bool_expressions -> OR_KW pair");
+		System.out.println("Rule 23.8: bool_expressions -> OR_KW pair");
 	}
 	| AND_KW THEN_KW pair {
-		System.out.println("Rule 24.9: bool_expressions -> AND_KW THEN_KW pair");
+		System.out.println("Rule 23.9: bool_expressions -> AND_KW THEN_KW pair");
 	}
 	| OR_KW ELSE_KW pair {
-		System.out.println("Rule 24.10: bool_expressions -> OR_KW ELSE_KW pair");
+		System.out.println("Rule 23.10: bool_expressions -> OR_KW ELSE_KW pair");
 	}
 	| NOT_KW expressions {
-		System.out.println("Rule 24.11: bool_expressions -> NOT_KW expressions");
+		System.out.println("Rule 23.11: bool_expressions -> NOT_KW expressions");
 	}
 
 arithmetic_expressions:
