@@ -117,10 +117,10 @@ range:
 
 initializer:
 	constant_expressions {
-	System.out.println("Rule 9.1: initializer -> constant_expressions");
+	System.out.println("Rule 8.1: initializer -> constant_expressions");
 	}
 	| OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW {
-	System.out.println("Rule 9.2: intitializer -> OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW");
+	System.out.println("Rule 8.2: intitializer -> OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW");
 	}
 
 initializer_list:
