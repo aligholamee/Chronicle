@@ -157,48 +157,48 @@ block:
 
 statement_list:
 	statement_list statement SEMICOLON_KW {
-	System.out.println("Rule 15.1: statement_list -> statement_list statement SEMICOLON_KW");
+	System.out.println("Rule 14.1: statement_list -> statement_list statement SEMICOLON_KW");
 	}
 	| statement SEMICOLON_KW {
-	System.out.println("Rule 15.2: statement_list -> statement SEMICOLON_KW");
+	System.out.println("Rule 14.2: statement_list -> statement SEMICOLON_KW");
 	}
 
 statement:
 	ID EQ_KW expressions {
-	System.out.println("Rule 16.1: statement -> ID EQ_KW expressions");
+	System.out.println("Rule 15.1: statement -> ID EQ_KW expressions");
 	}
 	| IF_KW bool_expressions THEN_KW statement {
-	System.out.println("Rule 16.2: statement -> IF_KW bool_expressions THEN_KW statement");
+	System.out.println("Rule 15.2: statement -> IF_KW bool_expressions THEN_KW statement");
 	}
 	| IF_KW bool_expressions THEN_KW statement ELSE_KW statement {
-	System.out.println("Rule 16.3: statement -> IF_KW bool_expressions THEN_KW statement ELSE_KW statement");
+	System.out.println("Rule 15.3: statement -> IF_KW bool_expressions THEN_KW statement ELSE_KW statement");
 	}
 	| DO_KW statement WHILE_KW bool_expressions {
-	System.out.println("Rule 16.4: statement -> DO_KW statement WHILE_KW bool_expressions");
+	System.out.println("Rule 15.4: statement -> DO_KW statement WHILE_KW bool_expressions");
 	}
 	| FOR_KW ID ASSIGN_KW counter DO_KW statement {
-	System.out.println("Rule 16.5: statement -> FOR_KW ID ASSIGN_KW counter DO_KW statement");
+	System.out.println("Rule 15.5: statement -> FOR_KW ID ASSIGN_KW counter DO_KW statement");
 	}
 	| SWITCH_KW expressions case_element default END_KW {
-	System.out.println("Rule 16.6: statement -> SWITCH_KW expressions case_element default END_KW");
+	System.out.println("Rule 15.6: statement -> SWITCH_KW expressions case_element default END_KW");
 	}
 	| ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
-	System.out.println("Rule 16.7: statement -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
+	System.out.println("Rule 15.7: statement -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
 	}
 	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions {
-	System.out.println("Rule 16.8: statement -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions");
+	System.out.println("Rule 15.8: statement -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW EQ_KW expressions");
 	}
 	| RETURN_KW expressions {
-	System.out.println("Rule 16.9: statement -> RETURN_KW expressions");
+	System.out.println("Rule 15.9: statement -> RETURN_KW expressions");
 	}
 	| EXIT_KW WHEN_KW bool_expressions {
-	System.out.println("Rule 16.10: statement -> EXIT_KW WHEN_KW bool_expressions");
+	System.out.println("Rule 15.10: statement -> EXIT_KW WHEN_KW bool_expressions");
 	}
 	| block	{
-	System.out.println("Rule 16.11: statement -> block");
+	System.out.println("Rule 15.11: statement -> block");
 	}
   | {
-  System.out.println("Rule 16.12: statement -> epsilon");
+  System.out.println("Rule 15.12: statement -> EMPTY");
   }
 
 arguments_list:
