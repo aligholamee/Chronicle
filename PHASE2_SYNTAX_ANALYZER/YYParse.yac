@@ -65,16 +65,16 @@ declarations:
 
 type_specifiers:
 	INTEGER_KW {
-	System.out.println("Rule 4.1: type_specifiers -> INTEGER_KW");
+	System.out.println("Rule 3.1: type_specifiers -> INTEGER_KW");
 	}
 	| REAL_KW {
-	System.out.println("Rule 4.2: type_specifiers -> REAL_KW");
+	System.out.println("Rule 3.2: type_specifiers -> REAL_KW");
 	}
 	| CHARACTER_KW {
-	System.out.println("Rule 4.3: type_specifiers -> CHARACTER_KW");
+	System.out.println("Rule 3.3: type_specifiers -> CHARACTER_KW");
 	}
 	| BOOLEAN_KW {
-	System.out.println("Rule 4.4: type_specifiers -> BOOLEAN_KW");
+	System.out.println("Rule 3.4: type_specifiers -> BOOLEAN_KW");
 	}
 
 declarator_list:
