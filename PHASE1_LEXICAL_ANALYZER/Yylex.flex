@@ -97,7 +97,7 @@ GTE_KW = (>=)
 LTE_KW = (<=)
 
 /* Other Keywords */
-DOT_KW = "\."
+DOT_KW = "\.\."
 SINGLE_QUOTE_KW = "\u0027"
 
 /* Arithmetic Operators */
