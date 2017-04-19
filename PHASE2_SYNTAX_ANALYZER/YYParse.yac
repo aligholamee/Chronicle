@@ -87,10 +87,10 @@ declarator_list:
 
 declarator:
 	dec EQ_KW initializer{
-	System.out.println("Rule 6.1: declarator -> dec EQ_KW initializer");
+	System.out.println("Rule 5.1: declarator -> dec EQ_KW initializer");
 	}
 	| dec {
-	System.out.println("Rule 6.2: declarator -> dec");
+	System.out.println("Rule 5.2: declarator -> dec");
 	}
 
 dec:
