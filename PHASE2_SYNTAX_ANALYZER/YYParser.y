@@ -289,6 +289,10 @@ statement:
 		System.out.println("Rule 16.13: " +
 			"statement -> SWITCH_KW expressions case_element END_KW");
 	}
+  | {
+  		System.out.println("Rule 16.14: " +
+  			"statement -> EMPTY");
+  	}
 
 arguments_list:
   multi_arguments {
