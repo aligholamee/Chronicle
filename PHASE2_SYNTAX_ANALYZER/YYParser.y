@@ -53,7 +53,7 @@
 program:
   PROGRAM_KW ID MAIN_KW {
     System.out.println("Rule 1.1: " +
-      "program -> PROGRAM_KW ID MAIN_KW block");
+      "program -> PROGRAM_KW ID MAIN_KW");
   }
   |
 	PROGRAM_KW ID MAIN_KW block {
