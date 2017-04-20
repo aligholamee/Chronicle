@@ -55,8 +55,7 @@ program:
     System.out.println("Rule 1.1: " +
       "program -> PROGRAM_KW ID MAIN_KW");
   }
-  |
-	PROGRAM_KW ID MAIN_KW block {
+  | PROGRAM_KW ID MAIN_KW block {
 		System.out.println("Rule 1.2: " +
 			"program -> PROGRAM_KW ID MAIN_KW block");
 	}
@@ -227,7 +226,7 @@ statement_list:
 		System.out.println("Rule 15.2: " +
 			"statement_list -> statement_list statement SEMICOLON_KW");
 	}
-	SEMICOLON_KW {
+	| SEMICOLON_KW {
 		System.out.println("Rule 15.3: " +
 			"statement_list -> SEMICOLON_KW");
 	}
@@ -289,20 +288,12 @@ statement:
 		System.out.println("Rule 16.13: " +
 			"statement -> SWITCH_KW expressions case_element END_KW");
 	}
-  | {
-  		System.out.println("Rule 16.14: " +
-  			"statement -> EMPTY");
-  	}
 
 arguments_list:
   multi_arguments {
 		System.out.println("Rule 17.1: " +
 			"arguments_list -> multi_arguments");
 	}
-  | {
-    System.out.println("Rule 17.2: " +
-      "arguments_list -> EMPTY");
-  }
 
 multi_arguments:
 	multi_arguments COMMA_KW expressions {
@@ -339,10 +330,6 @@ default:
 		System.out.println("Rule 21.1: " +
 			"default -> DEFAULT_KW SEMICOLON_KW block");
 	}
-  | {
-    System.out.println("Rule 21.1: " +
-      "default -> EMPTY");
-  }
 
 expressions:
 	constant_expressions {
