@@ -920,7 +920,7 @@ class Yylex {
         case 105: break;
         case 51: 
           { // System.out.println(yytext() + "\t" + "DOWNTO_KW\t" + '-');
-	return YYParser.DOWNTO_kW;
+	return YYParser.DOWNTO_KW;
           }
         case 106: break;
         case 52: 
