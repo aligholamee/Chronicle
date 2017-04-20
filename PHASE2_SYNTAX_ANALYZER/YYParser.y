@@ -299,6 +299,10 @@ arguments_list:
 		System.out.println("Rule 17.1: " +
 			"arguments_list -> multi_arguments");
 	}
+  | {
+    System.out.println("Rule 17.2: " +
+      "arguments_list -> EMPTY");
+  }
 
 multi_arguments:
 	multi_arguments COMMA_KW expressions {
@@ -335,6 +339,10 @@ default:
 		System.out.println("Rule 21.1: " +
 			"default -> DEFAULT_KW SEMICOLON_KW block");
 	}
+  | {
+    System.out.println("Rule 21.1: " +
+      "default -> EMPTY");
+  }
 
 expressions:
 	constant_expressions {

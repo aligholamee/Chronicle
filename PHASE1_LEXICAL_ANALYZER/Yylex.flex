@@ -34,6 +34,10 @@ class class_main
 /* Declaration Section */
 /* Identifier */
 %byaccj
+
+/* Spaces */
+WHITESPACE = [ \n\t\t\t\t\r]+
+
 /* Tokens */
 LETTER = [a-zA-Z]
 NONZERO_DIGIT = [1-9]
@@ -383,6 +387,9 @@ ID = {LETTER}+
 {ID} {
 	// System.out.println(yytext() + "\t" + "ID\t" + "Symbol Table Entry");
 	return YYParser.ID;
+}
+
+{WHITESPACE} {
 }
 
 "\s"|"\n"|"\r"|"\t" {
