@@ -146,17 +146,17 @@ dec:
 
 
 range:
-	ID RANGE_KW ID {
+	ID DOT_KW ID {
 		System.out.println("Rule 8.1: " +
-			"range -> ID RANGE_KW ID");
+			"range -> ID DOT_KW ID");
 	}
-	| NUMCONST RANGE_KW NUMCONST {
+	| NUMCONST DOT_KW NUMCONST {
 		System.out.println("Rule 8.2: " +
-			"range -> NUMCONST RANGE_KW NUMCONST");
+			"range -> NUMCONST DOT_KW NUMCONST");
 	}
-	| arithmetic_expressions RANGE_KW arithmetic_expressions {
+	| arithmetic_expressions DOT_KW arithmetic_expressions {
 		System.out.println("Rule 8.3: " +
-			"range -> arithmetic_expressions RANGE_KW arithmetic_expressions");
+			"range -> arithmetic_expressions DOT_KW arithmetic_expressions");
 	}
 
 initializer:
@@ -252,13 +252,13 @@ statement:
 		System.out.println("Rule 16.6: " +
 			"statement -> SWITCH_KW expressions case_element default END_KW");
 	}
-	| ID OPEN_PARENTHESIS arguments_list CLOSE_PARENTHESIS {
+	| ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 16.7: " +
-			"statement -> ID OPEN_PARENTHESIS arguments_list CLOSE_PARENTHESIS");
+			"statement -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
 	}
-	| ID OPEN_BRACKET expressions CLOSE_BRACKET ASSIGN_KW expressions {
+	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions {
 		System.out.println("Rule 16.8: " +
-			"statement -> IDENTIFIER OPEN_BRACKET expressions CLOSE_BRACKET ASSIGN_KW expressions");
+			"statement -> IDENTIFIER OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions");
 	}
 	| RETURN_KW expressions {
 		System.out.println("Rule 16.9: " +
@@ -272,9 +272,9 @@ statement:
 		System.out.println("Rule 16.11: " +
 			"statement -> block");
 	}
-	| ID OPEN_PARENTHESIS CLOSE_PARENTHESIS {
+	| ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 16.12: " +
-			"statement -> ID OPEN_PARENTHESIS CLOSE_PARENTHESIS");
+			"statement -> ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW");
 	}
 	| SWITCH_KW expressions case_element END_KW {
 		System.out.println("Rule 16.13: " +
@@ -282,11 +282,7 @@ statement:
 	}
 
 arguments_list:
-	expressions {
-		System.out.println("Rule 17.2: " +
-			"arguments_list -> expressions");
-	}
-	| multi_arguments {
+  multi_arguments {
 		System.out.println("Rule 17.1: " +
 			"arguments_list -> multi_arguments");
 	}
@@ -312,19 +308,19 @@ counter:
 	}
 
 case_element:
-	CASE_KW NUMCONST DOT_KW block {
+	CASE_KW NUMCONST SEMICOLON_KW block {
 		System.out.println("Rule 20.1: " +
-			"case_element -> CASE_KW NUMCONST DOT_KW block");
+			"case_element -> CASE_KW NUMCONST SEMICOLON_KW block");
 	}
-	| case_element CASE_KW NUMCONST DOT_KW block {
+	| case_element CASE_KW NUMCONST SEMICOLON_KW block {
 		System.out.println("Rule 20.2: " +
-			"case_element -> case_element CASE_KW NUMCONST DOT_KW block");
+			"case_element -> case_element CASE_KW NUMCONST SEMICOLON_KW block");
 	}
 
 default:
-	DEFUALT_KW DOT_KW block {
+	DEFAULT_KW SEMICOLON_KW block {
 		System.out.println("Rule 21.1: " +
-			"default -> DEFUALT_KW DOT_KW block");
+			"default -> DEFAULT_KW SEMICOLON_KW block");
 	}
 
 expressions:
@@ -344,21 +340,21 @@ expressions:
 		System.out.println("Rule 22.4: " +
 			"expressions -> ID");
 	}
-	| ID OPEN_BRACKET expressions CLOSE_BRACKET {
+	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW {
 		System.out.println("Rule 22.5: " +
-			"expressions -> ID OPEN_BRACKET expressions CLOSE_BRACKET");
+			"expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
 	}
-	| ID OPEN_PARENTHESIS arguments_list CLOSE_PARENTHESIS {
+	| ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.6: " +
-			"expressions -> ID OPEN_PARENTHESIS arguments_list CLOSE_PARENTHESIS");
+			"expressions -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
 	}
-	| OPEN_PARENTHESIS expressions CLOSE_PARENTHESIS {
+	| OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.7: " +
-			"expressions -> OPEN_PARENTHESIS expressions CLOSE_PARENTHESIS");
+			"expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
 	}
-	| ID OPEN_PARENTHESIS CLOSE_PARENTHESIS {
+	| ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.8: " +
-			"expressions -> ID OPEN_PARENTHESIS CLOSE_PARENTHESIS");
+			"expressions -> ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW");
 	}
 
 constant_expressions:
@@ -374,9 +370,9 @@ constant_expressions:
 		System.out.println("Rule 23.3: " +
 			"constant_expressions -> CHARCONST");
 	}
-	| BOOLEAN_CONSTANT {
+	| BOOLEAN_KW {
 		System.out.println("Rule 23.4: " +
-			"constant_expressions -> BOOLEAN_CONSTANT");
+			"constant_expressions -> BOOLEAN_KW");
 	}
 
 bool_expressions:
