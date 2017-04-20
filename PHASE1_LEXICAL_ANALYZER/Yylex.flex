@@ -262,7 +262,7 @@ ID = {LETTER}+
 
 {DOWNTO_KW} {
 	// System.out.println(yytext() + "\t" + "DOWNTO_KW\t" + '-');
-	return YYParser.DOWNTO_kW;
+	return YYParser.DOWNTO_KW;
 }
 
 {ASSIGN_KW} {
