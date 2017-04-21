@@ -48,14 +48,15 @@
 // Precedences go increasing, so "then" < "else".
 %nonassoc THEN_KW
 %nonassoc ELSE_KW
+%nonassoc DOT_KW
 
 %%
 program:
-  PROGRAM_KW ID MAIN_KW {
+    PROGRAM_KW ID MAIN_KW {
     System.out.println("Rule 1.1: " +
       "program -> PROGRAM_KW ID MAIN_KW");
   }
-  | PROGRAM_KW ID MAIN_KW block {
+    PROGRAM_KW ID MAIN_KW block {
 		System.out.println("Rule 1.2: " +
 			"program -> PROGRAM_KW ID MAIN_KW block");
 	}
@@ -316,19 +317,19 @@ counter:
 	}
 
 case_element:
-	CASE_KW NUMCONST SEMICOLON_KW block {
+	CASE_KW NUMCONST COLON_KW block {
 		System.out.println("Rule 20.1: " +
-			"case_element -> CASE_KW NUMCONST SEMICOLON_KW block");
+			"case_element -> CASE_KW NUMCONST COLON_KW block");
 	}
-	| case_element CASE_KW NUMCONST SEMICOLON_KW block {
+	| case_element CASE_KW NUMCONST COLON_KW block {
 		System.out.println("Rule 20.2: " +
-			"case_element -> case_element CASE_KW NUMCONST SEMICOLON_KW block");
+			"case_element -> case_element CASE_KW NUMCONST COLON_KW block");
 	}
 
 default:
-	DEFAULT_KW SEMICOLON_KW block {
+	DEFAULT_KW COLON_KW block {
 		System.out.println("Rule 21.1: " +
-			"default -> DEFAULT_KW SEMICOLON_KW block");
+			"default -> DEFAULT_KW COLON_KW block");
 	}
 
 expressions:

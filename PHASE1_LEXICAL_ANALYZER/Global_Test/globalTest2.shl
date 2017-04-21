@@ -1,4 +1,4 @@
-program globaltest 
+program folan
 		int a;
 		int b:=#3;
 		real f;
@@ -7,36 +7,45 @@ program globaltest
 		char c:='w';
 		char h;
 		bool s;
-		bool g:=true;
-		int array[#2]:={#1,#7};
-		char chars [0..2]:={'c','d','7'};
-		procedure p ( int w , char t){
-			switch w 
-				case #10 :{
-					w:=+(w,w);
-					w:=-(+(*(w,w),w),w);
+		bool r;
+		int array[#2]:={#5,#6};
+		procedure func (int input;) {
+			int x:=#1;
+        	int y:=#2;
+		{
+            if < (x,y)
+            then
+            x:= +(x, #1)
+            else
+            y:= -(y, #1);
 
-				}
-				case #20:{
-					t:= and (t,t);
-					w:= or(w,w);
-					do
-						for i:=#1 upto #10 do
-							 w:=%(w,#32);
-					while <>(w,#1);
-				}	
-				case #30:{
-					if not =(w,#4) then w:=5; else w:=#9;
-				}
-			default :{
-				if and (t,t) and then or(t,#0)
-					then w:=-w;
-			}
-			end;
-		};
-		main{
-				array [#2] := array [#2] - (char [#2] = 'd');
-				k := and (or else (+(*(#2,k),false),true), array[#1]),#1);
-				return -(l,k);
-				exit when not(>(array[#2],#0));
-		}
+            do
+            x:=+(x,#1)
+            while <(x, #1);
+
+            for i:=#1 upto #10
+            do d[#1] := +(j,+(i,#2));
+		;}
+            };
+		procedure func (int input;) {
+			int x:=#1;
+        	int y:=#2;
+		{
+            if >(input, #0) then {u:=#89;}
+            else return *(-#1, input)
+		;}
+            };
+main {
+      switch k
+      case #3: {		for i:=#1 upto #10
+                		do d[#1] := +(j,+(i,#2));}
+      case #6: {do var7:= #9 while <=((var9),#8);}
+      default:{
+                       {
+                           if >(input, #10) then {return input;}
+                       ;}
+              ;}
+      end;
+      exit when <=(+(l,k), -(k) );
+      *((*(-(#6,#6),#7)),#5);
+}
