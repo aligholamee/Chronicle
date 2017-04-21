@@ -46,16 +46,16 @@
     }
 }
 // Precedences go increasing, so "then" < "else".
+%left OR_KW
+%left AND_KW
+%left ADD_KW SUB_KW
+%right NOT_KW usub
 %nonassoc THEN_KW
 %nonassoc ELSE_KW
 %nonassoc DOT_KW
 
 %%
 program:
-    PROGRAM_KW ID MAIN_KW {
-    System.out.println("Rule 1.1: " +
-      "program -> PROGRAM_KW ID MAIN_KW");
-  }
     PROGRAM_KW ID MAIN_KW block {
 		System.out.println("Rule 1.2: " +
 			"program -> PROGRAM_KW ID MAIN_KW block");
@@ -72,6 +72,10 @@ program:
 		System.out.println("Rule 1.5: " +
 			"program -> PROGRAM_KW ID declarations_list procedure_list MAIN_KW block");
 	}
+  | PROGRAM_KW ID MAIN_KW {
+  System.out.println("Rule 1.1: " +
+    "program -> PROGRAM_KW ID MAIN_KW");
+}
 
 declarations_list:
 	 declarations_list declarations {
