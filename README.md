@@ -39,4 +39,13 @@ A source code can directly be translated into its target machine code, then why 
 3. It becomes easier to apply the source code modifications to **improve** code **performance** by applying code **optimization** techniques on the **intermediate code**.
 
 ### Three-Address Code
-In phase 3, we need to use the syntax tree which is produced in the previous section. That syntax tree can be converted into a **linear representation**. Intermediate code tends to be machine independent code. Therefore, code generator assumes to have unlimited number of memory storage (register) to generate code. A **three-address** code has at most three address locations to calculate the expression.
+In phase 3, we need to use the syntax tree which is produced in the previous section. That syntax tree can be converted into a **linear representation**. Intermediate code tends to be machine independent code. Therefore, code generator assumes to have unlimited number of memory storage (register) to generate code. A **three-address** code has at most three address locations to calculate the expression. For example:
+```
+D = A * B + C;
+```
+This will be converted to:
+```
+R1 = A * B;
+R2 = R1 + C;
+D = R2;
+```
