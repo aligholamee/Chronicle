@@ -38,5 +38,5 @@ A source code can directly be translated into its target machine code, then why 
 2. **Intermediate code** eliminates the **need** of a new full compiler for every unique machine by keeping the analysis portion **same** for **all** the compilers.
 3. It becomes easier to apply the source code modifications to **improve** code **performance** by applying code **optimization** techniques on the **intermediate code**.
 
-### 3-Address Code
-In phase 3, we need to use the syntax tree which is produced in the previous section. That syntax tree can be converted into a **linear representation**. Intermediate code tends to be machine independent code. Therefore, code generator assumes to have unlimited number of memory storage (register) to generate code.
+### Three-Address Code
+In phase 3, we need to use the syntax tree which is produced in the previous section. That syntax tree can be converted into a **linear representation**. Intermediate code tends to be machine independent code. Therefore, code generator assumes to have unlimited number of memory storage (register) to generate code. A **three-address** code has at most three address locations to calculate the expression.
