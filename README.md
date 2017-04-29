@@ -34,3 +34,4 @@ The .yac file is the main source program used by **YACC** tool to create a synta
 ## Phase 3 - Intermediate Code Generation
 This is the last main section of this project. The more we get closer to the end, the more we need to focus on more important things. In this section we have to generate the code for the machine in order to convert it into the machine code.
 A source code can directly be translated into its target machine code, then why at all we need to translate the source code into an intermediate code which is then translated to its target code?
+1. If a compiler translates the source language to its target machine language **without** having the option for generating intermediate code, then **for each new machine**, a **full native compiler is required**.
