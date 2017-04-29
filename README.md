@@ -12,7 +12,7 @@ In this section I'll provide a quick tutorial on how a grammer is written and ho
 ## How a compiler works?
 The procedure that takes place in order to build a executable file from a written program in an specific programming language is provided here:
 ![alt tag](http://uupload.ir/files/8oi6_target.png)
-In the first phase, I'll Implement a Lexical Analyser. Building a lexical analyser which is fully executable can take weeks to complete, so there are some softwares that provide some GUI for us to simply declare the desired grammer for the language we are going to build, and then passing this grammer to that software, and finally the output of that software is that Lexical Analyser. 
+In the first phase, I'll Implement a Lexical Analyser. Building a lexical analyser which is fully executable can take weeks to complete, so there are some softwares that provide some GUI for us to simply declare the desired grammer for the language we are going to build, and then passing this grammer to that software, and finally the output of that software is that Lexical Analyser.
 We can use any programming language to write our grammer code and pass it to that software. But the most common programming languages are Java and C. The software which is used for each is JFlex and Flex respectively. You can download Flex or JFlex from the directories above.
 
 ## Phase 1 - Lexical Analyzer
@@ -22,11 +22,14 @@ The very first code we'll work on is PH1_Lexical_Analyzer which it's name stands
 In the first phase, the only job we need to get done is specifying *KEYWORDS* and *TOKENS* and define some rules to do something if any of these keywords or tokens are met. Specification of these keywords and tokens is in the *DECLARATION* entry and the rules are in the *RULES* entry.
 Example:
 		ID = [a-zA-Z]+
-		
+
 The above code will create the ID token.
 
 ## Phase 2 - Syntax Analyzer
-In this section, we'll create a syntax analyzer in order to be able to match the input with the grammar. The matching process starts where the Syntax Analyzer builds a table called **Shift-Reduce**. In this table, the tokens and everything which is recognized in the previous section(**Lexical Analyser**) will be included. We also need to include the full grammar of our language here. What makes this part a bit tricky is that 
+In this section, we'll create a syntax analyzer in order to be able to match the input with the grammar. The matching process starts where the Syntax Analyzer builds a table called **Shift-Reduce**. In this table, the tokens and everything which is recognized in the previous section(**Lexical Analyser**) will be included. We also need to include the full grammar of our language here. What makes this part a bit tricky is that
 
 ## What is the .yac source file and what are the contents?
 The .yac file is the main source program used by **YACC** tool to create a syntax analyzer. This file will be sent to the **YACC** tool and will be integrated with the **main program** and the **syntax analyser** and will produce the whole **Lexical-Syntax-Analyser** together.
+
+## Phase 3 - Intermediate Code Generation
+This is the last main section of this project. The more we get closer to the end, the more we need to focus on more important things. In this section we have to generate the code for the machine in order to convert it into the machine code.
