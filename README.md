@@ -49,3 +49,6 @@ R1 = A * B;
 R2 = R1 + C;
 D = R2;
 ```
+A three-address code can be represented in **two** forms:
+1. **Quadruples**
+2. **Triples**(and **Indirect Triples**)
