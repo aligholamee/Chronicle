@@ -500,7 +500,13 @@ class SymbolTable {
     /* Create an integer to get the return value */
     int index = lookUp(fName);
 
+    if(index != NOT_FOUND)
+       ret = table.get(index);
+    else
+      ret = null;
 
+    /* Return ret */
+    return ret;
   }
 
 }
