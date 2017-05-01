@@ -459,7 +459,6 @@ pair:
 
 /* Class #1: SymbolTable */
 class SymbolTable {
-
   /* Record: Class definition */
   protected class Record {
     public String name;
@@ -549,5 +548,4 @@ class SymbolTable {
     else
       return ret;
   }
-
 }
