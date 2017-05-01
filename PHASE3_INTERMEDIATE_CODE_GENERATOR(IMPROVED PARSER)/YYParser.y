@@ -617,8 +617,20 @@ class Genesis {
   public static final String Func = "function";
   public static final String rectype = "rectype";
   public static final String unknownType = "unknown";
+  public static final String constOp = "const";
+
+  /* List of possible operations */
+  public static final String assignOp = ":=";
+  public static final String andOp = "and";
+  public static final String orOp = "or";
+  public static final String notOp = "not";
+  public static final String initOp = "init";
+  public static final String ifOp = "if";
+  public static final String stackPop = "stackPop";
+  public static final String stackPush = "stackPush";
+  public static final String castOP = "cast";
+  public static final String gotoOp = "gotoOp";
+  public static final String variableGotoOp = "varGotoOp";
 
 
-
-  
 }
