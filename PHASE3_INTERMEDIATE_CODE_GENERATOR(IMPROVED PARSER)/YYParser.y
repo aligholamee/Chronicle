@@ -634,5 +634,9 @@ class Genesis {
   public static final String[] relopOpList = new String[]{".lte",".lt",".gt",".gte",".eq",".ne"};
   public static final String[] mathOpList = new String[]{"+","-","*","/","%"};
 
+  /* Syntax Directed Definition */
+  public String place;
+  public String type;
+  public boolean isArray;
 
 }
