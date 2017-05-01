@@ -476,4 +476,9 @@ class SymbolTable {
       this.isArray = isArray;
     }
   }
+  /* Create an list of Records */
+  /* Each row of the symbol table will contain a list of records */
+  private List<Record> table;
+
+
 }
