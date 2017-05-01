@@ -480,5 +480,11 @@ class SymbolTable {
   /* Each row of the symbol table will contain a list of records */
   private List<Record> table;
 
+  /* SymbolTable: Class Constructor - No argument */
+  public SymbolTable()
+  {
+    table = new ArrayList<>();
+  }
+
 
 }
