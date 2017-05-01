@@ -486,5 +486,10 @@ class SymbolTable {
     table = new ArrayList<>();
   }
 
+  /* Class Getter: Size getter */
+  public getSize()
+  {
+    return table.size;
+  }
 
 }
