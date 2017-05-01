@@ -459,10 +459,21 @@ pair:
 
 /* Class #1: SymbolTable */
 class SymbolTable {
+
+  /* Record: Class definition */
   protected class Record {
-    public string name;
-    public string type;
+    public String name;
+    public String type;
     public int size;
     public boolean isArray;
+
+    /* Record: Class Constructor */
+    public Record(String name, String type, int size, boolean isArray)
+    {
+      this.name = name;
+      this.type = type;
+      this.size = size;
+      this.isArray = isArray;
+    }
   }
 }
