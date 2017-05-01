@@ -515,4 +515,17 @@ class SymbolTable {
     return table.get(fIndex);
   }
 
+  /* Function: addToSymbolTable */
+  public int addToSymbolTable(String name, String type, boolean isArray, int size)
+  {
+    boolean existsInSymbolTable = false;
+    /* Check the ST for previous insertions */
+    for(int i=0; i<table.size(); i++){
+      if(table.get(i).name.equals(name)){
+        existsInSymbolTable = true;
+        break;
+      }
+    }
+  }
+
 }
