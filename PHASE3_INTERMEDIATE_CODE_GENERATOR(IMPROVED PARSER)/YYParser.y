@@ -607,5 +607,18 @@ class SymbolTable {
 
 /* Class #2: Genesis */
 class Genesis {
+
+  /* List of possbile definitions for variables and functions */
+  public static final String INT ="int";
+  public static final String BOOL = "bool";
+  public static final String REAL = "float";
+  public static final String CHAR = "char";
+  public static final String STRING = "string";
+  public static final String Func = "function";
+  public static final String rectype = "rectype";
+  public static final String unknownType = "unknown";
+
+
+
   
 }
