@@ -453,3 +453,6 @@ pair:
 		System.out.println("Rule 26.1: " +
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
 	}
+
+%%
+/* Implementation of the classes needed to generate the intermediate code */
