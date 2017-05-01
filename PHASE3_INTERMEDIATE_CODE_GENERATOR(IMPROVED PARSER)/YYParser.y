@@ -604,3 +604,8 @@ class SymbolTable {
       return ret;
   }
 }
+
+/* Class #2: Genesis */
+class Genesis {
+  
+}
