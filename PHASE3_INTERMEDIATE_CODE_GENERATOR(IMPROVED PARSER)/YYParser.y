@@ -537,4 +537,8 @@ class SymbolTable {
     return ERROR;
   }
 
+  /* Function: lookUp in the table for an specific name */
+  /* Default return value of "indexOf" function is -1 if not found */
+  /* Otherwise it will return the index of the found element */
+
 }
