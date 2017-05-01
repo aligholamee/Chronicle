@@ -526,6 +526,15 @@ class SymbolTable {
         break;
       }
     }
+
+    /* If no previous insertions found */
+    if(!existsInSymbolTable)
+    {
+      Record temp = new Record(name, type, isArray, size);
+      table.add(temp);
+      return table.size()-1;
+    }
+    return ERROR;
   }
 
 }
