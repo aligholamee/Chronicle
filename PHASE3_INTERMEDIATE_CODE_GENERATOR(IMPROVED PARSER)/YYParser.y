@@ -65,6 +65,9 @@
     /* YYParser class section */
     /* Functions like emit, backpatch, newTemp, nextQuad and etc. will be implemented here */
 
+    /* Variable declarations and allocations */
+    private SymbolTable symbolTable = new SymbolTable();
+
     /* Emit function */
     private void emit(String operation,String arg0,String arg1,String result)
     {
