@@ -655,4 +655,12 @@ class Genesis {
     nextList = new ArrayList<>();
   }
 
+  /* makeList Function */
+  /* A simple function to create a list ;) of number i*/
+  public static ArrayList<Integer> makeList(int i) {
+    ArrayList<Integer> list = new ArrayList<>();
+    list.add(i);
+    return list;
+  }
+
 }
