@@ -540,5 +540,14 @@ class SymbolTable {
   /* Function: lookUp in the table for an specific name */
   /* Default return value of "indexOf" function is -1 if not found */
   /* Otherwise it will return the index of the found element */
+  public int lookUp(String name)
+  {
+    int ret = table.indexOf(name);
+    if(ret == -1)
+      /* Not found */
+      return NOT_FOUND;
+    else
+      return ret;
+  }
 
 }
