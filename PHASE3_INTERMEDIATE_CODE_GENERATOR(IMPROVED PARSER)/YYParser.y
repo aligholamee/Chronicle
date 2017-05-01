@@ -676,5 +676,11 @@ class Genesis {
       return list;
   }
 
-
+/* Class #3: Quadruple */
+class Quadruple {
+  public String operation;
+  public String arg0;
+  public String arg1;
+  public String result;
+}
 }
