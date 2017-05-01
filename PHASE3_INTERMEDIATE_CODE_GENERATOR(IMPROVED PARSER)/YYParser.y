@@ -65,8 +65,14 @@
     /* YYParser class section */
     /* Functions like emit, backpatch, newTemp, nextQuad and etc. will be implemented here */
 
-    static PrintStream writer;
+    /* Emit function */
+    private void emit(String operation,String arg0,String arg1,String result)
+    {
+      quadTable.add(new Quad(operation,arg0,arg1,result));
+      System.out.println("EMIT:"+operation+":"+arg0+":"+arg1+":"+result);
+    }
 
+    static PrintStream writer;
     public static void main(String args[]) throws IOException, FileNotFoundException {
         YYParser yyparser;
         final Yylex lexer;
