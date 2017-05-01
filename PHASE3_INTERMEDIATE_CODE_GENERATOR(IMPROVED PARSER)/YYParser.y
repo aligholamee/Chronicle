@@ -80,7 +80,7 @@
     private int tempCounter = 0;
     private String newTemp(String type,boolean isArray,int size)
     {
-      String name = "Temp"+(tempCounter++);
+      String name = "Temp" + (tempCounter++);
       emit(Genesis.initOp,type,"",name);
       symbolTable.addToSymbolTable(name,type,isArray,size);
       return name;
