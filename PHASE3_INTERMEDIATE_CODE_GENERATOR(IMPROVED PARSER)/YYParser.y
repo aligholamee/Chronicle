@@ -631,7 +631,7 @@ class Genesis {
   public static final String castOP = "cast";
   public static final String gotoOp = "gotoOp";
   public static final String variableGotoOp = "varGotoOp";
-  public static final String[] relopOpList = new String[]{".le",".lt",".gt",".ge",".eq",".ne"};
+  public static final String[] relopOpList = new String[]{".lte",".lt",".gt",".gte",".eq",".ne"};
   public static final String[] mathOpList = new String[]{"+","-","*","/","%"};
 
 
