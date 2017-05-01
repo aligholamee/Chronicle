@@ -639,4 +639,12 @@ class Genesis {
   public String type;
   public boolean isArray;
 
+
+  /* Required attributes for the boolean expressions */
+  public Genesis defaultInit;
+  public List<Genesis> typeInitList;
+  public ArrayList<Integer> trueList;
+  public ArrayList<Integer> falseList;
+  public ArrayList<Integer> nextList;
+  
 }
