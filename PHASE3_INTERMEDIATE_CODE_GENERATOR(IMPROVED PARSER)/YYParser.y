@@ -646,5 +646,13 @@ class Genesis {
   public ArrayList<Integer> trueList;
   public ArrayList<Integer> falseList;
   public ArrayList<Integer> nextList;
-  
+
+  /* Genesis Constructor */
+  public Genesis {
+    typeInitList = new ArrayList<>();
+    trueList = new ArrayList<>();
+    falseList = new ArrayList<>();
+    nextList = new ArrayList<>();
+  }
+
 }
