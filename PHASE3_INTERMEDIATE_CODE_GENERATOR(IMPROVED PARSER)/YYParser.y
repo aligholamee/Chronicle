@@ -663,4 +663,18 @@ class Genesis {
     return list;
   }
 
+  /* mergeList Function */
+  /* A Simple function to merge two lists */
+  public static ArrayList<Integer> merge(List i , List j) {
+      ArrayList<Integer> list = new ArrayList<>();
+      if(i!=null && i.size()>0) {
+          list.addAll(i);
+      }
+      if(j!=null && j.size()>0) {
+          list.addAll(j);
+      }
+      return list;
+  }
+
+
 }
