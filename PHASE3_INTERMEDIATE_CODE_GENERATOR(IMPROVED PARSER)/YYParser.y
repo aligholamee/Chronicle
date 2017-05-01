@@ -492,4 +492,15 @@ class SymbolTable {
     return table.size;
   }
 
+  /* Class Getter: symbol getter */
+  public Record getSymbol(String fName)
+  {
+    /* Returning value for the current function */
+    Record ret;
+    /* Create an integer to get the return value */
+    int index = lookUp(fName);
+
+
+  }
+
 }
