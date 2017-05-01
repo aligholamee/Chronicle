@@ -67,7 +67,8 @@
 
     /* Variable declarations and allocations */
     private SymbolTable symbolTable = new SymbolTable();
-
+	  private ArrayList<Quadruple> quadruples = new ArrayList<>();
+    
     /* Emit function */
     private void emit(String operation,String arg0,String arg1,String result)
     {
@@ -90,6 +91,8 @@
     private int nextQuad() {
       return quadruples.size();
     }
+
+    /*
 
     static PrintStream writer;
     public static void main(String args[]) throws IOException, FileNotFoundException {
