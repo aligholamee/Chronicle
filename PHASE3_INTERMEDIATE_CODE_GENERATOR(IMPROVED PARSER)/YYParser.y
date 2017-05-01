@@ -456,3 +456,5 @@ pair:
 
 %%
 /* Implementation of the classes needed to generate the intermediate code */
+
+/* Class #1: SymbolTable */
