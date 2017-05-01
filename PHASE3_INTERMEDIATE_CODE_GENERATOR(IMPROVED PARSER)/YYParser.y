@@ -62,6 +62,9 @@
 %token NONZERO_DIGIT
 %token LETTER
 %code {
+    /* YYParser class section */
+    /* Functions like emit, backpatch, newTemp, nextQuad and etc. will be implemented here */
+
     static PrintStream writer;
 
     public static void main(String args[]) throws IOException, FileNotFoundException {
@@ -690,4 +693,5 @@ class Quadruple {
     this.result = result;
   }
 }
+
 }
