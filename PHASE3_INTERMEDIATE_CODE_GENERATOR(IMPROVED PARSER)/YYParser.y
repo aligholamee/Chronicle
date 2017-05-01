@@ -72,6 +72,18 @@
       System.out.println("EMIT:"+operation+":"+arg0+":"+arg1+":"+result);
     }
 
+    /* newTemp function */
+    /* tempCounter: A variable to see how many temps are created until now */
+    private int tempCounter = 0;
+    private String newTemp(String type,boolean isArray,int size)
+    {
+      String name = "Temp"+(tempCounter++);
+      emit(Genesis.initOp,type,"",name);
+      symbolTable.addToSymbolTable(name,type,isArray,size);
+      return name;
+    }
+
+
     static PrintStream writer;
     public static void main(String args[]) throws IOException, FileNotFoundException {
         YYParser yyparser;
