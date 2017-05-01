@@ -458,3 +458,11 @@ pair:
 /* Implementation of the classes needed to generate the intermediate code */
 
 /* Class #1: SymbolTable */
+class SymbolTable {
+  protected class Record {
+    public string name;
+    public string type;
+    public int size;
+    public boolean isArray;
+  }
+}
