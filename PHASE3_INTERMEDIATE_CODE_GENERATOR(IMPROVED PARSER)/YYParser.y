@@ -682,5 +682,12 @@ class Quadruple {
   public String arg0;
   public String arg1;
   public String result;
+  /* Constructor */
+  public Quadruple(String operation,String arg0,String arg1,String result) {
+    this.operation = operation;
+    this.arg0 = arg0;
+    this.arg1 = arg1;
+    this.result = result;
+  }
 }
 }
