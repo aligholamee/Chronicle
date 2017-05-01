@@ -509,4 +509,10 @@ class SymbolTable {
     return ret;
   }
 
+  /* Class Getter: get by index */
+  public Record getByIndex(int fIndex)
+  {
+    return table.get(fIndex);
+  }
+
 }
