@@ -68,7 +68,7 @@
     /* Variable declarations and allocations */
     private SymbolTable symbolTable = new SymbolTable();
 	  private ArrayList<Quadruple> quadruples = new ArrayList<>();
-    
+
     /* Emit function */
     private void emit(String operation,String arg0,String arg1,String result)
     {
@@ -92,7 +92,19 @@
       return quadruples.size();
     }
 
-    /*
+    /* Code Exporting Function */
+    private void exportIntermediateCode(){
+      /* Print the general include section */
+      String result = "";
+      result = "#include <stdio.h>";
+      System.out.println(result);
+      result = "#include <iostream>";
+      System.out.println(result);
+      result = "#include <string>";
+      System.out.println(result);
+      result = "using namespace std;";
+      System.out.println(result);
+    }
 
     static PrintStream writer;
     public static void main(String args[]) throws IOException, FileNotFoundException {
