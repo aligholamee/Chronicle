@@ -168,22 +168,27 @@ program:
     PROGRAM_KW ID MAIN_KW block {
 		System.out.println("Rule 1.2: " +
 			"program -> PROGRAM_KW ID MAIN_KW block");
+      exportIntermediateCode();
 	}
 	| PROGRAM_KW ID declarations_list MAIN_KW block {
 		System.out.println("Rule 1.3: " +
 			"program -> PROGRAM_KW ID declarations_list MAIN_KW block");
+      exportIntermediateCode();
 	}
 	| PROGRAM_KW ID procedure_list MAIN_KW block {
 		System.out.println("Rule 1.4: " +
 			"program -> PROGRAM_KW ID procedure_list MAIN_KW block");
+      exportIntermediateCode();
 	}
 	| PROGRAM_KW ID declarations_list procedure_list MAIN_KW block {
 		System.out.println("Rule 1.5: " +
 			"program -> PROGRAM_KW ID declarations_list procedure_list MAIN_KW block");
+      exportIntermediateCode();
 	}
   | PROGRAM_KW ID MAIN_KW {
   System.out.println("Rule 1.1: " +
     "program -> PROGRAM_KW ID MAIN_KW");
+    exportIntermediateCode();
 }
 
 declarations_list:
