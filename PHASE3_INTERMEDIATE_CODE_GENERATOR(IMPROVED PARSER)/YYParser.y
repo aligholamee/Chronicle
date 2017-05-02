@@ -97,6 +97,9 @@
       for (int i = 0; i < list.size(); i++)
         quadruples.get(list.get(i)).result = String.valueOf(quadNumber);
     }
+    private void backpatch(int quadNumber, int destination) {
+        quadruples.get(quadNumber).result = String.valueOf(destination);
+    }
     
     /* Code Exporting Function */
     private void exportIntermediateCode() {
