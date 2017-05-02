@@ -94,17 +94,11 @@
 
     /* backpatch Function #1*/
     private void backpatch(ArrayList<Integer> list, int quadNumber) {
-      for (int i = 0; i < list.size(); i++) {
-        if(quadTable.get(list.get(i)).operation.equals(Genesis.assignOp)) {
-            quadTable.get(list.get(i)).arg0 = String.valueOf(quadNumber);
-        }
-        else {
-          quadTable.get(list.get(i)).result = String.valueOf(quadNumber);
-        }
-      }
-    }
+  		for (int i = 0; i < list.size(); i++)
+  			quadruples.get(list.get(i)).result = String.valueOf(quadNumber);
+  	}
 
-
+    /* backpatch Function #2*/
     private void backpatch(int quadNumber, int destination) {
         quadruples.get(quadNumber).result = String.valueOf(destination);
     }
