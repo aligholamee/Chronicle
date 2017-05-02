@@ -92,8 +92,14 @@
       return quadruples.size();
     }
 
+    /* backpatch Functions */
+    private void backpatch(ArrayList<Integer> list, int quadNumber) {
+      for (int i = 0; i < list.size(); i++)
+        quadruples.get(list.get(i)).result = String.valueOf(quadNumber);
+    }
+    
     /* Code Exporting Function */
-    private void exportIntermediateCode(){
+    private void exportIntermediateCode() {
       /* Print the general include section */
       String result = "";
       result = "#include <stdio.h>";
@@ -104,6 +110,9 @@
       System.out.println(result);
       result = "using namespace std;";
       System.out.println(result);
+
+
+
     }
 
     static PrintStream writer;
