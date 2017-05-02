@@ -115,9 +115,6 @@
       System.out.println(result);
       result = "using namespace std;";
       System.out.println(result);
-
-
-
     }
 
     static PrintStream writer;
