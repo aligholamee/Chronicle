@@ -606,6 +606,9 @@ pair:
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
 	}
 
+/* Declared Variables Handling Section */
+/* We need to manage if the ID is in the symbol table or not */
+
 %%
 /* Implementation of the classes needed to generate the intermediate code */
 
