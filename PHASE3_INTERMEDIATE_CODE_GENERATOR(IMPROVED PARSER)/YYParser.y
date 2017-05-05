@@ -612,9 +612,16 @@ pair:
 	OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 26.1: " +
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
+       /* Specially implemented for * / + - */
+       /* mod will be handled later */
        /* the operation will be grabbed from prev_op and the implementation in c will be straightforward */
-       
-
+       if((($2.type == Genesis.TYPE_CODE_INTEGER || $2.type == Genesis.TYPE_CODE_CHAR || $2.type == Genesis.TYPE_CODE_BOOLEAN)
+         && ($4.type == Genesis.TYPE_CODE_INTEGER || $4.type == Genesis.TYPE_CODE_CHAR || $4.type == Genesis.TYPE_CODE_BOOLEAN))
+       || ($2.type == Genesis.TYPE_CODE_REAL && $4.type == Genesis.TYPE_CODE_REAL)) {
+       $$ = new Genesis();
+       ((Genesis)$$).place = newTemp($2.type, false);
+       ((Genesis)$$).type = $2.type;
+       emit(prev_op, $2.place, $4.place, ((Genesis)$$).place);
 	}
 
 /* Declared Variables Handling Section */
