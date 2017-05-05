@@ -484,6 +484,12 @@ expressions:
 	| bool_expressions {
 		System.out.println("Rule 22.2: " +
 			"expressions -> bool_expressions");
+      $$ = new Genesis();
+      ((Genesis)$$).place = $1.place;
+      ((Genesis)$$).type = Genesis.BOOL;
+      ((Genesis)$$).nextList = $1.nextList;
+      ((Genesis)$$).trueList = $1.trueList;
+      ((Genesis)$$).falseList = $1.falseList;
 	}
 	| arithmetic_expressions {
 		System.out.println("Rule 22.3: " +
