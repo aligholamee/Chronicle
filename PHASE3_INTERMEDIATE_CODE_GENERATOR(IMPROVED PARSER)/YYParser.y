@@ -646,10 +646,14 @@ saved_character:
   		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
 
   		emit(":=", String.valueOf(lexChar), null, ((Genesis)$$).place);
+  		emit("check", ((Genesis)$$).place, null, String.valueOf(nextQuad() + 2));
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1));
+}
 
-/* We need to manage if the character is in the symbol table or not */
+/* We need to manage if the boolean is in the symbol table or not */
 saved_boolean:
 	BOOLCONST {
+		System.out.println("Rule 30.1: " +
   			"saved_boolean: BOOLCONST");
   		$$ = new Genesis();
   		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_BOOLEAN, false);
@@ -659,6 +663,23 @@ saved_boolean:
   		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
 
   		emit(":=", String.valueOf(lexBool), null, ((Genesis)$$).place);
+  		emit("check", ((Genesis)$$).place, null, String.valueOf(nextQuad() + 2));
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1));
+}
+
+/* We need to manage if the real is in the symbol table or not */
+saved_real:
+	REALCONST {
+		System.out.println("Rule 31.1: " +
+  			"saved_real: REALCONST");
+  		$$ = new Genesis();
+  		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_REAL, false);
+  		((Genesis)$$).type = Genesis.TYPE_CODE_REAL;
+  		((Genesis)$$).trueList = Genesis.makeList(nextQuad() + 1);
+  		((Genesis)$$).falseList = Genesis.makeList(nextQuad() + 2);
+  		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
+
+  		emit(":=", String.valueOf(lexReal), null, ((Genesis)$$).place);
   		emit("check", ((Genesis)$$).place, null, String.valueOf(nextQuad() + 2));
   		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 }
