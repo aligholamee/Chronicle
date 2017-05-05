@@ -245,6 +245,8 @@ type_specifiers:
 	| BOOLEAN_KW {
 		System.out.println("Rule 4.4: " +
 			"type_specifiers -> BOOLEAN_KW");
+      $$ = new Genesis();
+      ((Genesis)$$).type = Genesis.BOOL;
 	}
 
 declarator_list:
