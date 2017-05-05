@@ -68,7 +68,7 @@
     /* YYParser variable types list */
     public static final String TYPE_STRING_INTEGER = "int";
     public static final String TYPE_STRING_CHAR = "char";
-    public static final String TYPE_STRING_REAL = "real";
+    public static final String TYPE_STRING_REAL = "float";
     public static final String TYPE_STRING_BOOLEAN = "bool";
 
     /* Variable declarations and allocations */
