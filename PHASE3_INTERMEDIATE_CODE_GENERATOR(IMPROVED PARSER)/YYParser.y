@@ -852,7 +852,7 @@ class Genesis {
   public ArrayList<Integer> nextList;
 
   /* Genesis Constructor */
-  public Genesis {
+  public Genesis() {
     typeInitList = new ArrayList<>();
     trueList = new ArrayList<>();
     falseList = new ArrayList<>();
