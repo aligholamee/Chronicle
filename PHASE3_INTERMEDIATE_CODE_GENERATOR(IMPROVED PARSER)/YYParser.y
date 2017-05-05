@@ -174,25 +174,25 @@
 
 %%
 program:
-    PROGRAM_KW ID MAIN_KW block {
+    PROGRAM_KW repeated_id MAIN_KW block {
 		System.out.println("Rule 1.2: " +
 			"program -> PROGRAM_KW ID MAIN_KW block");
       backpatch($4.nextList, nextQuad());
       exportIntermediateCode();
 	}
-	| PROGRAM_KW ID declarations_list MAIN_KW block {
+	| PROGRAM_KW repeated_id declarations_list MAIN_KW block {
 		System.out.println("Rule 1.3: " +
 			"program -> PROGRAM_KW ID declarations_list MAIN_KW block");
       backpatch($5.nextList, nextQuad());
       exportIntermediateCode();
 	}
-	| PROGRAM_KW ID procedure_list MAIN_KW block {
+	| PROGRAM_KW repeated_id procedure_list MAIN_KW block {
 		System.out.println("Rule 1.4: " +
 			"program -> PROGRAM_KW ID procedure_list MAIN_KW block");
       backpatch($5.nextList, nextQuad());
       exportIntermediateCode();
 	}
-	| PROGRAM_KW ID declarations_list procedure_list MAIN_KW block {
+	| PROGRAM_KW repeated_id declarations_list procedure_list MAIN_KW block {
 		System.out.println("Rule 1.5: " +
 			"program -> PROGRAM_KW ID declarations_list procedure_list MAIN_KW block");
       backpatch($6.nextList, nextQuad());
@@ -273,15 +273,15 @@ declarator:
 
 
 dec:
-	ID {
+	repeated_id {
 		System.out.println("Rule 7.1: " +
 			"dec -> ID");
 	}
-	| ID OPENBRACKET_KW range CLOSEBRACKET_KW {
+	| repeated_id OPENBRACKET_KW range CLOSEBRACKET_KW {
 		System.out.println("Rule 7.2: " +
 			"dec -> ID OPENBRACKET_KW range CLOSEBRACKET_KW");
 	}
-	| ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW {
+	| repeated_id OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW {
 		System.out.println("Rule 7.3: " +
 			"dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
 	}
@@ -289,7 +289,7 @@ dec:
 
 
 range:
-	ID DOT_KW ID {
+	repeated_id DOT_KW repeated_id {
 		System.out.println("Rule 8.1: " +
 			"range -> ID DOT_KW ID");
 	}
@@ -335,11 +335,11 @@ procedure_list:
 	}
 
 procedure:
-  PROCEDURE_KW ID parameters OPENACCOLADE_KW block CLOSEACCOLADE_KW SEMICOLON_KW {
+  PROCEDURE_KW repeated_id parameters OPENACCOLADE_KW block CLOSEACCOLADE_KW SEMICOLON_KW {
    System.out.println("Rule 12.1: " +
      "procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW block CLOSEACCOLADE_KW SEMICOLON_KW");
   }
-  |PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW {
+  |PROCEDURE_KW repeated_id parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW {
 		System.out.println("Rule 12.2: " +
 			"procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW");
 	}
@@ -375,7 +375,7 @@ statement_list:
 	}
 
 statement:
-	ID ASSIGN_KW expressions {
+	repeated_id ASSIGN_KW expressions {
 		System.out.println("Rule 16.1: " +
 			"statement -> ID ASSIGN_KW expressions");
 	}
@@ -399,11 +399,11 @@ statement:
 		System.out.println("Rule 16.6: " +
 			"statement -> SWITCH_KW expressions case_element default END_KW");
 	}
-	| ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
+	| repeated_id OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 16.7: " +
 			"statement -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
 	}
-	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions {
+	| repeated_id OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions {
 		System.out.println("Rule 16.8: " +
 			"statement -> IDENTIFIER OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions");
 	}
@@ -419,7 +419,7 @@ statement:
 		System.out.println("Rule 16.11: " +
 			"statement -> block");
 	}
-	| ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
+	| repeated_id OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 16.12: " +
 			"statement -> ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW");
 	}
@@ -501,15 +501,15 @@ expressions:
   		((Genesis)$$).trueList = $1.trueList;
   		((Genesis)$$).falseList = $1.falseList;
 	}
-	| ID {
+	| repeated_id {
 		System.out.println("Rule 22.4: " +
 			"expressions -> ID");
 	}
-	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW {
+	| repeated_id OPENBRACKET_KW expressions CLOSEBRACKET_KW {
 		System.out.println("Rule 22.5: " +
 			"expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
 	}
-	| ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
+	| repeated_id OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.6: " +
 			"expressions -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
 	}
@@ -517,7 +517,7 @@ expressions:
 		System.out.println("Rule 22.7: " +
 			"expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
 	}
-	| ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
+	| repeated_id OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.8: " +
 			"expressions -> ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW");
 	}
@@ -578,6 +578,7 @@ arithmetic_expressions:
 	ADD_KW pair {
 		System.out.println("Rule 25.1: " +
 			"arithmetic_expressions -> ADD_KW pair");
+      /* The code for addition */
 	}
 	| SUB_KW pair {
 		System.out.println("Rule 25.2: " +
