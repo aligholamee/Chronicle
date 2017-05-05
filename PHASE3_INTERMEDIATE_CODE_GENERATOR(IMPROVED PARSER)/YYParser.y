@@ -65,6 +65,8 @@
     /* YYParser class section */
     /* Functions like emit, backpatch, newTemp, nextQuad and etc. will be implemented here */
 
+
+
     /* Variable declarations and allocations */
     private SymbolTable symbolTable = new SymbolTable();
 	  private ArrayList<Quadruple> quadruples = new ArrayList<>();
@@ -115,6 +117,9 @@
       System.out.println(result);
       result = "using namespace std;";
       System.out.println(result);
+
+      /* Print the Variable types: INT, BOOL, REAL, CHAR */
+
     }
 
     static PrintStream writer;
@@ -665,6 +670,35 @@ class SymbolTable {
       return NOT_FOUND;
     else
       return ret;
+  }
+
+  /* toString override */
+  @Override
+  public String toString()
+  {
+      if(table.size() == 0)
+          return null;
+      String res = "";
+      for(int i = 0; i < table.size(); i++) {
+          switch (table.type.get(i)) {
+              case Genesis.TYPE_CODE_INTEGER:
+                  res += "\t" + YYParser.TYPE_STRING_INTEGER;
+                  break;
+              case Genesis.TYPE_CODE_REAL:
+                  res += "\t" + YYParser.TYPE_STRING_REAL;
+                  break;
+              case Genesis.TYPE_CODE_CHAR:
+                  res += "\t" + YYParser.TYPE_STRING_CHAR;
+                  break;
+              case Genesis.TYPE_CODE_BOOLEAN:
+                  res += "\t" + YYParser.TYPE_STRING_BOOLEAN;
+                  break;
+              case Genesis.TYPE_CODE_RANGE:
+                  continue;
+          }
+          res += (table.isArray.get(i) ? " *" : " ") + table.name.get(i) + ";\n";
+      }
+      return res;
   }
 }
 
