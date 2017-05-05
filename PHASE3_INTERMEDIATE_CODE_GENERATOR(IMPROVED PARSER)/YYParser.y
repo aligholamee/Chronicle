@@ -819,20 +819,28 @@ class Quadruple {
         return result + " = -" + arg0 + ";";
       case ":=":
         return result + " = " + arg0 + ";";
+        /* integer */
       case "int_print":
         return "printf(\"%s = %d\\n\", \"" + result + "\", " + result + ");";
+        /* real */
       case "real_print":
         return "printf(\"%s = %f\\n\", \"" + result + "\", " + result + ");";
+        /* character */
       case "char_print":
         return "printf(\"%s = '%c'\\n\", \"" + result + "\", " + result + ");";
+        /* boolean */
       case "bool_print":
         return "printf(\"%s = %s\\n\", \"" + result + "\", " + result + " ? \"true\" : \"false\");";
+        /* integer array */
       case "aiprint":
         return "printf(\"%s[%d] = %d\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+         /* real array */
       case "arprint":
         return "printf(\"%s[%d] = %f\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+        /* character array */
       case "acprint":
         return "printf(\"%s[%d] = '%c'\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+        /* boolean array */
       case "abprint":
         return "printf(\"%s[%d] = %s\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "] ? \"true\" : \"false\");";
       case "[]=":
