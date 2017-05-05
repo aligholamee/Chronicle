@@ -645,10 +645,24 @@ saved_character:
   		((Genesis)$$).falseList = Genesis.makeList(nextQuad() + 2);
   		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
 
-  		emit(":=", String.valueOf(lexInt), null, ((Genesis)$$).place);
+  		emit(":=", String.valueOf(lexChar), null, ((Genesis)$$).place);
+
+/* We need to manage if the character is in the symbol table or not */
+saved_boolean:
+	BOOLCONST {
+  			"saved_boolean: BOOLCONST");
+  		$$ = new Genesis();
+  		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_BOOLEAN, false);
+  		((Genesis)$$).type = Genesis.TYPE_CODE_BOOLEAN;
+  		((Genesis)$$).trueList = Genesis.makeList(nextQuad() + 1);
+  		((Genesis)$$).falseList = Genesis.makeList(nextQuad() + 2);
+  		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
+
+  		emit(":=", String.valueOf(lexBool), null, ((Genesis)$$).place);
   		emit("check", ((Genesis)$$).place, null, String.valueOf(nextQuad() + 2));
   		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 }
+
 %%
 /* Implementation of the classes needed to generate the intermediate code */
 
