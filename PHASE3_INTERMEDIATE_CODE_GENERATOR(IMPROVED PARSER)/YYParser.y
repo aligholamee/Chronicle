@@ -799,7 +799,7 @@ class Quadruple {
     {
       case "goto":
         return operation + " " + LINE_STR + result + ";";
-      case "check":
+      case "conidition":
         return "if (" + arg0 + ") goto " + LINE_STR + result + ";";
       case "<":
       case "<=":
@@ -815,8 +815,6 @@ class Quadruple {
         return result + " = " + arg0 + " " + "==" + " " + arg1 + ";";
       case "<>":
         return result + " != " + arg0 + " " + "==" + " " + arg1 + ";";
-      case "usub":
-        return result + " = -" + arg0 + ";";
       case ":=":
         return result + " = " + arg0 + ";";
         /* integer */
