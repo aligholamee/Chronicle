@@ -215,7 +215,6 @@ declarations_list:
 			"declarations_list -> declarations");
 	}
 
-
 declarations:
 	type_specifiers declarator_list SEMICOLON_KW {
 		System.out.println("Rule 3.1: " +
@@ -228,6 +227,8 @@ type_specifiers:
 	INTEGER_KW {
 		System.out.println("Rule 4.1: " +
 			"type_specifiers -> INTEGER_KW");
+      $$ = new Genesis();
+      ((Genesis)$$).type = Genesis.INT;
 	}
 	| REAL_KW {
 		System.out.println("Rule 4.2: " +
