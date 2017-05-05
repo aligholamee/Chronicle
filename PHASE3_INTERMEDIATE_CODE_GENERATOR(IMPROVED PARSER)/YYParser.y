@@ -65,7 +65,11 @@
     /* YYParser class section */
     /* Functions like emit, backpatch, newTemp, nextQuad and etc. will be implemented here */
 
-
+    /* YYParser variable types list */
+    public static final String TYPE_STRING_INTEGER = "int";
+    public static final String TYPE_STRING_CHAR = "char";
+    public static final String TYPE_STRING_REAL = "real";
+    public static final String TYPE_STRING_BOOLEAN = "bool";
 
     /* Variable declarations and allocations */
     private SymbolTable symbolTable = new SymbolTable();
