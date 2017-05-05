@@ -239,6 +239,8 @@ type_specifiers:
 	| CHARACTER_KW {
 		System.out.println("Rule 4.3: " +
 			"type_specifiers -> CHAR_KW");
+      $$ = new Genesis();
+      ((Genesis)$$).type = Genesis.CHAR;
 	}
 	| BOOLEAN_KW {
 		System.out.println("Rule 4.4: " +
