@@ -609,12 +609,27 @@ pair:
 /* Declared Variables Handling Section */
 /* We need to manage if the ID is in the symbol table or not */
 repeated_id:
-IDENTIFIER {
-  System.out.println("Rule 27.1: " +
-    "saved_identifier: IDENTIFIER");
-    $$ = new Genesis();
-    ((Genesis)$$).place = lexIdentifier;
+  ID {
+    System.out.println("Rule 27.1: " +
+      "repeated_id: ID");
+      $$ = new Genesis();
+      ((Genesis)$$).place = lexIdentifier;
   }
+saved_integer:
+	NUMCONST {
+		System.out.println("Rule 28.1: " +
+  			"saved_integer: NUMCONST");
+  		$$ = new Genesis();
+  		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_INTEGER, false);
+  		((Genesis)$$).type = Genesis.TYPE_CODE_INTEGER;
+  		((Genesis)$$).trueList = Genesis.makeList(nextQuad() + 1);
+  		((Genesis)$$).falseList = Genesis.makeList(nextQuad() + 2);
+  		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
+
+  		emit(":=", String.valueOf(lexInt), null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2));
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1));
+}
 
 %%
 /* Implementation of the classes needed to generate the intermediate code */
