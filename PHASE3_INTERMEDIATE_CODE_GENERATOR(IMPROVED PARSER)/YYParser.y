@@ -233,6 +233,8 @@ type_specifiers:
 	| REAL_KW {
 		System.out.println("Rule 4.2: " +
 			"type_specifiers -> REAL_KW");
+      $$ = new Genesis();
+      ((Genesis)$$).type = Genesis.REAL;
 	}
 	| CHARACTER_KW {
 		System.out.println("Rule 4.3: " +
