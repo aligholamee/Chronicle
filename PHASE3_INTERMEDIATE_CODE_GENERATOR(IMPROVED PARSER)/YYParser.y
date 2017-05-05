@@ -608,6 +608,13 @@ pair:
 
 /* Declared Variables Handling Section */
 /* We need to manage if the ID is in the symbol table or not */
+repeated_id:
+IDENTIFIER {
+  System.out.println("Rule 27.1: " +
+    "saved_identifier: IDENTIFIER");
+    $$ = new Genesis();
+    ((Genesis)$$).place = lexIdentifier;
+  }
 
 %%
 /* Implementation of the classes needed to generate the intermediate code */
