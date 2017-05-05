@@ -75,6 +75,8 @@
     private SymbolTable symbolTable = new SymbolTable();
 	  private ArrayList<Quadruple> quadruples = new ArrayList<>();
 
+    /* a character to hold the previous operator for the pair section */
+    private char prev_op;
     /* Emit function */
     private void emit(String operation,String arg0,String arg1,String result)
     {
@@ -293,7 +295,7 @@ range:
 		System.out.println("Rule 8.1: " +
 			"range -> ID DOT_KW ID");
 	}
-	| NUMCONST DOT_KW NUMCONST {
+	| saved_integer DOT_KW saved_integer {
 		System.out.println("Rule 8.2: " +
 			"range -> NUMCONST DOT_KW NUMCONST");
 	}
@@ -578,33 +580,41 @@ arithmetic_expressions:
 	ADD_KW pair {
 		System.out.println("Rule 25.1: " +
 			"arithmetic_expressions -> ADD_KW pair");
-      /* The code for addition */
+      prev_op = '+';
 	}
 	| SUB_KW pair {
 		System.out.println("Rule 25.2: " +
 			"arithmetic_expressions -> SUB_KW pair");
+      prev_op = '-';
 	}
 	| MUL_KW pair {
 		System.out.println("Rule 25.3: " +
 			"arithmetic_expressions -> MUL_KW pair");
+      prev_op = '*';
 	}
 	| DIV_KW pair {
 		System.out.println("Rule 25.4: " +
 			"arithmetic_expressions -> DIV_KW pair");
+      prev_op = '/';
 	}
 	| MOD_KW pair {
 		System.out.println("Rule 25.5: " +
 			"arithmetic_expressions -> MOD_KW pair");
+      prev_op = '%';
 	}
 	| SUB_KW expressions {
 		System.out.println("Rule 25.6: " +
 			"arithmetic_expressions -> SUB_KW expressions");
+      prev_op = '-';
 	}
 
 pair:
 	OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 26.1: " +
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
+       /* the operation will be grabbed from prev_op and the implementation in c will be straightforward */
+       
+
 	}
 
 /* Declared Variables Handling Section */
