@@ -819,17 +819,13 @@ class Quadruple {
         return result + " = -" + arg0 + ";";
       case ":=":
         return result + " = " + arg0 + ";";
-      case "cast":
-        return result + " = (" + arg1 + ") " + arg0 + ";";
-      case "init":
-        return arg1 + " " + result + ";";
-      case "iprint":
+      case "int_print":
         return "printf(\"%s = %d\\n\", \"" + result + "\", " + result + ");";
-      case "rprint":
+      case "real_print":
         return "printf(\"%s = %f\\n\", \"" + result + "\", " + result + ");";
-      case "cprint":
+      case "char_print":
         return "printf(\"%s = '%c'\\n\", \"" + result + "\", " + result + ");";
-      case "bprint":
+      case "bool_print":
         return "printf(\"%s = %s\\n\", \"" + result + "\", " + result + " ? \"true\" : \"false\");";
       case "aiprint":
         return "printf(\"%s[%d] = %d\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
