@@ -615,6 +615,8 @@ repeated_id:
       $$ = new Genesis();
       ((Genesis)$$).place = lexIdentifier;
   }
+
+/* We need to manage if the integer is in the symbol table or not */
 saved_integer:
 	NUMCONST {
 		System.out.println("Rule 28.1: " +
@@ -626,11 +628,27 @@ saved_integer:
   		((Genesis)$$).falseList = Genesis.makeList(nextQuad() + 2);
   		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
 
-  		emit(":=", String.valueOf(lexInt), null, ((EVal)$$).place);
-  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2));
+  		emit(":=", String.valueOf(lexInt), null, ((Genesis)$$).place);
+  		emit("check", ((Genesis)$$).place, null, String.valueOf(nextQuad() + 2));
   		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 }
 
+/* We need to manage if the character is in the symbol table or not */
+saved_character:
+	CHARCONST {
+		System.out.println("Rule 29.1: " +
+  			"saved_character: CHARCONST");
+  		$$ = new Genesis();
+  		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_CHAR, false);
+  		((Genesis)$$).type = Genesis.TYPE_CODE_CHAR;
+  		((Genesis)$$).trueList = Genesis.makeList(nextQuad() + 1);
+  		((Genesis)$$).falseList = Genesis.makeList(nextQuad() + 2);
+  		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
+
+  		emit(":=", String.valueOf(lexInt), null, ((Genesis)$$).place);
+  		emit("check", ((Genesis)$$).place, null, String.valueOf(nextQuad() + 2));
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1));
+}
 %%
 /* Implementation of the classes needed to generate the intermediate code */
 
