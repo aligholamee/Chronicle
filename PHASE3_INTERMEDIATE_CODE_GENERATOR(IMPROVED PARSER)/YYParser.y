@@ -305,6 +305,12 @@ range:
         System.err.println("Error! \"" + $3.place + "\" is not declared.");
         return YYABORT;
       }
+
+      /* Create range code section */
+      $$ = new Genesis();
+      ((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_RANGE, true);
+      ((Genesis)$$).type = Genesis.TYPE_CODE_RANGE;
+      ((Genesis)$$).array = true;
 	}
 	| saved_integer DOT_KW saved_integer {
 		System.out.println("Rule 8.2: " +
