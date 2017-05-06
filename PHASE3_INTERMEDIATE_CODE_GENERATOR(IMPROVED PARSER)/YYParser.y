@@ -74,7 +74,7 @@
     /* Variable declarations and allocations */
     private SymbolTable symbolTable = new SymbolTable();
 	  private ArrayList<Quadruple> quadruples = new ArrayList<>();
-    
+
     public static String lexIdentifier;
     public static int lexInt;
     public static double lexReal;
@@ -945,6 +945,12 @@ class Genesis {
   public ArrayList<Integer> trueList;
   public ArrayList<Integer> falseList;
   public ArrayList<Integer> nextList;
+
+  /* Variables to handle declarations and the list that is going to return from them */
+  public ArrayList<ArrayList<Genesis>> initializersList;
+  public ArrayList<Genesis> declareds;
+  public ArrayList<Genesis> initializers;
+
 
   /* Genesis Constructor */
   public Genesis() {
