@@ -294,6 +294,17 @@ range:
 	repeated_id DOT_KW repeated_id {
 		System.out.println("Rule 8.1: " +
 			"range -> ID DOT_KW ID");
+      /* Check ID existence */
+      int index1 = symbolTable.lookUp($1.place);
+      int index2 = symbolTable.lookUp($3.place);
+      if (index1 == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+        System.err.println("Error! \"" + $1.place + "\" is not declared.");
+        return YYABORT;
+      }
+      if (index2 == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+        System.err.println("Error! \"" + $3.place + "\" is not declared.");
+        return YYABORT;
+      }
 	}
 	| saved_integer DOT_KW saved_integer {
 		System.out.println("Rule 8.2: " +
@@ -632,6 +643,8 @@ pair:
            String tmp = newTemp(Genesis.TYPE_CODE_REAL, false);
            emit("cast", $1.place, TYPE_STRING_REAL, tmp);
            emit(prev_op, tmp, $3.place, ((Genesis)$$).place);
+
+
 	}
 
 /* Declared Variables Handling Section */
