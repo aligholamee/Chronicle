@@ -340,6 +340,29 @@ range:
 	| arithmetic_expressions DOT_KW arithmetic_expressions {
 		System.out.println("Rule 8.3: " +
 			"range -> arithmetic_expressions DOT_KW arithmetic_expressions");
+
+      /* Check the type */
+      if ($1.type != Genesis.TYPE_CODE_INTEGER) {
+        System.err.println("Error! \"" + $1.place + "\" arg1 type mismatch.");
+        return YYABORT;
+      }
+      if ($3.type != Genesis.TYPE_CODE_INTEGER) {
+        System.err.println("Error! \"" + $3.place + "\" arg2 type mismatch.");
+        return YYABORT;
+      }
+
+      /* Create range code section */
+      $$ = new Genesis();
+      ((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_RANGE, true);
+      ((Genesis)$$).type = Genesis.TYPE_CODE_RANGE;
+      ((Genesis)$$).array = true;
+
+      /* Add size and start point to the quadruple table */
+      symbolTable.addToSymbolTable(startStr + ((Genesis)$$).place, Genesis.TYPE_CODE_INTEGER, false);
+      symbolTable.addToSymbolTable(sizeStr + ((Genesis)$$).place, Genesis.TYPE_CODE_INTEGER, false);
+      emit(":=", $1.place, null , startStr + ((Genesis)$$).place);
+      emit("-", $3.place, $1.place , sizeStr + ((Genesis)$$).place);
+      emit("+", sizeStr + ((Genesis)$$).place, "1", sizeStr + ((Genesis)$$).place);
 	}
 
 initializer:
