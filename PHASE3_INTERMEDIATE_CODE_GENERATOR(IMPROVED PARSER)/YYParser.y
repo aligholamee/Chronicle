@@ -74,6 +74,12 @@
     /* Variable declarations and allocations */
     private SymbolTable symbolTable = new SymbolTable();
 	  private ArrayList<Quadruple> quadruples = new ArrayList<>();
+    
+    public static String lexIdentifier;
+    public static int lexInt;
+    public static double lexReal;
+    public static boolean lexBoolean;
+    public static char lexChar;
 
     /* a character to hold the previous operator for the pair section */
     private char prev_op;
