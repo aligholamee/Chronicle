@@ -604,7 +604,7 @@ constant_expressions:
 		System.out.println("Rule 23.3: " +
 			"constant_expressions -> CHARCONST");
 	}
-	| saved_character {
+	| saved_boolean {
 		System.out.println("Rule 23.4: " +
 			"constant_expressions -> BOOLEAN_KW");
 	}
