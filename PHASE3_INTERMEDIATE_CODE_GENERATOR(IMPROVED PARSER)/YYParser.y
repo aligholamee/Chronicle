@@ -213,7 +213,7 @@ program:
       backpatch($6.nextList, nextQuad());
       exportIntermediateCode();
 	}
-  | PROGRAM_KW ID MAIN_KW {
+  | PROGRAM_KW repeated_id MAIN_KW {
   System.out.println("Rule 1.1: " +
     "program -> PROGRAM_KW ID MAIN_KW");
     exportIntermediateCode();
@@ -706,7 +706,7 @@ pair:
            emit("cast", $1.place, TYPE_STRING_REAL, tmp);
            emit(prev_op, tmp, $3.place, ((Genesis)$$).place);
 	}
-
+}
 /* Declared Variables Handling Section */
 /* We need to manage if the ID is in the symbol table or not */
 repeated_id:
@@ -719,7 +719,7 @@ repeated_id:
 
 /* We need to manage if the integer is in the symbol table or not */
 saved_integer:
-	saved_integer {
+	NUMCONST {
 		System.out.println("Rule 28.1: " +
   			"saved_integer: saved_integer");
   		$$ = new Genesis();
@@ -736,7 +736,7 @@ saved_integer:
 
 /* We need to manage if the character is in the symbol table or not */
 saved_character:
-	saved_character {
+	CHARCONST {
 		System.out.println("Rule 29.1: " +
   			"saved_character: saved_character");
   		$$ = new Genesis();
@@ -753,7 +753,7 @@ saved_character:
 
 /* We need to manage if the boolean is in the symbol table or not */
 saved_boolean:
-	saved_boolean {
+	BOOLCONST {
 		System.out.println("Rule 30.1: " +
   			"saved_boolean: saved_boolean");
   		$$ = new Genesis();
@@ -770,7 +770,7 @@ saved_boolean:
 
 /* We need to manage if the real is in the symbol table or not */
 saved_real:
-	saved_real {
+	REALCONST {
 		System.out.println("Rule 31.1: " +
   			"saved_real: saved_real");
   		$$ = new Genesis();
