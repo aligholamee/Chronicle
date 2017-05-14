@@ -12,7 +12,7 @@
 %type <Genesis> saved_real
 %token ID
 %token saved_integer
-%token REALCONST
+%token saved_real
 %token saved_character
 %token saved_boolean
 %token SHARP_KW
@@ -605,7 +605,7 @@ constant_expressions:
 	}
 	| saved_real {
 		System.out.println("Rule 23.2: " +
-			"constant_expressions -> REALCONST");
+			"constant_expressions -> saved_real");
 	}
 	| saved_character {
 		System.out.println("Rule 23.3: " +
@@ -770,9 +770,9 @@ saved_boolean:
 
 /* We need to manage if the real is in the symbol table or not */
 saved_real:
-	REALCONST {
+	saved_real {
 		System.out.println("Rule 31.1: " +
-  			"saved_real: REALCONST");
+  			"saved_real: saved_real");
   		$$ = new Genesis();
   		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_REAL, false);
   		((Genesis)$$).type = Genesis.TYPE_CODE_REAL;
