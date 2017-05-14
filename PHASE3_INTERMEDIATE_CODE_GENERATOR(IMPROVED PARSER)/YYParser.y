@@ -14,7 +14,7 @@
 %token saved_integer
 %token REALCONST
 %token saved_character
-%token BOOLCONST
+%token saved_boolean
 %token SHARP_KW
 %token MOD_KW
 %token DIV_KW
@@ -753,9 +753,9 @@ saved_character:
 
 /* We need to manage if the boolean is in the symbol table or not */
 saved_boolean:
-	BOOLCONST {
+	saved_boolean {
 		System.out.println("Rule 30.1: " +
-  			"saved_boolean: BOOLCONST");
+  			"saved_boolean: saved_boolean");
   		$$ = new Genesis();
   		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_BOOLEAN, false);
   		((Genesis)$$).type = Genesis.TYPE_CODE_BOOLEAN;
