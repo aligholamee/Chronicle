@@ -13,7 +13,7 @@
 %token ID
 %token saved_integer
 %token REALCONST
-%token CHARCONST
+%token saved_character
 %token BOOLCONST
 %token SHARP_KW
 %token MOD_KW
@@ -609,7 +609,7 @@ constant_expressions:
 	}
 	| saved_character {
 		System.out.println("Rule 23.3: " +
-			"constant_expressions -> CHARCONST");
+			"constant_expressions -> saved_character");
 	}
 	| saved_boolean {
 		System.out.println("Rule 23.4: " +
@@ -736,9 +736,9 @@ saved_integer:
 
 /* We need to manage if the character is in the symbol table or not */
 saved_character:
-	CHARCONST {
+	saved_character {
 		System.out.println("Rule 29.1: " +
-  			"saved_character: CHARCONST");
+  			"saved_character: saved_character");
   		$$ = new Genesis();
   		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_CHAR, false);
   		((Genesis)$$).type = Genesis.TYPE_CODE_CHAR;
