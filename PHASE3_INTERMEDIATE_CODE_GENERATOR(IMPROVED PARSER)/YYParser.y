@@ -4,6 +4,11 @@
   import java.io.*;
 %}
 
+%type <Genesis> repeated_id
+%type <Genesis> saved_integer
+%type <Genesis> saved_boolean
+%type <Genesis> saved_character
+%type <Genesis> saved_real
 %token ID
 %token NUMCONST
 %token REALCONST
@@ -61,6 +66,7 @@
 %token DIGIT
 %token NONZERO_DIGIT
 %token LETTER
+%type <Genesis> program declarations_list declarations type_specifiers declarator_list declarator dec range initializer initializer_list procedure_list procedure parameters block statement_list statement arguments_list multi_arguments counter case_element default expressions constant_expressions bool_expressions arithmetic_expressions pair repeated_id saved_integer saved_character saved_boolean
 %code {
     /* YYParser class section */
     /* Functions like emit, backpatch, newTemp, nextQuad and etc. will be implemented here */
