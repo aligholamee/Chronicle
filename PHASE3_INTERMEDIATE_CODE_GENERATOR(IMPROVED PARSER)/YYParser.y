@@ -11,10 +11,6 @@
 %type <Genesis> saved_character
 %type <Genesis> saved_real
 %token ID
-%token saved_integer
-%token saved_real
-%token saved_character
-%token saved_boolean
 %token SHARP_KW
 %token MOD_KW
 %token DIV_KW
