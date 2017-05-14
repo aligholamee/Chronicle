@@ -86,7 +86,7 @@
     /* Emit function */
     private void emit(String operation,String arg0,String arg1,String result)
     {
-      quadTable.add(new Quad(operation,arg0,arg1,result));
+      quadruples.add(new Quadruple(operation,arg0,arg1,result));
       System.out.println("EMIT:"+operation+":"+arg0+":"+arg1+":"+result);
     }
 
@@ -140,7 +140,7 @@
         final Yylex lexer;
 
         writer = new PrintStream(new File("yacc_tool_output.txt"));
-        lexer = new Yylex(new InputStreamReader(new FileInputStream(".\\Global_Test\\globalTest2.shl")));
+        lexer = new Yylex(new InputStreamReader(new FileInputStream("C:\Users\aligholamee\Desktop\Chronicle\PHASE1_LEXICAL_ANALYZER\Global_Test\globalTest2.shl")));
 
         yyparser = new YYParser(new Lexer() {
 
@@ -592,19 +592,19 @@ expressions:
 	}
 
 constant_expressions:
-	NUMCONST {
+	saved_integer {
 		System.out.println("Rule 23.1: " +
 			"constant_expressions -> NUMCONST");
 	}
-	| REALCONST {
+	| saved_real {
 		System.out.println("Rule 23.2: " +
 			"constant_expressions -> REALCONST");
 	}
-	| CHARCONST {
+	| saved_character {
 		System.out.println("Rule 23.3: " +
 			"constant_expressions -> CHARCONST");
 	}
-	| BOOLEAN_KW {
+	| saved_character {
 		System.out.println("Rule 23.4: " +
 			"constant_expressions -> BOOLEAN_KW");
 	}
@@ -682,7 +682,6 @@ pair:
        /* Specially implemented for * / + - */
        /* mod will be handled later */
        /* the operation will be grabbed from prev_op and the implementation in c will be straightforward */
-       if(prev_op == '+' | prev_op == '-' | prev_op == '*' | prev_op == '/')
          if((($2.type == Genesis.TYPE_CODE_INTEGER || $2.type == Genesis.TYPE_CODE_CHAR || $2.type == Genesis.TYPE_CODE_BOOLEAN)
          && ($4.type == Genesis.TYPE_CODE_INTEGER || $4.type == Genesis.TYPE_CODE_CHAR || $4.type == Genesis.TYPE_CODE_BOOLEAN))
          || ($2.type == Genesis.TYPE_CODE_REAL && $4.type == Genesis.TYPE_CODE_REAL)) {
