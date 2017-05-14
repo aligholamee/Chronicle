@@ -11,7 +11,7 @@
 %type <Genesis> saved_character
 %type <Genesis> saved_real
 %token ID
-%token NUMCONST
+%token saved_integer
 %token REALCONST
 %token CHARCONST
 %token BOOLCONST
@@ -296,9 +296,9 @@ dec:
 		System.out.println("Rule 7.2: " +
 			"dec -> ID OPENBRACKET_KW range CLOSEBRACKET_KW");
 	}
-	| repeated_id OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW {
+	| repeated_id OPENBRACKET_KW saved_integer CLOSEBRACKET_KW {
 		System.out.println("Rule 7.3: " +
-			"dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
+			"dec -> ID OPENBRACKET_KW saved_integer CLOSEBRACKET_KW");
 	}
 
 
@@ -335,7 +335,7 @@ range:
 	}
 	| saved_integer DOT_KW saved_integer {
 		System.out.println("Rule 8.2: " +
-			"range -> NUMCONST DOT_KW NUMCONST");
+			"range -> saved_integer DOT_KW saved_integer");
 
       /* Create range code section */
       $$ = new Genesis();
@@ -521,23 +521,23 @@ multi_arguments:
 	}
 
 counter:
-	NUMCONST UPTO_KW NUMCONST {
+	saved_integer UPTO_KW saved_integer {
 		System.out.println("Rule 19.1: " +
-			"counter -> NUMCONST UPTO_KW NUMCONST");
+			"counter -> saved_integer UPTO_KW saved_integer");
 	}
-	| NUMCONST DOWNTO_KW NUMCONST {
+	| saved_integer DOWNTO_KW saved_integer {
 		System.out.println("Rule 19.2: " +
-			"counter -> NUMCONST DOWNTO_KW NUMCONST");
+			"counter -> saved_integer DOWNTO_KW saved_integer");
 	}
 
 case_element:
-	CASE_KW NUMCONST COLON_KW block {
+	CASE_KW saved_integer COLON_KW block {
 		System.out.println("Rule 20.1: " +
-			"case_element -> CASE_KW NUMCONST COLON_KW block");
+			"case_element -> CASE_KW saved_integer COLON_KW block");
 	}
-	| case_element CASE_KW NUMCONST COLON_KW block {
+	| case_element CASE_KW saved_integer COLON_KW block {
 		System.out.println("Rule 20.2: " +
-			"case_element -> case_element CASE_KW NUMCONST COLON_KW block");
+			"case_element -> case_element CASE_KW saved_integer COLON_KW block");
 	}
 
 default:
@@ -601,7 +601,7 @@ expressions:
 constant_expressions:
 	saved_integer {
 		System.out.println("Rule 23.1: " +
-			"constant_expressions -> NUMCONST");
+			"constant_expressions -> saved_integer");
 	}
 	| saved_real {
 		System.out.println("Rule 23.2: " +
@@ -719,9 +719,9 @@ repeated_id:
 
 /* We need to manage if the integer is in the symbol table or not */
 saved_integer:
-	NUMCONST {
+	saved_integer {
 		System.out.println("Rule 28.1: " +
-  			"saved_integer: NUMCONST");
+  			"saved_integer: saved_integer");
   		$$ = new Genesis();
   		((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_INTEGER, false);
   		((Genesis)$$).type = Genesis.TYPE_CODE_INTEGER;
