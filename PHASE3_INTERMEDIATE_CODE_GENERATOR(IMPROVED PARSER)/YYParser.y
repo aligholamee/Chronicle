@@ -323,7 +323,7 @@ range:
       $$ = new Genesis();
       ((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_RANGE, true);
       ((Genesis)$$).type = Genesis.TYPE_CODE_RANGE;
-      ((Genesis)$$).array = true;
+      ((Genesis)$$).isArray = true;
 
       /* Add size and start point to the quadruple table */
       symbolTable.addToSymbolTable(startStr + ((Genesis)$$).place, Genesis.TYPE_CODE_INTEGER, false);
@@ -341,7 +341,7 @@ range:
       $$ = new Genesis();
       ((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_RANGE, true);
       ((Genesis)$$).type = Genesis.TYPE_CODE_RANGE;
-      ((Genesis)$$).array = true;
+      ((Genesis)$$).isArray = true;
 
       /* Add size and start point to the quadruple table */
       symbolTable.addToSymbolTable(startStr + ((Genesis)$$).place, Genesis.TYPE_CODE_INTEGER, false);
@@ -368,7 +368,7 @@ range:
       $$ = new Genesis();
       ((Genesis)$$).place = newTemp(Genesis.TYPE_CODE_RANGE, true);
       ((Genesis)$$).type = Genesis.TYPE_CODE_RANGE;
-      ((Genesis)$$).array = true;
+      ((Genesis)$$).isArray = true;
 
       /* Add size and start point to the quadruple table */
       symbolTable.addToSymbolTable(startStr + ((Genesis)$$).place, Genesis.TYPE_CODE_INTEGER, false);
