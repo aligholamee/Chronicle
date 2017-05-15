@@ -71,6 +71,11 @@
 %code {
     /* YYParser class section */
     /* Functions like emit, backpatch, newTemp, nextQuad and etc. will be implemented here */
+    private static final String tempStr = "TempVar";
+  	public static final String startStr = "StartVar";
+  	public static final String sizeStr = "SizeVar";
+  	public static final String indexStr = "IndexVar";
+  	public static final String condStr = "ConditionVar";
 
     /* YYParser variable types list */
     public static final String TYPE_STRING_INTEGER = "int";
