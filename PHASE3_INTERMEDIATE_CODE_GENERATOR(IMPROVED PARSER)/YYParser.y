@@ -986,6 +986,7 @@ class Genesis {
       }
       return list;
   }
+  }
 
 /* Class #3: Quadruple */
 class Quadruple {
