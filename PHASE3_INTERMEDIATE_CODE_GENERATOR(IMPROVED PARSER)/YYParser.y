@@ -662,7 +662,7 @@ arithmetic_expressions:
         $$ = new Genesis();
         ((Genesis)$$).place = newTemp($3.type, false);
         ((Genesis)$$).type = $3.type;
-        emit('+', $3.place, $5.place, ((Genesis)$$).place);
+        emit("+", $3.place, $5.place, ((Genesis)$$).place);
         //prev_op = '+';
     }
     | SUB_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
@@ -671,7 +671,7 @@ arithmetic_expressions:
         $$ = new Genesis();
         ((Genesis)$$).place = newTemp($3.type, false);
         ((Genesis)$$).type = $3.type;
-        emit('-', $3.place, $5.place, ((Genesis)$$).place);
+        emit("-", $3.place, $5.place, ((Genesis)$$).place);
         //prev_op = '-';
     }
     | MUL_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
@@ -680,7 +680,7 @@ arithmetic_expressions:
         $$ = new Genesis();
         ((Genesis)$$).place = newTemp($3.type, false);
         ((Genesis)$$).type = $3.type;
-        emit('*', $3.place, $5.place, ((Genesis)$$).place);
+        emit("*", $3.place, $5.place, ((Genesis)$$).place);
     }
     | DIV_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
       System.out.println("Rule 25.4: " +
@@ -688,7 +688,7 @@ arithmetic_expressions:
         $$ = new Genesis();
         ((Genesis)$$).place = newTemp($3.type, false);
         ((Genesis)$$).type = $3.type;
-        emit('/', $3.place, $5.place, ((Genesis)$$).place);
+        emit("/", $3.place, $5.place, ((Genesis)$$).place);
         //prev_op = '/';
     }
     | MOD_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
@@ -697,7 +697,7 @@ arithmetic_expressions:
         $$ = new Genesis();
         ((Genesis)$$).place = newTemp($3.type, false);
         ((Genesis)$$).type = $3.type;
-        emit('%', $3.place, $5.place, ((Genesis)$$).place);
+        emit("%", $3.place, $5.place, ((Genesis)$$).place);
         //prev_op = '%';
     }
   /*| SUB_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
