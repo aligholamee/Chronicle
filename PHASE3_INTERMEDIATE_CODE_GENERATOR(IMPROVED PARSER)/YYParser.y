@@ -858,7 +858,7 @@ class SymbolTable {
     /* Create an integer to get the return value */
     int index = lookUp(fName);
 
-    if(index != NOT_FOUND)
+    if(index != NOT_IN_SYMBOL_TABLE)
        ret = table.get(index);
     else
       ret = null;
@@ -903,7 +903,7 @@ class SymbolTable {
     int ret = table.indexOf(name);
     if(ret == -1)
       /* Not found */
-      return NOT_FOUND;
+      return NOT_IN_SYMBOL_TABLE;
     else
       return ret;
   }
