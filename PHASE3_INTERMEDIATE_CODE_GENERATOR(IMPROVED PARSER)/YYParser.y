@@ -836,7 +836,7 @@ class SymbolTable {
   }
   /* Create an list of Records */
   /* Each row of the symbol table will contain a list of records */
-  private List<Record> table;
+  public List<Record> table;
 
   /* SymbolTable: Class Constructor - No argument */
   public SymbolTable()
