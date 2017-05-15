@@ -567,7 +567,7 @@ expressions:
 			"expressions -> bool_expressions");
       $$ = new Genesis();
       ((Genesis)$$).place = $1.place;
-      ((Genesis)$$).type = Genesis.TYPE_CODE_BOOL;
+      ((Genesis)$$).type = Genesis.TYPE_CODE_BOOLEAN;
       ((Genesis)$$).nextList = $1.nextList;
       ((Genesis)$$).trueList = $1.trueList;
       ((Genesis)$$).falseList = $1.falseList;
@@ -790,7 +790,7 @@ saved_boolean:
   		((Genesis)$$).falseList = Genesis.makeList(nextQuad() + 2);
   		((Genesis)$$).nextList = Genesis.merge(((Genesis)$$).trueList, ((Genesis)$$).falseList);
 
-  		emit(":=", String.valueOf(lexBool), null, ((Genesis)$$).place);
+  		emit(":=", String.valueOf(lexBoolean), null, ((Genesis)$$).place);
   		emit("check", ((Genesis)$$).place, null, String.valueOf(nextQuad() + 2));
   		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 }
@@ -819,7 +819,7 @@ saved_real:
 class SymbolTable {
     public static final int NOT_IN_SYMBOL_TABLE = -1;
     /* Record: Class definition */
-    protected class Record {
+    public class Record {
     public String name;
     public String type;
     public int size;
@@ -845,7 +845,7 @@ class SymbolTable {
   }
 
   /* Class Getter: Size getter */
-  public getSize()
+  public int getSize()
   {
     return table.size;
   }
@@ -947,7 +947,7 @@ class Genesis {
   public static final String TYPE_CODE_REAL = "float";
   public static final String TYPE_CODE_CHAR = "char";
   public static final String TYPE_CODE_STRING = "string";
-  public static final int TYPE_CODE_RANGE = "range";
+  public static final String TYPE_CODE_RANGE = "range";
   public static final String Func = "function";
   public static final String rectype = "rectype";
   public static final String unknownType = "unknown";
@@ -1019,6 +1019,7 @@ class Genesis {
 
 /* Class #3: Quadruple */
 class Quadruple {
+  public static final String LINE_STR = "Line";
   public String operation;
   public String arg0;
   public String arg1;
