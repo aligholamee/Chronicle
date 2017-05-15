@@ -812,8 +812,9 @@ saved_real:
 
 /* Class #1: SymbolTable */
 class SymbolTable {
-  /* Record: Class definition */
-  protected class Record {
+    public static final int NOT_IN_SYMBOL_TABLE = -1;
+    /* Record: Class definition */
+    protected class Record {
     public String name;
     public String type;
     public int size;
