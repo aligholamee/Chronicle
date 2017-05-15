@@ -567,7 +567,7 @@ expressions:
 			"expressions -> bool_expressions");
       $$ = new Genesis();
       ((Genesis)$$).place = $1.place;
-      ((Genesis)$$).type = Genesis.BOOL;
+      ((Genesis)$$).type = Genesis.TYPE_CODE_BOOL;
       ((Genesis)$$).nextList = $1.nextList;
       ((Genesis)$$).trueList = $1.trueList;
       ((Genesis)$$).falseList = $1.falseList;
