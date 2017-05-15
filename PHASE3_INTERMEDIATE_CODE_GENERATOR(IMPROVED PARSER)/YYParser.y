@@ -676,12 +676,15 @@ arithmetic_expressions:
 			"arithmetic_expressions -> MOD_KW pair");
       prev_op = '%';
 	}
-	| SUB_KW expressions {
+  /*| SUB_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 25.6: " +
 			"arithmetic_expressions -> SUB_KW expressions");
-      prev_op = '-';
-	}
-
+      $$ = new Genesis();
+      ((Genesis)$$).place = newTemp($3.type, false);
+      ((Genesis)$$).type = $3.type;
+      emit('-', $3.place, $5.place, ((Genesis)$$).place);
+      //prev_op = '-';
+	}*/
   pair:
   	OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
   		System.out.println("Rule 26.1: " +
