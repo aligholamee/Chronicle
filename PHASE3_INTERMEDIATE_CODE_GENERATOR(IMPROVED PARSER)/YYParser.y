@@ -651,31 +651,50 @@ bool_expressions:
 	}
 
 arithmetic_expressions:
-	ADD_KW pair {
-		System.out.println("Rule 25.1: " +
-			"arithmetic_expressions -> ADD_KW pair");
-      prev_op = '+';
-	}
-	| SUB_KW pair {
-		System.out.println("Rule 25.2: " +
-			"arithmetic_expressions -> SUB_KW pair");
-      prev_op = '-';
-	}
-	| MUL_KW pair {
-		System.out.println("Rule 25.3: " +
-			"arithmetic_expressions -> MUL_KW pair");
-      prev_op = '*';
-	}
-	| DIV_KW pair {
-		System.out.println("Rule 25.4: " +
-			"arithmetic_expressions -> DIV_KW pair");
-      prev_op = '/';
-	}
-	| MOD_KW pair {
-		System.out.println("Rule 25.5: " +
-			"arithmetic_expressions -> MOD_KW pair");
-      prev_op = '%';
-	}
+    ADD_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
+      System.out.println("Rule 25.1: " +
+        "arithmetic_expressions -> ADD_KW pair");
+        $$ = new Genesis();
+        ((Genesis)$$).place = newTemp($3.type, false);
+        ((Genesis)$$).type = $3.type;
+        emit('+', $3.place, $5.place, ((Genesis)$$).place);
+        //prev_op = '+';
+    }
+    | SUB_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
+      System.out.println("Rule 25.2: " +
+        "arithmetic_expressions -> SUB_KW pair");
+        $$ = new Genesis();
+        ((Genesis)$$).place = newTemp($3.type, false);
+        ((Genesis)$$).type = $3.type;
+        emit('-', $3.place, $5.place, ((Genesis)$$).place);
+        //prev_op = '-';
+    }
+    | MUL_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
+      System.out.println("Rule 25.3: " +
+        "arithmetic_expressions -> MUL_KW pair");
+        $$ = new Genesis();
+        ((Genesis)$$).place = newTemp($3.type, false);
+        ((Genesis)$$).type = $3.type;
+        emit('*', $3.place, $5.place, ((Genesis)$$).place);
+    }
+    | DIV_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
+      System.out.println("Rule 25.4: " +
+        "arithmetic_expressions -> DIV_KW pair");
+        $$ = new Genesis();
+        ((Genesis)$$).place = newTemp($3.type, false);
+        ((Genesis)$$).type = $3.type;
+        emit('/', $3.place, $5.place, ((Genesis)$$).place);
+        //prev_op = '/';
+    }
+    | MOD_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
+      System.out.println("Rule 25.5: " +
+        "arithmetic_expressions -> MOD_KW pair");
+        $$ = new Genesis();
+        ((Genesis)$$).place = newTemp($3.type, false);
+        ((Genesis)$$).type = $3.type;
+        emit('%', $3.place, $5.place, ((Genesis)$$).place);
+        //prev_op = '%';
+    }
   /*| SUB_KW OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 25.6: " +
 			"arithmetic_expressions -> SUB_KW expressions");
