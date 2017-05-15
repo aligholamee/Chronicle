@@ -892,7 +892,7 @@ class SymbolTable {
       table.add(temp);
       return table.size()-1;
     }
-    return ERROR;
+    return NOT_IN_SYMBOL_TABLE;
   }
 
   /* Function: lookUp in the table for an specific name */
@@ -1091,6 +1091,4 @@ class Quadruple {
         return null;
     }
   }
-}
-}
 }
