@@ -942,6 +942,7 @@ class Genesis {
   public static final String TYPE_CODE_REAL = "float";
   public static final String TYPE_CODE_CHAR = "char";
   public static final String TYPE_CODE_STRING = "string";
+  public static final int TYPE_CODE_RANGE = "range";
   public static final String Func = "function";
   public static final String rectype = "rectype";
   public static final String unknownType = "unknown";
