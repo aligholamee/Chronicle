@@ -105,12 +105,12 @@
     /* newTemp function */
     /* tempCounter: A variable to see how many temps are created until now */
     private int tempCounter = 0;
-    private String newTemp(String type,boolean isArray,int size) {
-      String name = "Temp" + (tempCounter++);
-      emit(Genesis.initOp,type,"",name);
-      symbolTable.addToSymbolTable(name,type,isArray,size);
-      return name;
-    }
+    private String newTemp(int type, boolean array) {
+  		String name = tempStr + tempCounter++;
+  		symbolTable.addToSymbolTable(name, type, array);
+  		return name;
+  	}
+
 
     /* nextQuad function */
     /* Give us the address of the current(+1 is next) quad in the table which is equal to the size of the quadRuple table */
