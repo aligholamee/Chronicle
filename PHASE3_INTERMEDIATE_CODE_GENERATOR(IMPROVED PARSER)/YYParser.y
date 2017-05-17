@@ -471,14 +471,94 @@ range:
 	saved_identifier DOT_KW saved_identifier {
 		System.out.println("Rule 8.1: " +
 			"range -> ID DOT_KW ID");
+      int index1 = symbolTable.lookUp($1.place);
+  		int index2 = symbolTable.lookUp($3.place);
+  		if (index1 == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+  			System.err.println("Error! \"" + $1.place + "\" is not declared.");
+  			return YYABORT;
+  		}
+  		if (index2 == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+  			System.err.println("Error! \"" + $3.place + "\" is not declared.");
+  			return YYABORT;
+  		}
+
+  		if(symbolTable.types.get(index1) != EVal.TYPE_CODE_INTEGER) {
+  			System.err.println("Error! Type mismatch: " + $1.place + "is not integer.");
+  			return YYABORT;
+  		}
+  		if(symbolTable.types.get(index2) != EVal.TYPE_CODE_INTEGER) {
+  			System.err.println("Error! Type mismatch: " + $3.place + "is not integer.");
+  			return YYABORT;
+  		}
+
+  		$$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_RANGE, true);
+  		((EVal)$$).type = EVal.TYPE_CODE_RANGE;
+  		((EVal)$$).array = true;
+
+  		// Set start and size
+  		symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		emit(":=", $1.place, null , startStr + ((EVal)$$).place);
+  		emit("-", $3.place, $1.place , sizeStr + ((EVal)$$).place);
+  		emit("+", sizeStr + ((EVal)$$).place, "1", sizeStr + ((EVal)$$).place);
+
+  		// Check size
+  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		EVal.invalidArraySizeList.add(nextQuad() + 1);
+  		emit("<=", sizeStr + ((EVal)$$).place, "0", condStr + ((EVal)$$).place);
+  		emit("check", condStr + ((EVal)$$).place, null, String.valueOf(nextQuad() + 1));
 	}
 	| saved_integer  DOT_KW saved_integer  {
 		System.out.println("Rule 8.2: " +
 			"range -> NUMCONST DOT_KW NUMCONST");
+      $$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_RANGE, true);
+  		((EVal)$$).type = EVal.TYPE_CODE_RANGE;
+  		((EVal)$$).array = true;
+
+  		// Set start and size
+  		symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		emit(":=", $1.place, null , startStr + ((EVal)$$).place);
+  		emit("-", $3.place, $1.place , sizeStr + ((EVal)$$).place);
+  		emit("+", sizeStr + ((EVal)$$).place, "1", sizeStr + ((EVal)$$).place);
+
+  		// Check size
+  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		EVal.invalidArraySizeList.add(nextQuad() + 1);
+  		emit("<=", sizeStr + ((EVal)$$).place, "0", condStr + ((EVal)$$).place);
+  		emit("check", condStr + ((EVal)$$).place, null, String.valueOf(nextQuad() + 1));
 	}
 	| arithmetic_expressions DOT_KW arithmetic_expressions {
 		System.out.println("Rule 8.3: " +
 			"range -> arithmetic_expressions DOT_KW arithmetic_expressions");
+      if($1.type != EVal.TYPE_CODE_INTEGER) {
+  			System.err.println("Error! Type mismatch: " + $1.place + "is not integer.");
+  			return YYABORT;
+  		}
+  		if($3.type != EVal.TYPE_CODE_INTEGER) {
+  			System.err.println("Error! Type mismatch: " + $3.place + "is not integer.");
+  			return YYABORT;
+  		}
+
+  		$$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_RANGE, true);
+  		((EVal)$$).type = EVal.TYPE_CODE_RANGE;
+  		((EVal)$$).array = true;
+
+  		// Set start and size
+  		symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		emit(":=", $1.place, null , startStr + ((EVal)$$).place);
+  		emit("-", $3.place, $1.place , sizeStr + ((EVal)$$).place);
+  		emit("+", sizeStr + ((EVal)$$).place, "1", sizeStr + ((EVal)$$).place);
+
+  		// Check size
+  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		EVal.invalidArraySizeList.add(nextQuad() + 1);
+  		emit("<=", sizeStr + ((EVal)$$).place, "0", condStr + ((EVal)$$).place);
+  		emit("check", condStr + ((EVal)$$).place, null, String.valueOf(nextQuad() + 1));
 	}
 
 initializer:
