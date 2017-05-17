@@ -404,6 +404,42 @@ dec:
 			"dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
 	}
 
+  declarator_end:
+  	dec SEMICOLON_KW {
+  		System.out.println("Rule 7.4: " +
+  			"declarator_end: dec SEMICOLON_KW");
+  		$$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = EVal.TYPE_CODE_UNKNOWN;
+  		((EVal)$$).initializers = null;
+  	}
+  	| dec ASS_KW initializer SEMICOLON_KW {
+  		System.out.println("Rule 7.5: " +
+  			"declarator_end: dec ASS_KW initializer SEMICOLON_KW");
+  		if($1.array != $3.array) {
+  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
+  			return YYABORT;
+  		}
+  		$$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $3.type;
+  		((EVal)$$).array = $1.array;
+  		((EVal)$$).initializers = $3.initializers;
+  	}
+  	| dec ASS_KW initializer_end {
+  		System.out.println("Rule 7.6: " +
+  			"declarator_end: dec ASS_KW initializer_end");
+  		if($1.array != $3.array) {
+  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
+  			return YYABORT;
+  		}
+  		$$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $3.type;
+  		((EVal)$$).array = $1.array;
+  		((EVal)$$).initializers = $3.initializers;
+  	}
+
 
 
 range:
