@@ -769,7 +769,7 @@ statement:
 			"statement -> ID ASSIGN_KW expressions");
 	}
 	| IF_KW bool_expressions THEN_KW statement {
-		System.out.println("Rule 16.2: " +
+		System.out.println ("Rule 16.2: " +
 			"statement -> IF_KW bool_expressions THEN_KW statement");
 	}
 	| IF_KW bool_expressions THEN_KW statement ELSE_KW statement {
@@ -863,22 +863,91 @@ expressions:
 	constant_expressions {
 		System.out.println("Rule 22.1: " +
 			"expressions -> constant_expressions");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).nextList = $1.nextList;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
 	}
 	| bool_expressions {
 		System.out.println("Rule 22.2: " +
 			"expressions -> bool_expressions");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = EVal.TYPE_CODE_BOOLEAN;
+  		((EVal)$$).nextList = $1.nextList;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
 	}
 	| arithmetic_expressions {
 		System.out.println("Rule 22.3: " +
 			"expressions -> arithmetic_expressions");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).nextList = $1.nextList;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
 	}
 	| saved_identifier {
 		System.out.println("Rule 22.4: " +
 			"expressions -> ID");
+      System.out.println("Rule 26.4: " +
+  			"expressions: saved_identifier");
+  		int index = symbolTable.lookUp($1.place);
+  		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+  			System.err.println("Error! \"" + lexIdentifier + "\" is not declared.");
+  			return YYABORT;
+  		}
+  		if (symbolTable.arrays.get(index)) {
+  			System.err.println("Error! \"" + lexIdentifier + "\" is an array, it can not be used without index.");
+  			return YYABORT;
+  		}
+  		$$ = new EVal();
+  		((EVal)$$).place = symbolTable.names.get(index);
+  		((EVal)$$).type = symbolTable.types.get(index);
+
+  		((EVal)$$).trueList = EVal.makeList(nextQuad());
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result will be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result will be backpatched.
 	}
 	| saved_identifier OPENBRACKET_KW expressions CLOSEBRACKET_KW {
 		System.out.println("Rule 22.5: " +
 			"expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
+      System.out.println("Rule 26.5: " +
+  			"expressions: saved_identifier LB_KW arithmatic_expressions RB_KW");
+  		int index = symbolTable.lookUp($1.place);
+  		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+  			System.err.println("Error! \"" + lexIdentifier + "\" is not declared.");
+  			return YYABORT;
+  		}
+  		if (!symbolTable.arrays.get(index)) {
+  			System.err.println("Error! \"" + lexIdentifier + "\" is not an array, it can not be used with index.");
+  			return YYABORT;
+  		}
+  		$$ = new EVal();
+  		((EVal)$$).place = newTemp(symbolTable.types.get(index), false);
+  		((EVal)$$).type = symbolTable.types.get(index);
+  		EVal.arrayIndexOutOfBoundList.add(nextQuad() + 2);
+  		EVal.arrayIndexOutOfBoundList.add(nextQuad() + 4);
+  		emit("-", $3.place, startStr + $1.place, indexStr + $1.place);
+  		emit(">=", indexStr + $1.place, sizeStr + $1.place, condStr + $1.place);
+  		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 3)); // Result will be backpatched.
+  		emit("<", indexStr + $1.place, "0", condStr + $1.place);
+  		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 1)); // Result will be backpatched.
+
+  		emit("=[]", $1.place, indexStr + $1.place, ((EVal)$$).place);
+
+  		((EVal)$$).trueList = EVal.makeList(nextQuad());
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result will be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); //result will be backpatched.
 	}
 	| saved_identifier OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.6: " +
@@ -887,6 +956,12 @@ expressions:
 	| OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.7: " +
 			"expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
+      $$ = new EVal();
+  		((EVal)$$).place = $2.place;
+  		((EVal)$$).type = $2.type;
+  		((EVal)$$).nextList = $2.nextList;
+  		((EVal)$$).trueList = $2.trueList;
+  		((EVal)$$).falseList = $2.falseList;
 	}
 	| saved_identifier OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 22.8: " +
