@@ -520,15 +520,15 @@ constant_expressions:
 		System.out.println("Rule 23.1: " +
 			"constant_expressions -> NUMCONST");
 	}
-	| REALCONST {
+	| saved_real {
 		System.out.println("Rule 23.2: " +
 			"constant_expressions -> REALCONST");
 	}
-	| CHARCONST {
+	| saved_char {
 		System.out.println("Rule 23.3: " +
 			"constant_expressions -> CHARCONST");
 	}
-	| BOOLEAN_KW {
+	| saved_boolean {
 		System.out.println("Rule 23.4: " +
 			"constant_expressions -> BOOLEAN_KW");
 	}
