@@ -596,6 +596,100 @@ pair:
 		System.out.println("Rule 26.1: " +
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
 	}
+
+  saved_identifier:
+  	IDENTIFIER {
+  		System.out.println("Rule 30: " +
+  			"saved_identifier: IDENTIFIER");
+  		$$ = new EVal();
+  		((EVal)$$).place = lexIdentifier;
+  	}
+
+  saved_integer:
+  	NUMCONST {
+  		System.out.println("Rule 31: " +
+  			"saved_integer: NUMCONST");
+  		$$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_INTEGER, false);
+  		((EVal)$$).type = EVal.TYPE_CODE_INTEGER;
+  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit(":=", String.valueOf(lexInt), null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+
+  	}
+
+  saved_real:
+  	REALCONST {
+  		System.out.println("Rule 32: " +
+  			"saved_real: REALCONST");
+  		$$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_REAL, false);
+  		((EVal)$$).type = EVal.TYPE_CODE_REAL;
+  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit(":=", String.valueOf(lexReal), null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+  	}
+
+  saved_char:
+  	CHARCONST {
+  		System.out.println("Rule 33: " +
+  			"saved_char: CHARCONST");
+  		$$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_CHAR, false);
+  		((EVal)$$).type = EVal.TYPE_CODE_CHAR;
+  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit(":=", "'" + String.valueOf(lexChar) + "'", null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+  	}
+
+  saved_boolean:
+  	BOOLCONST {
+  		System.out.println("Rule 34: " +
+  			"saved_boolean: BOOLCONST");
+  		$$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_BOOLEAN, false);
+  		((EVal)$$).type = EVal.TYPE_CODE_BOOLEAN;
+  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		if(lexBoolean)
+  			emit(":=", "1", null, ((EVal)$$).place);
+  		else
+  			emit(":=", "0", null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+  	}
+
+  M:
+  	{
+  		System.out.println("Rule 35: " +
+  			"M: ");
+  		$$ = new EVal();
+  		((EVal)$$).quad = nextQuad();
+  	}
+
+  N:
+  	{
+  		System.out.println("Rule 36: " +
+  			"N: ");
+  		$$ = new EVal();
+  		((EVal)$$).nextList = EVal.makeList(nextQuad());
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result will be backpatched.
+  	}
+
 %%
 // Classes
 // // EVal
