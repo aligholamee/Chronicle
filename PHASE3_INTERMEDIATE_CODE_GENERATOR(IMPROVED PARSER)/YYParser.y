@@ -11,8 +11,7 @@
 %type <EVal> saved_real
 %type <EVal> saved_char
 %type <EVal> saved_boolean
-%type <EVal> declarator_list declarator_end initializer initializer_list_in_cb initializer_end
-%type <EVal> declarations_list declarations type_specifiers declarator_list declarator dec range initializer_list procedure procedure_list parameters block statement_list statement arguments_list multi_arguments counter case_element default expressions constant_expressions bool_expressions arithmetic_expressions pair
+%type <EVal> initer declarator_end initializer initializer_list_in_cb initializer_end declarations_list declarations type_specifiers declarator_list declarator dec range initializer_list procedure procedure_list parameters block statement_list statement arguments_list multi_arguments counter case_element default expressions constant_expressions bool_expressions arithmetic_expressions pair
 %type <EVal> M N
 
 %code {
