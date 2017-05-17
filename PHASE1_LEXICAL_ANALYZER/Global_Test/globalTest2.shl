@@ -1,18 +1,18 @@
-program folan
-		int a;
-		int b:=#3;
-		real f;
-		real k:=#0.4;
-		real l:=#3.5000;
-		char c:='w';
-		char h;
-		bool s;
-		bool r;
-		int array[#2]:={#5,#6};
-		procedure func (int input;) {
-			int x:=#1;
-        	int y:=#2;
-		{
+program test
+      int a;
+      int b:=#3;
+      real f;
+      real k:=#0.4;
+      real l:=#3.5000;
+      char c:='w';
+      char h;
+      bool s;
+      bool r;
+      int array[#2]:={#5,#6};
+      procedure func (int input;) {
+         int x:=#1;
+           int y:=#2;
+      {
             if < (x,y)
             then
             x:= +(x, #1)
@@ -25,20 +25,20 @@ program folan
 
             for i:=#1 upto #10
             do d[#1] := +(j,+(i,#2));
-		;}
+      ;}
             };
-		procedure func (int input;) {
-			int x:=#1;
-        	int y:=#2;
-		{
+      procedure func (int input;) {
+         int x:=#1;
+           int y:=#2;
+      {
             if >(input, #0) then {u:=#89;}
             else return *(-#1, input)
-		;}
+      ;}
             };
 main {
       switch k
-      case #3: {		for i:=#1 upto #10
-                		do d[#1] := +(j,+(i,#2));}
+      case #3: {      for i:=#1 upto #10
+                      do d[#1] := +(j,+(i,#2));}
       case #6: {do var7:= #9 while <=((var9),#8);}
       default:{
                        {
