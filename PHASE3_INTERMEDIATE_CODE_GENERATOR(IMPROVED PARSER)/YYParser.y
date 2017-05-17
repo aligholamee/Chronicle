@@ -562,14 +562,47 @@ range:
 	}
 
 initializer:
-	constant_expressions {
-		System.out.println("Rule 9.1: " +
-			"initializer -> constant_expressions");
+initer CLOSEACCOLADE_KW {
+		System.out.println("Rule 11.2: " +
+			"initializer_list_in_cb: constant_expressions RCB_KW");
+		$$ = new EVal();
+		((EVal)$$).type = $1.type;
+		((EVal)$$).array = true;
+		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
 	}
-	| OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW {
+	| OPENACCOLADE_KW initializer_list_in_cb{
 		System.out.println("Rule 9.2: " +
 			"initializer -> OPENACCOLADE_KW initializer CLOSEACCOLADE_KW");
+      $$ = new EVal();
+  		((EVal)$$).type = $2.type;
+  		((EVal)$$).array = $2.array;
+  		((EVal)$$).initializers = $2.initializers;
 	}
+
+  initializer_list_in_cb:
+  	initializer_list initer CLOSEACCOLADE_KW {
+  		System.out.println("Rule 11.1: " +
+  			"initializer_list_in_cb: initializer_list constant_expressions RCB_KW");
+  		if($1.type == $2.type) {
+  			$$ = new EVal();
+  			((EVal)$$).type = $1.type;
+  			((EVal)$$).array = true;
+  			((EVal)$$).initializers = $1.initializers;
+  			((EVal)$$).initializers.add($2);
+  		} else {
+  			System.err.println("Error! " + "Initializer type mismatch.");
+  			return YYABORT;
+  		}
+  	}
+  	| initer CLOSEACCOLADE_KW {
+  		System.out.println("Rule 11.2: " +
+  			"initializer_list_in_cb: constant_expressions RCB_KW");
+  		$$ = new EVal();
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).array = true;
+  		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
+  	}
+
 
 
 
