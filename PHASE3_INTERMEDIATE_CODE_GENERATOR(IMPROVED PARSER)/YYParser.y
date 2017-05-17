@@ -681,7 +681,7 @@ initializer_list:
       		((EVal)$$).type = $2.type;
       		emit("usub", $2.place, null, ((EVal)$$).place);
       	}
-        
+
 initializer_end:
       	initializer_list initer SEMICOLON_KW {
       		System.out.println("Rule 13.1: " +
@@ -738,25 +738,30 @@ block:
 	OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW {
 		System.out.println("Rule 14.1: " +
 			"block -> OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW");
+      $$ = new EVal();
+  		((EVal)$$).nextList = $2.nextList;
 	}
 
 statement_list:
-	statement SEMICOLON_KW {
-		System.out.println("Rule 15.1: " +
-			"statement_list -> statement SEMICOLON_KW");
-	}
-	| statement_list statement SEMICOLON_KW {
-		System.out.println("Rule 15.2: " +
-			"statement_list -> statement_list statement SEMICOLON_KW");
-	}
-	| SEMICOLON_KW {
-		System.out.println("Rule 15.3: " +
-			"statement_list -> SEMICOLON_KW");
-	}
-	| statement_list SEMICOLON_KW {
-		System.out.println("Rule 15.4: " +
-			"statement_list -> statement_list SEMICOLON_KW");
-	}
+SEMICOLON_KW M {
+  System.out.println("Rule 18.1: " +
+    "statement_list: SEMICOLON_KW M");
+  $$ = new EVal();
+  ((EVal)$$).nextList = EVal.makeList($2.quad);
+}
+| statement SEMICOLON_KW M {
+  System.out.println("Rule 18.2: " +
+    "statement_list: statement SEMICOLON_KW M");
+  $$ = new EVal();
+  ((EVal)$$).nextList = $1.nextList;
+}
+| statement_list M statement SEMICOLON_KW {
+  System.out.println("Rule 18.3: " +
+    "statement_list: statement_list M statement SEMICOLON_KW");
+  $$ = new EVal();
+  ((EVal)$$).nextList = $3.nextList;
+  backpatch($1.nextList, $2.quad);
+}
 
 statement:
 	saved_identifier ASSIGN_KW expressions {
