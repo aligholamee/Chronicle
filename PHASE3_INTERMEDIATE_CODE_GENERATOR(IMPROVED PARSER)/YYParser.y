@@ -453,3 +453,230 @@ pair:
 		System.out.println("Rule 26.1: " +
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
 	}
+%%
+// Classes
+// // EVal
+class EVal {
+
+	public static final int TYPE_CODE_UNKNOWN = -1;
+	public static final int TYPE_CODE_INTEGER = 0;
+	public static final int TYPE_CODE_REAL = 1;
+	public static final int TYPE_CODE_CHAR = 2;
+	public static final int TYPE_CODE_BOOLEAN = 3;
+	public static final int TYPE_CODE_RANGE = 4;
+
+
+	public String place;
+	public int type;
+	public boolean array;
+
+	public int quad;
+
+	public static ArrayList<Integer> arrayIndexOutOfBoundList = new ArrayList<>();
+	public static ArrayList<Integer> invalidArraySizeList = new ArrayList<>();
+	public ArrayList<Integer> initList;
+	public ArrayList<Integer> nextList;
+	public ArrayList<Integer> trueList;
+	public ArrayList<Integer> falseList;
+
+	public ArrayList<ArrayList<EVal>> initializersList;
+	public ArrayList<EVal> declareds;
+
+	public ArrayList<EVal> initializers;
+
+	public EVal() {
+	}
+
+	public static ArrayList<Integer> makeList(int number) {
+		ArrayList<Integer> result = new ArrayList<>();
+		result.add(number);
+		return result;
+	}
+
+	public static ArrayList<Integer> merge(ArrayList<Integer> al1, ArrayList<Integer> al2) {
+		ArrayList<Integer> result = new ArrayList<>();
+		result.addAll(al1);
+		result.addAll(al2);
+		return result;
+	}
+
+	public static ArrayList<ArrayList<EVal>> makeInitializersList(ArrayList<EVal> initializers) {
+		ArrayList<ArrayList<EVal>> result = new ArrayList<>();
+		result.add(initializers);
+		return result;
+	}
+
+	public static ArrayList<EVal> makeInitializersOrDeclareds(EVal initializerOrdDeclared) {
+		ArrayList<EVal> result = new ArrayList<>();
+		result.add(initializerOrdDeclared);
+		return result;
+	}
+}
+
+// // Quadruple
+/*  ______________________________________________________________________________
+ * |                                                                              |
+ * |                                  Quadruples                                  |
+ * |______________________________________________________________________________|
+ * |              Statement             | Operation |    Arg0   |  Arg1 |  Result |
+ * |____________________________________|___________|___________|_______|_________|
+ * |               goto L               |    goto   |           |       |    L    |
+ * |       if BOOLEAN then goto L       |   check   |  BOOLEAN  |       |    L    |
+ * |             E = E1 < E2            |     <     |     E1    |   E2  |    E    |
+ * |            E = E1 <= E2            |     <=    |     E1    |   E2  |    E    |
+ * |             E = E1 > E2            |     >     |     E1    |   E2  |    E    |
+ * |            E = E1 >= E2            |     >=    |     E1    |   E2  |    E    |
+ * |            E = E1 == E2            |     =     |     E1    |   E2  |    E    |
+ * |            E = E1 <> E2            |     <>    |     E1    |   E2  |    E    |
+ * |             E = E1 + E2            |     +     |     E1    |   E2  |    E    |
+ * |             E = E1 - E2            |     -     |     E1    |   E2  |    E    |
+ * |             E = E1 * E2            |     *     |     E1    |   E2  |    E    |
+ * |             E = E1 / E2            |     /     |     E1    |   E2  |    E    |
+ * |             E = E1 % E2            |     %     |     E1    |   E2  |    E    |
+ * |               E = -E1              |    usub   |     E1    |       |    E    |
+ * |               E = E1               |     :=    |     E1    |       |    E    |
+ * |            E = (TYPE) E1           |    cast   |     E1    |  TYPE |    E    |
+ * |               TYPE E               |    init   |           |  TYPE |    E    |
+ * |         printf("E = E.val")        |   iprint  |           |       |   int   |
+ * |         printf("E = E.val")        |   rprint  |           |       |   real  |
+ * |         printf("E = E.val")        |   cprint  |           |       |   char  |
+ * |         printf("E = E.val")        |   bprint  |           |       | boolean |
+ * |  printf("E[PLACE] = E[INDEX].val") |  aiprint  |   PLACE   | INDEX |   int   |
+ * |  printf("E[PLACE] = E[INDEX].val") |  arprint  |   PLACE   | INDEX |   real  |
+ * |  printf("E[PLACE] = E[INDEX].val") |  acprint  |   PLACE   | INDEX |   char  |
+ * |  printf("E[PLACE] = E[INDEX].val") |  abprint  |   PLACE   | INDEX | boolean |
+ * | NAME = malloc(sizeOf(TYPE) * SIZE) |   malloc  |    TYPE   |  SIZE |   NAME  |
+ * |          *(E + INDEX) = E1         |    []=    |     E1    | INDEX |    E    |
+ * |          E = *(E1 + INDEX)         |    =[]    |     E1    | INDEX |    E    |
+ * |____________________________________|___________|___________|_______|_________|
+ */
+class Quadruple {
+
+	public static final String LINE_STR = "Line";
+
+	public String operation;
+	public String arg0;
+	public String arg1;
+	public String result;
+
+	public Quadruple(String operation, String arg0, String arg1, String result) {
+		this.operation = operation;
+		this.arg0 = arg0;
+		this.arg1 = arg1;
+		this.result = result;
+	}
+
+	@Override
+	public String toString() {
+		switch(operation.toLowerCase()){
+			case "goto":
+				return operation + " " + LINE_STR + result + ";";
+			case "check":
+				return "if (" + arg0 + ") goto " + LINE_STR + result + ";";
+			case "<":
+			case "<=":
+			case ">":
+			case ">=":
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+			case "%":
+				return result + " = " + arg0 + " " + operation + " " + arg1 + ";";
+			case "=":
+				return result + " = " + arg0 + " " + "==" + " " + arg1 + ";";
+			case "<>":
+				return result + " != " + arg0 + " " + "==" + " " + arg1 + ";";
+			case "usub":
+				return result + " = -" + arg0 + ";";
+			case ":=":
+				return result + " = " + arg0 + ";";
+			case "cast":
+				return result + " = (" + arg1 + ") " + arg0 + ";";
+			case "init":
+				return arg1 + " " + result + ";";
+			case "iprint":
+				return "printf(\"%s = %d\\n\", \"" + result + "\", " + result + ");";
+			case "rprint":
+				return "printf(\"%s = %f\\n\", \"" + result + "\", " + result + ");";
+			case "cprint":
+				return "printf(\"%s = '%c'\\n\", \"" + result + "\", " + result + ");";
+			case "bprint":
+				return "printf(\"%s = %s\\n\", \"" + result + "\", " + result + " ? \"true\" : \"false\");";
+			case "aiprint":
+				return "printf(\"%s[%d] = %d\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+			case "arprint":
+				return "printf(\"%s[%d] = %f\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+			case "acprint":
+				return "printf(\"%s[%d] = '%c'\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+			case "abprint":
+				return "printf(\"%s[%d] = %s\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "] ? \"true\" : \"false\");";
+			case "[]=":
+				return "*(" + result + " + " + arg1 + ") = " + arg0 + ";";
+			case "=[]":
+				return result + " = *(" + arg0 + " + " + arg1 + ");";
+			case "malloc":
+				return result + " = " + "malloc(sizeof(" + arg0 + ") * " + arg1+ ");";
+			default:
+				return null;
+		}
+	}
+}
+
+// Symbol Table
+class SymbolTable {
+
+	public static final int NOT_IN_SYMBOL_TABLE = -1;
+
+	public ArrayList<String> names;
+	public ArrayList<Integer> types;
+	public ArrayList<Boolean> arrays;
+
+	public SymbolTable() {
+		names = new ArrayList<>();
+		types = new ArrayList<>();
+		arrays = new ArrayList<>();
+	}
+
+	public int lookUp(String name) {
+		return names.indexOf(name);
+	}
+
+	public boolean addToSymbolTable(String name, int type, boolean array) {
+		if (lookUp(name) == -1) {
+			names.add(name);
+			types.add(type);
+			arrays.add(array);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+    public String toString() {
+        if(names.size() == 0)
+            return null;
+        String res = "";
+        for(int i = 0; i < names.size(); i++) {
+            switch (types.get(i)) {
+                case EVal.TYPE_CODE_INTEGER:
+                    res += "\t" + YYParser.TYPE_STRING_INTEGER;
+                    break;
+                case EVal.TYPE_CODE_REAL:
+                    res += "\t" + YYParser.TYPE_STRING_REAL;
+                    break;
+                case EVal.TYPE_CODE_CHAR:
+                    res += "\t" + YYParser.TYPE_STRING_CHAR;
+                    break;
+                case EVal.TYPE_CODE_BOOLEAN:
+                    res += "\t" + YYParser.TYPE_STRING_BOOLEAN;
+                    break;
+                case EVal.TYPE_CODE_RANGE:
+                    continue;
+            }
+            res += (arrays.get(i) ? " *" : " ") + names.get(i) + ";\n";
+        }
+        return res;
+	}
+
+}
