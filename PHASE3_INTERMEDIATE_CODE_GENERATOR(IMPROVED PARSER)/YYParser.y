@@ -292,7 +292,7 @@ dec:
 		System.out.println("Rule 7.2: " +
 			"dec -> ID OPENBRACKET_KW range CLOSEBRACKET_KW");
 	}
-	| saved_identifier OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW {
+	| saved_identifier OPENBRACKET_KW saved_integer CLOSEBRACKET_KW {
 		System.out.println("Rule 7.3: " +
 			"dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
 	}
@@ -304,7 +304,7 @@ range:
 		System.out.println("Rule 8.1: " +
 			"range -> ID DOT_KW ID");
 	}
-	| NUMCONST DOT_KW NUMCONST {
+	| saved_integer  DOT_KW saved_integer  {
 		System.out.println("Rule 8.2: " +
 			"range -> NUMCONST DOT_KW NUMCONST");
 	}
@@ -456,21 +456,21 @@ multi_arguments:
 	}
 
 counter:
-	NUMCONST UPTO_KW NUMCONST {
+	saved_integer  UPTO_KW saved_integer  {
 		System.out.println("Rule 19.1: " +
 			"counter -> NUMCONST UPTO_KW NUMCONST");
 	}
-	| NUMCONST DOWNTO_KW NUMCONST {
+	| saved_integer  DOWNTO_KW saved_integer  {
 		System.out.println("Rule 19.2: " +
 			"counter -> NUMCONST DOWNTO_KW NUMCONST");
 	}
 
 case_element:
-	CASE_KW NUMCONST COLON_KW block {
+	CASE_KW saved_integer  COLON_KW block {
 		System.out.println("Rule 20.1: " +
 			"case_element -> CASE_KW NUMCONST COLON_KW block");
 	}
-	| case_element CASE_KW NUMCONST COLON_KW block {
+	| case_element CASE_KW saved_integer  COLON_KW block {
 		System.out.println("Rule 20.2: " +
 			"case_element -> case_element CASE_KW NUMCONST COLON_KW block");
 	}
@@ -516,7 +516,7 @@ expressions:
 	}
 
 constant_expressions:
-	NUMCONST {
+	saved_integer  {
 		System.out.println("Rule 23.1: " +
 			"constant_expressions -> NUMCONST");
 	}
