@@ -368,8 +368,42 @@ declarator_list:
   		}
 	}
 
-
-
+  declarator_end:
+  	dec SEMICOLON_KW {
+  		System.out.println("Rule 7.1: " +
+  			"declarator_end: dec SEMICOLON_KW");
+  		$$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = EVal.TYPE_CODE_UNKNOWN;
+  		((EVal)$$).initializers = null;
+  	}
+  	| dec ASSIGN_KW initializer SEMICOLON_KW {
+  		System.out.println("Rule 7.2: " +
+  			"declarator_end: dec ASSIGN_KW initializer SEMICOLON_KW");
+  		if($1.array != $3.array) {
+  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
+  			return YYABORT;
+  		}
+  		$$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $3.type;
+  		((EVal)$$).array = $1.array;
+  		((EVal)$$).initializers = $3.initializers;
+  	}
+  	| dec ASSIGN_KW initializer_end {
+  		System.out.println("Rule 7.3: " +
+  			"declarator_end: dec ASSIGN_KW initializer_end");
+  		if($1.array != $3.array) {
+  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
+  			return YYABORT;
+  		}
+  		$$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $3.type;
+  		((EVal)$$).array = $1.array;
+  		((EVal)$$).initializers = $3.initializers;
+  	}
+    
 declarator:
 	 dec {
 		System.out.println("Rule 6.1: " +
@@ -438,9 +472,9 @@ dec:
   		((EVal)$$).type = EVal.TYPE_CODE_UNKNOWN;
   		((EVal)$$).initializers = null;
   	}
-  	| dec ASS_KW initializer SEMICOLON_KW {
+  	| dec ASSIGN_KW initializer SEMICOLON_KW {
   		System.out.println("Rule 7.5: " +
-  			"declarator_end: dec ASS_KW initializer SEMICOLON_KW");
+  			"declarator_end: dec ASSIGN_KW initializer SEMICOLON_KW");
   		if($1.array != $3.array) {
   			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
   			return YYABORT;
@@ -451,9 +485,9 @@ dec:
   		((EVal)$$).array = $1.array;
   		((EVal)$$).initializers = $3.initializers;
   	}
-  	| dec ASS_KW initializer_end {
+  	| dec ASSIGN_KW initializer_end {
   		System.out.println("Rule 7.6: " +
-  			"declarator_end: dec ASS_KW initializer_end");
+  			"declarator_end: dec ASSIGN_KW initializer_end");
   		if($1.array != $3.array) {
   			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
   			return YYABORT;
@@ -606,8 +640,8 @@ initer CLOSEACCOLADE_KW {
 
 
 
-    initializer_list:
-    	initializer_list initer COMMA_KW {
+initializer_list:
+    initializer_list initer COMMA_KW {
     		System.out.println("Rule 12.1: " +
     			"initializer_list: initializer_list constant_expressions COMMA_KW");
     		if($1.type == $2.type) {
@@ -630,6 +664,30 @@ initer CLOSEACCOLADE_KW {
     		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
     	}
 
+initializer_end:
+      	initializer_list initer SEMICOLON_KW {
+      		System.out.println("Rule 13.1: " +
+      			"initializer_end: initializer_list constant_expressions SEMICOLON_KW");
+      		if($1.type == $2.type) {
+      			$$ = new EVal();
+      			((EVal)$$).type = $1.type;
+      			((EVal)$$).array = true;
+      			((EVal)$$).initializers = $1.initializers;
+      			((EVal)$$).initializers.add($2);
+      		} else {
+      			System.err.println("Error! Initializer type mismatch.");
+      			return YYABORT;
+      		}
+      	}
+      	| initer SEMICOLON_KW {
+      		System.out.println("Rule 13.2: " +
+      			"initializer_end: constant_expressions SEMICOLON_KW");
+      		$$ = new EVal();
+      		((EVal)$$).type = $1.type;
+      		((EVal)$$).array = false;
+      		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
+      	}
+
 
 procedure_list:
 	procedure_list procedure {
@@ -640,6 +698,7 @@ procedure_list:
 		System.out.println("Rule 11.2: " +
 			"procedure_list -> procedure");
 	}
+
 
 procedure:
   PROCEDURE_KW saved_identifier parameters OPENACCOLADE_KW block CLOSEACCOLADE_KW SEMICOLON_KW {
