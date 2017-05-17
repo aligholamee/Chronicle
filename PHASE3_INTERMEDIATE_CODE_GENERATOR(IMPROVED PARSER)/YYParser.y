@@ -13,6 +13,8 @@
 %type <EVal> saved_boolean
 
 %type <EVal> declarations_list declarations type_specifiers declarator_list declarator dec range initializer initializer_list procedure procedure_list parameters block statement_list statement arguments_list multi_arguments counter case_element default expressions constant_expressions bool_expressions arithmetic_expressions pair
+%type <EVal> M N
+
 %code {
 
 	public static final String TYPE_STRING_INTEGER = "int";
@@ -414,7 +416,7 @@ statement:
 	}
 	| ID OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions {
 		System.out.println("Rule 16.8: " +
-			"statement -> IDENTIFIER OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions");
+			"statement -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions");
 	}
 	| RETURN_KW expressions {
 		System.out.println("Rule 16.9: " +
@@ -598,9 +600,9 @@ pair:
 	}
 
   saved_identifier:
-  	IDENTIFIER {
+  	ID {
   		System.out.println("Rule 30: " +
-  			"saved_identifier: IDENTIFIER");
+  			"saved_identifier: ID");
   		$$ = new EVal();
   		((EVal)$$).place = lexIdentifier;
   	}
