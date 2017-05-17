@@ -378,6 +378,15 @@ declarator:
 	| dec ASSIGN_KW initializer {
 		System.out.println("Rule 6.2: " +
 			"declarator -> dec ASSIGN_KW initializer");
+      if($1.array != $3.array) {
+  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
+  			return YYABORT;
+  		}
+  		$$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $3.type;
+  		((EVal)$$).array = $1.array;
+  		((EVal)$$).initializers = $3.initializers;
 	}
 
 
