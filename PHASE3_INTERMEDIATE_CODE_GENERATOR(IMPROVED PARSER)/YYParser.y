@@ -246,7 +246,75 @@ declarations:
 	type_specifiers declarator_list SEMICOLON_KW {
 		System.out.println("Rule 3.1: " +
 			"declarations -> type_specifiers declarator_list SEMICOLON_KW");
-	}
+      if($2.type == EVal.TYPE_CODE_UNKNOWN || $1.type == $2.type) {
+  			for(int i = 0; i < $2.initializersList.size(); i++) {
+  				if(symbolTable.lookUp(sizeStr + $2.declareds.get(i).place) == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+  					symbolTable.addToSymbolTable($2.declareds.get(i).place, $1.type, false);
+  					if($2.initializersList.get(i) != null && $2.initializersList.get(i).size() == 1) {
+  						//if($1.type != EVal.TYPE_CODE_BOOLEAN) {
+  							emit(":=", $2.initializersList.get(i).get(0).place, null, $2.declareds.get(i).place);
+  							switch ($1.type) {
+  								case EVal.TYPE_CODE_INTEGER:
+  									emit("iprint", null, null, $2.declareds.get(i).place);
+  									break;
+  								case EVal.TYPE_CODE_REAL:
+  									emit("rprint", null, null, $2.declareds.get(i).place);
+  									break;
+  								case EVal.TYPE_CODE_CHAR:
+  									emit("cprint", null, null, $2.declareds.get(i).place);
+  									break;
+  							}
+  						//} else {
+  							// backpatch($2.initializersList.get(i).get(0).falseList, nextQuad());
+  							// backpatch($2.initializersList.get(i).get(0).trueList, nextQuad() + 2);
+  						//	emit(":=", "0", null, $2.declareds.get(i).place);
+  						//	emit("goto", null, null, String.valueOf(nextQuad() + 2));
+  						//	emit(":=", "1", null, $2.declareds.get(i).place);
+  						//	emit("bprint", null, null, $2.declareds.get(i).place);
+  						//}
+  					} else if($2.initializersList.get(i) != null) {
+  						System.err.println("Error! Initializer number mismatch. (Expected: 1" + ", Number: " + $2.initializersList.get(i).size() + ")");
+  						return YYABORT;
+  					}
+  				} else {
+  					symbolTable.addToSymbolTable($2.declareds.get(i).place, $1.type, true);
+  					emit("malloc", getTypeString($1.type), sizeStr + $2.declareds.get(i).place, $2.declareds.get(i).place);
+  					if($2.initializersList.get(i) != null) {
+  						for(int j = 0; j < $2.initializersList.get(i).size(); j++) {
+  							EVal.arrayIndexOutOfBoundList.add(nextQuad() + 1);
+  							emit(">=", String.valueOf(j), sizeStr + $2.declareds.get(i).place, condStr + $2.declareds.get(i).place);
+  							emit("check", condStr + $2.declareds.get(i).place, null, String.valueOf(nextQuad() + 2)); // Result will be backpatched.
+  							//if($1.type != EVal.TYPE_CODE_BOOLEAN) {
+  								emit("[]=", $2.initializersList.get(i).get(j).place, String.valueOf(j), $2.declareds.get(i).place);
+  								emit("+", startStr + $2.declareds.get(i).place, String.valueOf(j), condStr + $2.declareds.get(i).place);
+  								switch ($1.type) {
+  									case EVal.TYPE_CODE_INTEGER:
+  										emit("aiprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
+  										break;
+  									case EVal.TYPE_CODE_REAL:
+  										emit("arprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
+  										break;
+  									case EVal.TYPE_CODE_CHAR:
+  										emit("acprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
+  										break;
+  								}
+  							//} else {
+  								// backpatch($2.initializersList.get(i).get(j).falseList, nextQuad());
+  								// backpatch($2.initializersList.get(i).get(j).trueList, nextQuad() + 2);
+  							//	emit("[]=", "0", String.valueOf(j), $2.declareds.get(i).place);
+  							//	emit("goto", null, null, String.valueOf(nextQuad() + 2));
+  							//	emit("[]=", "1", String.valueOf(j), $2.declareds.get(i).place);
+  							//	emit("abprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
+  							//}
+  						}
+  					}
+  				}
+  			}
+  		} else {
+  			System.err.println("Error! Type specifier type mismatch. (" + $1.type + ", " + $2.type + ")");
+  			return YYABORT;
+  		}
+}
 
 type_specifiers:
 	INTEGER_KW {
