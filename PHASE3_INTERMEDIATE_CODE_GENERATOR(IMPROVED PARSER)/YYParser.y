@@ -606,15 +606,30 @@ initer CLOSEACCOLADE_KW {
 
 
 
-initializer_list:
-	constant_expressions COMMA_KW initializer_list {
-		System.out.println("Rule 10.1: " +
-			"initializer_list -> constant_expressions COMMA_KW initializer_list");
-	}
-	| constant_expressions {
-		System.out.println("Rule 10.2: " +
-			"initializer_list -> constant_expressions");
-	}
+    initializer_list:
+    	initializer_list initer COMMA_KW {
+    		System.out.println("Rule 12.1: " +
+    			"initializer_list: initializer_list constant_expressions COMMA_KW");
+    		if($1.type == $2.type) {
+    			$$ = new EVal();
+    			((EVal)$$).type = $1.type;
+    			((EVal)$$).array = true;
+    			((EVal)$$).initializers = $1.initializers;
+    			((EVal)$$).initializers.add($2);
+    		} else {
+    			System.err.println("Error! Initializer type mismatch.");
+    			return YYABORT;
+    		}
+    	}
+    	| initer COMMA_KW {
+    		System.out.println("Rule 12.2: " +
+    			"initializer_list: constant_expressions COMMA_KW");
+    		$$ = new EVal();
+    		((EVal)$$).type = $1.type;
+    		((EVal)$$).array = false;
+    		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
+    	}
+
 
 procedure_list:
 	procedure_list procedure {
