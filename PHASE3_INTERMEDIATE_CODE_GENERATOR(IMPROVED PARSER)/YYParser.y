@@ -403,7 +403,7 @@ declarator_list:
   		((EVal)$$).array = $1.array;
   		((EVal)$$).initializers = $3.initializers;
   	}
-    
+
 declarator:
 	 dec {
 		System.out.println("Rule 6.1: " +
@@ -664,6 +664,24 @@ initializer_list:
     		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
     	}
 
+      initer:
+      	constant_expressions {
+      		System.out.println("Rule 14.1: " +
+      			"initer: constant_expressions");
+      		$$ = new EVal();
+      		((EVal)$$).place = $1.place;
+      		((EVal)$$).type = $1.type;
+      		((EVal)$$).nextList = $1.nextList;
+      	}
+      	| SUB_KW constant_expressions {
+      		System.out.println("Rule 14.2: " +
+      			"initer: SUB_KW constant_expressions");
+      		$$ = new EVal();
+      		((EVal)$$).place = newTemp($2.type, false);
+      		((EVal)$$).type = $2.type;
+      		emit("usub", $2.place, null, ((EVal)$$).place);
+      	}
+        
 initializer_end:
       	initializer_list initer SEMICOLON_KW {
       		System.out.println("Rule 13.1: " +
