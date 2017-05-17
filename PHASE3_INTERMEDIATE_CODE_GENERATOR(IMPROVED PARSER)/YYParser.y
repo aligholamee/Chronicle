@@ -11,8 +11,8 @@
 %type <EVal> saved_real
 %type <EVal> saved_char
 %type <EVal> saved_boolean
-
-%type <EVal> declarations_list declarations type_specifiers declarator_list declarator dec range initializer initializer_list procedure procedure_list parameters block statement_list statement arguments_list multi_arguments counter case_element default expressions constant_expressions bool_expressions arithmetic_expressions pair
+%type <EVal> declarator_list declarator_end initializer initializer_list_in_cb initializer_end
+%type <EVal> declarations_list declarations type_specifiers declarator_list declarator dec range initializer_list procedure procedure_list parameters block statement_list statement arguments_list multi_arguments counter case_element default expressions constant_expressions bool_expressions arithmetic_expressions pair
 %type <EVal> M N
 
 %code {
@@ -972,24 +972,49 @@ constant_expressions:
 	saved_integer  {
 		System.out.println("Rule 23.1: " +
 			"constant_expressions -> NUMCONST");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
+  		((EVal)$$).nextList = $1.nextList;
 	}
 	| saved_real {
 		System.out.println("Rule 23.2: " +
 			"constant_expressions -> REALCONST");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
+  		((EVal)$$).nextList = $1.nextList;
 	}
 	| saved_char {
 		System.out.println("Rule 23.3: " +
 			"constant_expressions -> CHARCONST");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
+  		((EVal)$$).nextList = $1.nextList;
 	}
 	| saved_boolean {
 		System.out.println("Rule 23.4: " +
 			"constant_expressions -> BOOLEAN_KW");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
+  		((EVal)$$).nextList = $1.nextList;
 	}
 
 bool_expressions:
 	LT_KW pair {
 		System.out.println("Rule 24.1: " +
 			"bool_expressions -> LT_KW pair");
+
 	}
 	| LTE_KW pair {
 		System.out.println("Rule 24.2: " +
