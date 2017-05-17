@@ -343,13 +343,29 @@ type_specifiers:
 	}
 
 declarator_list:
-	declarator {
+	declarator_end  {
 		System.out.println("Rule 5.1: " +
 			"declarator_list -> declarator");
+      $$ = new EVal();
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).declareds = EVal.makeInitializersOrDeclareds($1);
+  		((EVal)$$).initializersList = EVal.makeInitializersList($1.initializers);
 	}
 	| declarator_list COMMA_KW declarator {
 		System.out.println("Rule 5.2: " +
 			"declarator_list -> declarator_list COMMA_KW declarator");
+      if($1.type == EVal.TYPE_CODE_UNKNOWN
+  			|| $1.type == $2.type) {
+  			$$ = new EVal();
+  			((EVal)$$).type = $2.type;
+  			((EVal)$$).declareds = $1.declareds;
+  			((EVal)$$).declareds.add($2);
+  			((EVal)$$).initializersList = $1.initializersList;
+  			((EVal)$$).initializersList.add($2.initializers);
+  		} else {
+  			System.err.println("Error! Declarator type mismatch.");
+  			return YYABORT;
+  		}
 	}
 
 
