@@ -320,18 +320,26 @@ type_specifiers:
 	INTEGER_KW {
 		System.out.println("Rule 4.1: " +
 			"type_specifiers -> INTEGER_KW");
+      $$ = new EVal();
+  		((EVal)$$).type = EVal.TYPE_CODE_INTEGER;
 	}
 	| REAL_KW {
 		System.out.println("Rule 4.2: " +
 			"type_specifiers -> REAL_KW");
+      $$ = new EVal();
+  		((EVal)$$).type = EVal.TYPE_CODE_REAL;
 	}
 	| CHARACTER_KW {
 		System.out.println("Rule 4.3: " +
 			"type_specifiers -> CHAR_KW");
+      $$ = new EVal();
+  		((EVal)$$).type = EVal.TYPE_CODE_CHAR;
 	}
 	| BOOLEAN_KW {
 		System.out.println("Rule 4.4: " +
 			"type_specifiers -> BOOLEAN_KW");
+      $$ = new EVal();
+  		((EVal)$$).type = EVal.TYPE_CODE_BOOLEAN;
 	}
 
 declarator_list:
