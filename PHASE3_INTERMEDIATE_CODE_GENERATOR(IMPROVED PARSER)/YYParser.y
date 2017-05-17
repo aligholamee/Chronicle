@@ -394,14 +394,39 @@ dec:
 	saved_identifier {
 		System.out.println("Rule 7.1: " +
 			"dec -> ID");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).array = false;
 	}
 	| saved_identifier OPENBRACKET_KW range CLOSEBRACKET_KW {
 		System.out.println("Rule 7.2: " +
 			"dec -> ID OPENBRACKET_KW range CLOSEBRACKET_KW");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).array = true;
+      symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		emit(":=", startStr + $3.place, null , startStr + ((EVal)$$).place);
+
+  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		emit(":=", sizeStr + $3.place, null , sizeStr + ((EVal)$$).place);
+
+  		symbolTable.addToSymbolTable(indexStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
 	}
 	| saved_identifier OPENBRACKET_KW saved_integer CLOSEBRACKET_KW {
 		System.out.println("Rule 7.3: " +
 			"dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).array = true;
+      symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		emit(":=", "0", null , startStr + ((EVal)$$).place);
+
+  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		emit(":=", $3.place, null , sizeStr + ((EVal)$$).place);
+
+  		symbolTable.addToSymbolTable(indexStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
 	}
 
   declarator_end:
