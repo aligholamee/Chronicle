@@ -5,14 +5,19 @@
 %}
 
 %token <EVal> ID NUMCONST REALCONST CHARCONST BOOLCONST SHARP_KW MOD_KW DIV_KW MUL_KW SUB_KW ADD_KW SINGLE_QUOTE_KW DOT_KW LTE_KW GTE_KW NEQ_KW EQ_KW GT_KW LT_KW COMMA_KW CLOSEPARENTHESIS_KW OPENPARENTHESIS_KW CLOSEACCOLADE_KW OPENACCOLADE_KW CLOSEBRACKET_KW OPENBRACKET_KW ASSIGN_KW COLON_KW SEMICOLON_KW NOT_KW OR_KW AND_KW DOWNTO_KW UPTO_KW EXIT_KW RETURN_KW FOR_KW WHEN_KW END_KW DEFAULT_KW CASE_KW SWITCH_KW WHILE_KW DO_KW ELSE_KW THEN_KW IF_KW PROCEDURE_KW BOOLEAN_KW CHARACTER_KW REAL_KW INTEGER_KW MAIN_KW PROGRAM_KW DIGIT NONZERO_DIGIT LETTER
+%token <Eval> ID
+%type <Eval> saved_id
+%token <Eval> NUMCONSTANT
+%type <Eval> saved_integer
+%token <Eval> REALCONST
+%type <Eval> saved_real
+%token <Eval> CHARCONST
+%type <Eval> saved_char
+%token <Eval> BOOLCONST
+%type <Eval> saved_boolean
 
-%type <EVal> saved_identifier
-%type <EVal> saved_integer
-%type <EVal> saved_real
-%type <EVal> saved_char
-%type <EVal> saved_boolean
-%type <EVal> initer declarator_end initializer initializer_list_in_cb initializer_end declarations_list declarations type_specifiers declarator_list declarator dec range initializer_list procedure procedure_list parameters block statement_list statement arguments_list multi_arguments counter case_element default expressions constant_expressions bool_expressions arithmetic_expressions pair
-%type <EVal> M N
+%type <Eval> type_specifieirs initializer initializer_list declarator declarator_list dec range block statment_list statment case_element default expressions constant_expressions bool_expression arithmetic_expressions
+
 
 %code {
 
@@ -220,7 +225,7 @@ declarations_list:
 		System.out.println("Rule 3 :  declarations_list ->  declarations_list declarations") ;
 	}
 declarations:
-	type_specifieirs declarator_list SEMICOLON {
+	type_specifieirs declarator_list SEMICOLON_KW {
 		System.out.println("Rule 4.1 :  declarations ->  type_specifieirs declarator_list") ;
 		if($2.type == Eval.TYPECODES.UNKNOWN.getType() || $1.type == $2.type) {
 			for(int i = 0; i < $2.initializersList.size(); i++) {
@@ -302,7 +307,7 @@ declarator_list:
 		((Eval)$$).declareds = Eval.makeInitializersOrDeclareds($1);
 		((Eval)$$).initializersList = Eval.makeInitializersList($1.initializers);
 	}
-	| declarator_list COLON declarator {
+	| declarator_list COLON_KW declarator {
 		System.out.println("Rule 10 :  type_specifieirs ->  declarator_list ->  declarator_list,declarator") ;
 		if($1.type == Eval.TYPECODES.UNKNOWN.getType()
 			|| $1.type == $3.type) {
@@ -326,7 +331,7 @@ declarator:
 		((Eval)$$).array = $1.array;
 		((Eval)$$).initializers = null;
 	}
-	| dec ASSIGN initializer {
+	| dec ASSIGN_KW initializer {
 		System.out.println("Rule 12 :  declarator -> dec := initializer") ;
 		if($1.array != $3.array) {
 			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
@@ -345,7 +350,7 @@ dec:
 		((Eval)$$).place = $1.place;
 		((Eval)$$).array = false;
 	}
-	| saved_id BRACKETOPEN range BRACKETCLOSE {
+	| saved_id OPENBRACKET_KW range CLOSEBRACKET_KW {
 		System.out.println("Rule 14 :  dec -> saved_id[range] ") ;
 		$$ = new Eval();
 		((Eval)$$).place = $1.place;
@@ -360,7 +365,7 @@ dec:
 		symbolTable.setSymbol(indexStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
 		symbolTable.setSymbol(condStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
 	}
-	| saved_id BRACKETOPEN saved_integer BRACKETCLOSE {
+	| saved_id OPENBRACKET_KW saved_integer CLOSEBRACKET_KW {
 		System.out.println("Rule 15 :  dec -> saved_id[saved_integer] ") ;
 		$$ = new Eval();
 		((Eval)$$).place = $1.place;
@@ -376,13 +381,13 @@ dec:
 		symbolTable.setSymbol(condStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
 	}
 range:
-	saved_id DOT DOT  saved_id {
+	saved_id DOT_KW DOT_KW  saved_id {
 		System.out.println("Rule 16 :  range -> saved_id .. saved_id ") ;
 	}
-	| saved_integer DOT DOT saved_integer {
+	| saved_integer DOT_KW DOT_KW saved_integer {
 		System.out.println("Rule 17 :  range -> saved_integer .. saved_integer ") ;
 	}
-	| arithmetic_expressions DOT DOT arithmetic_expressions {
+	| arithmetic_expressions DOT_KW DOT_KW arithmetic_expressions {
 		System.out.println("Rule 18 : range -> arithmetic_expressions .. arithmetic_expressions") ;
 	}
 initializer:
@@ -394,7 +399,7 @@ initializer:
 		((Eval)$$).nextList = $1.nextList;
 		((Eval)$$).initializers.add($1);
 	}
-	| ACOLADEOPEN initializer_list ACOLADECLOSE {
+	| OPENACCOLADE_KW initializer_list CLOSEACCOLADE_KW {
 		System.out.println("Rule 19 :  initializer -> {initializer_list} ") ;
 		$$ = new Eval();
 		((Eval)$$).type = $2.type;
@@ -402,7 +407,7 @@ initializer:
 		((Eval)$$).initializers = $2.initializers;
 	}
 initializer_list:
-	constant_expressions COLON initializer_list {
+	constant_expressions COLON_KW initializer_list {
 		System.out.println("Rule 20 :  initializer_list -> constant_expressions, initializer_list ") ;
 		if($1.type == $3.type) {
 			$$ = new Eval();
@@ -431,33 +436,33 @@ procedure_list:
 		System.out.println("Rule 22.2 : procedure_list -> procedure") ;
 	}
 procedure:
-	PROCEDURE_KW saved_id parameters ACOLADEOPEN declarations_list block ACOLADECLOSE SEMICOLON {
+	PROCEDURE_KW saved_id parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW {
 		System.out.println("Rule 23 :  procedure -> PROCEDURE_KW saved_id parameters {declarations_list block} ") ;
 	}
 parameters:
-	PARANTHESISOPEN declarations_list PARANTHESISCLOSE {
+	OPENPARENTHESIS_KW declarations_list CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 24 :  parameters -> ( declarations_list ) ") ;
 	}
 block:
-	ACOLADEOPEN statment_list ACOLADECLOSE {
+	OPENACCOLADE_KW statment_list CLOSEACCOLADE_KW {
 		System.out.println("Rule 25 :  block -> {statment_list} ") ;
 		$$ = new Eval();
 		((Eval)$$).nextList = $2.nextList;
 	}
-	| ACOLADEOPEN ACOLADECLOSE {
+	| OPENACCOLADE_KW CLOSEACCOLADE_KW {
 		$$ = new Eval();
 		((Eval)$$).nextList = Eval.makeList(nextQuad());
 		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 	}
 statment_list:
-	statment SEMICOLON {
+	statment SEMICOLON_KW {
 		System.out.println("Rule 26 :  statment_list -> statment ") ;
 	}
-	| statment_list statment SEMICOLON {
+	| statment_list statment SEMICOLON_KW {
 		System.out.println("Rule 27 :  statment_list -> statment_list statment; ") ;
 	}
 statment:
-	saved_id ASSIGN expressions {
+	saved_id ASSIGN_KW expressions {
 		System.out.println("Rule 28 :  statment -> saved_id := expressions ") ;
 	}
 	| IF_KW bool_expression THEN_KW statment ELSE_KW statment {
@@ -469,16 +474,16 @@ statment:
 	| DO_KW statment WHILE_KW bool_expression {
 		System.out.println("Rule 30 :  statment -> DO statment WHILE bool_expression ") ;
 	}
-	| FOR_KW saved_id ASSIGN counter DO_KW statment {
+	| FOR_KW saved_id ASSIGN_KW counter DO_KW statment {
 		System.out.println("Rule 31 :  statment -> FOR saved_id := counter DO statment ") ;
 	}
 	| SWITCH_KW expressions case_element default END_KW {
 		System.out.println("Rule 31.1 :  statment -> SWITCH_KW expressions case_element default END_KW ") ;
 	}
-	| saved_id PARANTHESISOPEN arguments_list PARANTHESISCLOSE {
+	| saved_id OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 32 :  statment ->  saved_id (arguments_list)") ;
 	}
-	| saved_id BRACKETOPEN expressions BRACKETCLOSE ASSIGN expressions {
+	| saved_id OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions {
 		System.out.println("Rule 33 :  statment ->  saved_id [ expressions ] := expressions") ;
 	}
 	| RETURN_KW expressions {
@@ -511,14 +516,14 @@ counter:
 		System.out.println("Rule 42 :  counter -> saved_integer DOWNTO_KW saved_integer") ;
 	}
 case_element:
-	CASE_KW saved_integer DOUBLEDOT block {
+	CASE_KW saved_integer DOUBLE_DOT_KW block {
 		System.out.println("Rule 43 :  case_element -> CASE_KW saved_integer : block") ;
 	}
-	| case_element CASE_KW saved_integer DOUBLEDOT block {
+	| case_element CASE_KW saved_integer DOUBLE_DOT_KW block {
 		System.out.println("Rule 44 :  case_element -> case_element CASE_KW saved_integer : block") ;
 	}
 default:
-	DEFAULT_KW DOUBLEDOT block {
+	DEFAULT_KW DOUBLE_DOT_KW block {
 		System.out.println("Rule 45 :  default -> DEFAULT_KW ':' block") ;
 	}
 
@@ -550,7 +555,7 @@ expressions:
 		((Eval)$$).trueList = $1.trueList;
 		((Eval)$$).falseList = $1.falseList;
 	}
-	| saved_id BRACKETOPEN expressions BRACKETCLOSE {
+	| saved_id OPENBRACKET_KW expressions CLOSEBRACKET_KW {
 		System.out.println("Rule 51 :  expressions -> saved_id [expressions]") ;
 		int index = symbolTable.lookUp($1.place);
 		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
@@ -582,7 +587,7 @@ expressions:
 		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 
 	}
-	| saved_id PARANTHESISOPEN expressions PARANTHESISCLOSE {
+	| saved_id OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 52 :  expressions -> saved_id (arguments_list)") ;
 		int index = symbolTable.lookUp($1.place);
 		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
@@ -635,7 +640,7 @@ expressions:
 		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
 		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 	}
-	| PARANTHESISOPEN expressions PARANTHESISCLOSE {
+	| OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 53 :  expressions -> (expressions)") ;
 		$$ = new Eval();
 		((Eval)$$).place = $2.place;
@@ -682,7 +687,7 @@ constant_expressions:
 		((Eval)$$).nextList = $1.nextList;
 	}
 bool_expression:
-	NEQ PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	NEQ_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 58 :  bool_expression -> <> pair") ;
 		$$ = new Eval();
 		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
@@ -694,10 +699,10 @@ bool_expression:
 		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
 		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 	}
-	| LE PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| LTE_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 59 :  bool_expression -> <= pair") ;
 	}
-	| LT PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| LT_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 60 :  bool_expression -> < pair") ;
 		$$ = new Eval();
 		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
@@ -709,16 +714,16 @@ bool_expression:
 		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
 		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 	}
-	| GTE PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| GTE_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 61 :  bool_expression -> >= pair") ;
 	}
-	| GT PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| GT_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 62 :  bool_expression -> > pair") ;
 	}
-	| EQ PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| EQ_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 63 :  bool_expression -> = pair") ;
 	}
-	| AND_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| AND_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 64 :  bool_expression -> AND pair") ;
 		$$ = new Eval();
 		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
@@ -727,7 +732,7 @@ bool_expression:
 		((Eval)$$).trueList = $6.trueList;
 		((Eval)$$).falseList = Eval.merge($1.falseList, $6.falseList);
 	}
-	| OR_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| OR_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 65 :  bool_expression -> OR pair") ;
 		$$ = new Eval();
 		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
@@ -736,10 +741,10 @@ bool_expression:
 		((Eval)$$).trueList = $6.trueList;
 		((Eval)$$).falseList = Eval.merge($1.falseList, $6.falseList);
 	}
-	| AND_KW THEN_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| AND_KW THEN_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 66 :  bool_expression -> AND THEN pair") ;
 	}
-	| OR_KW ELSE_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| OR_KW ELSE_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 67 :  bool_expression -> OR ELSE pair") ;
 	}
 	| NOT_KW expressions {
@@ -751,23 +756,23 @@ bool_expression:
 		((Eval)$$).falseList = $2.trueList;
 	}
 arithmetic_expressions:
-	PLUS PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	ADD_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 69 :  arithmetic_expressions -> + pair") ;
 
 	}
-	| MINUS PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| SUB_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 70 :  arithmetic_expressions -> - pair") ;
 	}
-	| MULTIPLY PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| MUL_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 71 :  arithmetic_expressions -> * pair") ;
 	}
-	| DIVISION PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| DIV_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 72 :  arithmetic_expressions -> / pair") ;
 	}
-	| MODE PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+	| MOD_KW OPENPARENTHESIS_KW expressions COLON_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 73 :  arithmetic_expressions -> % pair") ;
 	}
-	| MINUS expressions {
+	| SUB_KW expressions {
 		System.out.println("Rule 74 :  arithmetic_expressions -> - expressions") ;
 	}
 
