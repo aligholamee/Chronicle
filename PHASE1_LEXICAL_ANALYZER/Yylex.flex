@@ -101,7 +101,8 @@ GTE_KW = (>=)
 LTE_KW = (<=)
 
 /* Other Keywords */
-DOT_KW = "\.\."
+DOUBLE_DOT_KW = "\.\."
+DOT_KW = "\."
 SINGLE_QUOTE_KW = "\u0027"
 
 /* Arithmetic Operators */
@@ -303,6 +304,11 @@ ID = {LETTER}+
 {DOT_KW} {
 	// System.out.println(yytext() + "\t" + "DOT_KW\t" + '-');
 	return YYParser.DOT_KW;
+}
+
+{DOUBLE_DOT_KW} {
+	// System.out.println(yytext() + "\t" + "DOUBLE_DOT_KW\t" + '-');
+	return YYParser.DOUBLE_DOT_KW;
 }
 
 {LT_KW} {
