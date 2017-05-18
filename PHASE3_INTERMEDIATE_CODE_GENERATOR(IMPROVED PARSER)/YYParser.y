@@ -16,57 +16,130 @@
 
 %code {
 
-	public static final String TYPE_STRING_INTEGER = "int";
-	public static final String TYPE_STRING_REAL = "double";
-	public static final String TYPE_STRING_CHAR = "char";
-	public static final String TYPE_STRING_BOOLEAN = "int";
+    public static String lexIdentifier;
+    public static int lexInt;
+    public static double lexReal;
+    public static boolean lexBoolean;
+    public static char lexChar;
 
-	private static final String tempStr = "__SHLangTempVar";
-	public static final String startStr = "__SHLangStartVar";
-	public static final String sizeStr = "__SHLangSizeVar";
-	public static final String indexStr = "__SHLangIndexVar";
-	public static final String condStr = "__SHLangConditionVar";
+    private static final String tempStr = "TempVar";
+    public static final String startStr = "StartVar";
+    public static final String sizeStr = "SizeVar";
+    public static final String indexStr = "IndexVar";
+    public static final String condStr = "ConditionVar";
 
-	public static String lexIdentifier;
-	public static int lexInt;
-	public static double lexReal;
-	public static boolean lexBoolean;
-	public static char lexChar;
+    public int tempCounter = 0;
 
-	private ArrayList<Quadruple> quadruples = new ArrayList<>();
-	private SymbolTable symbolTable = new SymbolTable();
-	public static PrintStream writer;
+	public Vector<Quadruple> quadTable = new Vector<>();
+    public SymbolTable symbolTable = new SymbolTable();
+    private void emit(String operation,String arg0,String arg1,String result)
+    {
+        quadTable.add(new Quadruple(operation,arg0,arg1,result));
+        System.out.println("EMIT:"+operation+":"+arg0+":"+arg1+":"+result);
+    }
 
-	private int tempCounter = 0;
 
-	public String fileAddress;
+    /* nextQuad function */
+    /* Give us the address of the current(+1 is next) quad in the table which is equal to the size of the quadRuple table */
+    private int nextQuad() {
+        return quadTable.size();
+    }
 
-	public static void main(String args[]) throws IOException {
+    /* backpatch Function #1*/
+    private void backpatch(Vector<Integer> list, int quadNumber) {
+        for (int i:list)
+            quadTable.get(i).result = String.valueOf(quadNumber);
+    }
+
+    /* backpatch Function #2*/
+    private void backpatch(int quadNumber, int destination) {
+        quadTable.get(quadNumber).result = String.valueOf(destination);
+    }
+
+    private String newTemp(int type, boolean array) {
+        String name = tempStr + tempCounter++;
+        symbolTable.setSymbol(name, type, array);
+        return name;
+    }
+
+	private String getTypeString(int typeCode){
+		switch(typeCode){
+			case 0://Eval.TYPE_CODE_INTEGER:
+				return Eval.TYPES.INTEGER.getType();
+			case 1://Eval.TYPE_CODE_REAL:
+				return Eval.TYPES.REAL.getType();
+			case 2://Eval.TYPE_CODE_CHAR:
+				return Eval.TYPES.CHAR.getType();
+			case 3://Eval.TYPE_CODE_BOOLEAN:
+				return Eval.TYPES.BOOLEAN.getType();
+			case -1:
+			case 4:
+			default:
+				return null;
+		}
+	}
+
+    /* Code Exporting Function */
+    private void exportIntermediateCode() {
+        DataOutputStream dos = null;
+        try {
+            dos = new DataOutputStream(new FileOutputStream("./output.txt"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            dos.writeBytes("#include <stdio.h>\n\nint main() {\n\t// ////////////////// Symbol Table \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
+            dos.writeBytes(symbolTable.print());
+            dos.writeBytes("\n\t// ////////////////// Quadruples \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
+            // Backpatch of error controllers.
+            backpatch(Eval.arrayIndexOutOfBoundList, (quadTable.size() + 1)); // Array index out of bound error.
+            backpatch(Eval.invalidArraySizeList, (quadTable.size() + 2)); // Invalid array size error.
+            for (int i = 0; i < quadTable.size() && i < 100; i++) {
+                dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadTable.get(i).print() + "\n");
+            }
+            for (int i = 100; i < quadTable.size(); i++) {
+                dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadTable.get(i).print() + "\n");
+            }
+            // Normal Finish
+            if(quadTable.size() < 100)
+                dos.writeBytes(Quadruple.LINE_STR + quadTable.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
+                    "\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
+            else
+                dos.writeBytes(Quadruple.LINE_STR + quadTable.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
+                    "\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
+
+            // Array index out of bound error.
+            if(quadTable.size() < 100)
+                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
+                    "\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
+            else
+                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
+                    "\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
+
+            // Invalid array size error.
+            if(quadTable.size() < 100)
+                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
+                    "\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
+            else
+                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
+                    "\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
+
+            dos.writeBytes("}\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    static PrintStream writer;
+
+    public static void main(String args[]) throws IOException, FileNotFoundException {
         YYParser yyparser;
         final Yylex lexer;
 
-        String inputCode = ".\\files\\Code.shl";
-        String outputCode = "E:\\Dev C++\\TEMP - Programs\\compiler.c";
-        String output = "output.txt";
-
-        if (args.length == 1) {
-            inputCode = args[0];
-            outputCode = args[0] + ".c";
-            output = args[0] + ".txt";
-        }
-        if (args.length == 2) {
-            inputCode = args[0];
-            outputCode = args[1];
-            output = args[0] + ".txt";
-        }
-        if (args.length == 3) {
-            inputCode = args[0];
-            outputCode = args[1];
-            output = args[2];
-        }
-
-        writer = new PrintStream(new File(output));
-        lexer = new Yylex(new InputStreamReader(new FileInputStream(inputCode)));
+        writer = new PrintStream(new File("output.txt"));
+        lexer = new Yylex(new InputStreamReader(new FileInputStream("java_code.txt")));
 
         yyparser = new YYParser(new Lexer() {
 
@@ -74,120 +147,28 @@
             public int yylex() {
                 int yyl_return = -1;
                 try {
+
                     yyl_return = lexer.yylex();
                 } catch (IOException e) {
-                    System.err.println("IO error: " + e);
+                    System.err.println("IO error :" + e);
                 }
                 return yyl_return;
             }
 
             @Override
             public void yyerror(String error) {
-                System.err.println("Error! " + error);
+                System.err.println("Error : " + error);
             }
 
             @Override
             public Object getLVal() {
-                return null;
+                return null;//lexer.yytext();
             }
         });
-        yyparser.fileAddress = outputCode;
         yyparser.parse();
 
         return;
-	}
-
-	private void emit(String operation, String arg0, String arg1, String result) {
-		quadruples.add(new Quadruple(operation, arg0, arg1, result));
-	}
-
-	private void backpatch(ArrayList<Integer> list, int quadNumber) {
-		for (int i = 0; i < list.size(); i++)
-			quadruples.get(list.get(i)).result = String.valueOf(quadNumber);
-	}
-
-	private void backpatch(int quadNumber, int destination) {
-		quadruples.get(quadNumber).result = String.valueOf(destination);
-	}
-
-	private String newTemp(int type, boolean array) {
-		String name = tempStr + tempCounter++;
-		symbolTable.addToSymbolTable(name, type, array);
-		return name;
-	}
-
-	private int nextQuad() {
-		return quadruples.size();
-	}
-
-	private String getTypeString(int typeCode){
-		switch(typeCode){
-			case EVal.TYPE_CODE_INTEGER:
-				return TYPE_STRING_INTEGER;
-			case EVal.TYPE_CODE_REAL:
-				return TYPE_STRING_REAL;
-			case EVal.TYPE_CODE_CHAR:
-				return TYPE_STRING_CHAR;
-			case EVal.TYPE_CODE_BOOLEAN:
-				return TYPE_STRING_BOOLEAN;
-			case EVal.TYPE_CODE_UNKNOWN:
-			case EVal.TYPE_CODE_RANGE:
-			default:
-				return null;
-		}
-	}
-
-	private void exportIntermediateCode() {
-		DataOutputStream dos = null;
-		try {
-			dos = new DataOutputStream(new FileOutputStream(fileAddress));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			dos.writeBytes("#include <stdio.h>\n\nint main() {\n\t// ////////////////// Symbol Table \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
-			dos.writeBytes(symbolTable.toString());
-			dos.writeBytes("\n\t// ////////////////// Quadruples \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
-			// Backpatch of error controllers.
-			backpatch(EVal.arrayIndexOutOfBoundList, (quadruples.size() + 1)); // Array index out of bound error.
-			backpatch(EVal.invalidArraySizeList, (quadruples.size() + 2)); // Invalid array size error.
-			for (int i = 0; i < quadruples.size() && i < 100; i++) {
-				dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadruples.get(i) + "\n");
-			}
-			for (int i = 100; i < quadruples.size(); i++) {
-				dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadruples.get(i) + "\n");
-			}
-			// Normal Finish
-			if(quadruples.size() < 100)
-				dos.writeBytes(Quadruple.LINE_STR + quadruples.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
-					"\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
-			else
-				dos.writeBytes(Quadruple.LINE_STR + quadruples.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
-					"\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
-
-			// Array index out of bound error.
-			if(quadruples.size() < 100)
-				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
-					"\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
-			else
-				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
-					"\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
-
-			// Invalid array size error.
-			if(quadruples.size() < 100)
-				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
-					"\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
-			else
-				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
-					"\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
-
-			dos.writeBytes("}\n");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
+    }
 }
 // Precedences go increasing, so "then" < "else".
 %left OR_KW
