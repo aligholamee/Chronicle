@@ -181,1165 +181,693 @@
 
 %%
 program:
-    PROGRAM_KW saved_identifier MAIN_KW block {
+	PROGRAM_KW saved_id MAIN_KW block {
 		System.out.println("Rule 1.2: " +
-			"program -> PROGRAM_KW ID MAIN_KW block");
-      backpatch($4.nextList, nextQuad());
-  		exportIntermediateCode();
+			"program -> PROGRAM_KW saved_id MAIN_KW block");
+		backpatch($4.nextList, nextQuad());
+      	exportIntermediateCode();
 	}
-	| PROGRAM_KW saved_identifier declarations_list MAIN_KW block {
+	| PROGRAM_KW saved_id declarations_list MAIN_KW block {
 		System.out.println("Rule 1.3: " +
-			"program -> PROGRAM_KW ID declarations_list MAIN_KW block");
-      backpatch($5.nextList, nextQuad());
-  		exportIntermediateCode();
+			"program -> PROGRAM_KW saved_id declarations_list MAIN_KW block");
+		backpatch($5.nextList, nextQuad());
+      	exportIntermediateCode();
 	}
-	| PROGRAM_KW saved_identifier procedure_list MAIN_KW block {
+	| PROGRAM_KW saved_id procedure_list MAIN_KW block {
 		System.out.println("Rule 1.4: " +
-			"program -> PROGRAM_KW ID procedure_list MAIN_KW block");
-      backpatch($5.nextList, nextQuad());
-  		exportIntermediateCode();
+			"program -> PROGRAM_KW saved_id procedure_list MAIN_KW block");
+		backpatch($5.nextList, nextQuad());
+      	exportIntermediateCode();
 	}
-	| PROGRAM_KW saved_identifier declarations_list procedure_list MAIN_KW block {
+	| PROGRAM_KW saved_id declarations_list procedure_list MAIN_KW block {
 		System.out.println("Rule 1.5: " +
-			"program -> PROGRAM_KW ID declarations_list procedure_list MAIN_KW block");
-      backpatch($6.nextList, nextQuad());
-  		exportIntermediateCode();
+			"program -> PROGRAM_KW saved_id declarations_list procedure_list MAIN_KW block");
+
+		backpatch($6.nextList, nextQuad());
+      	exportIntermediateCode();
 	}
-  | PROGRAM_KW saved_identifier MAIN_KW {
-  System.out.println("Rule 1.1: " +
-    "program -> PROGRAM_KW ID MAIN_KW");
+  	| PROGRAM_KW saved_id MAIN_KW {
+		System.out.println("Rule 1.1: " +
+			"program -> PROGRAM_KW saved_id MAIN_KW");
 		exportIntermediateCode();
-}
+	}
 
 declarations_list:
-	 declarations_list declarations {
-		System.out.println("Rule 2.1: " +
-			"declarations_list -> declarations_list declarations");
+	declarations {
+		System.out.println("Rule 2 :  declarations_list -> declarations ") ;
 	}
-
-	| declarations {
-		System.out.println("Rule 2.2: " +
-			"declarations_list -> declarations");
+	|  declarations_list declarations {
+		System.out.println("Rule 3 :  declarations_list ->  declarations_list declarations") ;
 	}
-
 declarations:
-	type_specifiers declarator_list SEMICOLON_KW {
-		System.out.println("Rule 3.1: " +
-			"declarations -> type_specifiers declarator_list SEMICOLON_KW");
-      if($2.type == EVal.TYPE_CODE_UNKNOWN || $1.type == $2.type) {
-  			for(int i = 0; i < $2.initializersList.size(); i++) {
-  				if(symbolTable.lookUp(sizeStr + $2.declareds.get(i).place) == SymbolTable.NOT_IN_SYMBOL_TABLE) {
-  					symbolTable.addToSymbolTable($2.declareds.get(i).place, $1.type, false);
-  					if($2.initializersList.get(i) != null && $2.initializersList.get(i).size() == 1) {
-  						//if($1.type != EVal.TYPE_CODE_BOOLEAN) {
-  							emit(":=", $2.initializersList.get(i).get(0).place, null, $2.declareds.get(i).place);
-  							switch ($1.type) {
-  								case EVal.TYPE_CODE_INTEGER:
-  									emit("iprint", null, null, $2.declareds.get(i).place);
-  									break;
-  								case EVal.TYPE_CODE_REAL:
-  									emit("rprint", null, null, $2.declareds.get(i).place);
-  									break;
-  								case EVal.TYPE_CODE_CHAR:
-  									emit("cprint", null, null, $2.declareds.get(i).place);
-  									break;
-  							}
-  						//} else {
-  							// backpatch($2.initializersList.get(i).get(0).falseList, nextQuad());
-  							// backpatch($2.initializersList.get(i).get(0).trueList, nextQuad() + 2);
-  						//	emit(":=", "0", null, $2.declareds.get(i).place);
-  						//	emit("goto", null, null, String.valueOf(nextQuad() + 2));
-  						//	emit(":=", "1", null, $2.declareds.get(i).place);
-  						//	emit("bprint", null, null, $2.declareds.get(i).place);
-  						//}
-  					} else if($2.initializersList.get(i) != null) {
-  						System.err.println("Error! Initializer number mismatch. (Expected: 1" + ", Number: " + $2.initializersList.get(i).size() + ")");
-  						return YYABORT;
-  					}
-  				} else {
-  					symbolTable.addToSymbolTable($2.declareds.get(i).place, $1.type, true);
-  					emit("malloc", getTypeString($1.type), sizeStr + $2.declareds.get(i).place, $2.declareds.get(i).place);
-  					if($2.initializersList.get(i) != null) {
-  						for(int j = 0; j < $2.initializersList.get(i).size(); j++) {
-  							EVal.arrayIndexOutOfBoundList.add(nextQuad() + 1);
-  							emit(">=", String.valueOf(j), sizeStr + $2.declareds.get(i).place, condStr + $2.declareds.get(i).place);
-  							emit("check", condStr + $2.declareds.get(i).place, null, String.valueOf(nextQuad() + 2)); // Result will be backpatched.
-  							//if($1.type != EVal.TYPE_CODE_BOOLEAN) {
-  								emit("[]=", $2.initializersList.get(i).get(j).place, String.valueOf(j), $2.declareds.get(i).place);
-  								emit("+", startStr + $2.declareds.get(i).place, String.valueOf(j), condStr + $2.declareds.get(i).place);
-  								switch ($1.type) {
-  									case EVal.TYPE_CODE_INTEGER:
-  										emit("aiprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
-  										break;
-  									case EVal.TYPE_CODE_REAL:
-  										emit("arprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
-  										break;
-  									case EVal.TYPE_CODE_CHAR:
-  										emit("acprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
-  										break;
-  								}
-  							//} else {
-  								// backpatch($2.initializersList.get(i).get(j).falseList, nextQuad());
-  								// backpatch($2.initializersList.get(i).get(j).trueList, nextQuad() + 2);
-  							//	emit("[]=", "0", String.valueOf(j), $2.declareds.get(i).place);
-  							//	emit("goto", null, null, String.valueOf(nextQuad() + 2));
-  							//	emit("[]=", "1", String.valueOf(j), $2.declareds.get(i).place);
-  							//	emit("abprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
-  							//}
-  						}
-  					}
-  				}
-  			}
-  		} else {
-  			System.err.println("Error! Type specifier type mismatch. (" + $1.type + ", " + $2.type + ")");
-  			return YYABORT;
-  		}
-}
-
-type_specifiers:
+	type_specifieirs declarator_list SEMICOLON {
+		System.out.println("Rule 4.1 :  declarations ->  type_specifieirs declarator_list") ;
+		if($2.type == Eval.TYPECODES.UNKNOWN.getType() || $1.type == $2.type) {
+			for(int i = 0; i < $2.initializersList.size(); i++) {
+				if(symbolTable.lookUp(sizeStr + $2.declareds.get(i).place) == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+					symbolTable.setSymbol($2.declareds.get(i).place, $1.type, false);
+					if($2.initializersList.get(i) != null && $2.initializersList.get(i).size() == 1) {
+						emit(":=", $2.initializersList.get(i).get(0).place, null, $2.declareds.get(i).place);
+						switch ($1.type) {
+							case 0://Eval.TYPECODES.INTEGER.getType():
+								emit("iprint", null, null, $2.declareds.get(i).place);
+								break;
+							case 1://Eval.TYPECODES.REAL.getType():
+								emit("rprint", null, null, $2.declareds.get(i).place);
+								break;
+							case 2://Eval.TYPECODES.CHAR.getType():
+								emit("cprint", null, null, $2.declareds.get(i).place);
+								break;
+						}
+					} else if($2.initializersList.get(i) != null) {
+						System.err.println("Error! Initializer number mismatch. (Expected: 1" + ", Number: " + $2.initializersList.get(i).size() + ")");
+						return YYABORT;
+					}
+				} else {
+					symbolTable.setSymbol($2.declareds.get(i).place, $1.type, true);
+					emit("malloc", getTypeString($1.type), sizeStr + $2.declareds.get(i).place, $2.declareds.get(i).place);
+					if($2.initializersList.get(i) != null) {
+						for(int j = 0; j < $2.initializersList.get(i).size(); j++) {
+							Eval.arrayIndexOutOfBoundList.add(nextQuad() + 1);
+							emit(">=", String.valueOf(j), sizeStr + $2.declareds.get(i).place, condStr + $2.declareds.get(i).place);
+							emit("check", condStr + $2.declareds.get(i).place, null, String.valueOf(nextQuad() + 2)); // Result will be backpatched.
+							emit("[]=", $2.initializersList.get(i).get(j).place, String.valueOf(j), $2.declareds.get(i).place);
+							emit("+", startStr + $2.declareds.get(i).place, String.valueOf(j), condStr + $2.declareds.get(i).place);
+							switch ($1.type) {
+								case 0://Eval.TYPECODES.INTEGER.getType():
+									emit("aiprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
+									break;
+								case 1://Eval.TYPECODES.REAL.getType():
+									emit("arprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
+									break;
+								case 2://Eval.TYPECODES.CHAR.getType():
+									emit("acprint", condStr + $2.declareds.get(i).place, String.valueOf(j), $2.declareds.get(i).place);
+									break;
+							}
+						}
+					}
+				}
+			}
+		} else {
+			System.err.println("Error! Type specifier type mismatch. (" + $1.type + ", " + $2.type + ")");
+			return YYABORT;
+		}
+	}
+type_specifieirs:
 	INTEGER_KW {
-		System.out.println("Rule 4.1: " +
-			"type_specifiers -> INTEGER_KW");
-      $$ = new EVal();
-  		((EVal)$$).type = EVal.TYPE_CODE_INTEGER;
+		System.out.println("Rule 5 :  type_specifieirs ->  INTEGER_KW") ;
+		$$ = new Eval();
+      	((Eval)$$).type = Eval.TYPECODES.INTEGER.getType();
 	}
 	| REAL_KW {
-		System.out.println("Rule 4.2: " +
-			"type_specifiers -> REAL_KW");
-      $$ = new EVal();
-  		((EVal)$$).type = EVal.TYPE_CODE_REAL;
+		System.out.println("Rule 6 :  type_specifieirs ->  REAL_KW") ;
+		$$ = new Eval();
+      	((Eval)$$).type = Eval.TYPECODES.REAL.getType();
 	}
-	| CHARACTER_KW {
-		System.out.println("Rule 4.3: " +
-			"type_specifiers -> CHAR_KW");
-      $$ = new EVal();
-  		((EVal)$$).type = EVal.TYPE_CODE_CHAR;
+	| CHAR_KW {
+		System.out.println("Rule 7 :  type_specifieirs ->  CHAR_KW") ;
+		$$ = new Eval();
+      	((Eval)$$).type = Eval.TYPECODES.CHAR.getType();
 	}
 	| BOOLEAN_KW {
-		System.out.println("Rule 4.4: " +
-			"type_specifiers -> BOOLEAN_KW");
-      $$ = new EVal();
-  		((EVal)$$).type = EVal.TYPE_CODE_BOOLEAN;
+		System.out.println("Rule 8 :  type_specifieirs ->  BOOLEAN_KW") ;
+		$$ = new Eval();
+      	((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
 	}
-
 declarator_list:
-	declarator_end  {
-		System.out.println("Rule 5.1: " +
-			"declarator_list -> declarator");
-      $$ = new EVal();
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).declareds = EVal.makeInitializersOrDeclareds($1);
-  		((EVal)$$).initializersList = EVal.makeInitializersList($1.initializers);
+	declarator {
+		System.out.println("Rule 9 :  declarator_list ->  declarator") ;
+		$$ = new Eval();
+		((Eval)$$).type = $1.type;
+		((Eval)$$).declareds = Eval.makeInitializersOrDeclareds($1);
+		((Eval)$$).initializersList = Eval.makeInitializersList($1.initializers);
 	}
-	| declarator_list COMMA_KW declarator {
-		System.out.println("Rule 5.2: " +
-			"declarator_list -> declarator_list COMMA_KW declarator");
-      if($1.type == EVal.TYPE_CODE_UNKNOWN
-  			|| $1.type == $2.type) {
-  			$$ = new EVal();
-  			((EVal)$$).type = $2.type;
-  			((EVal)$$).declareds = $1.declareds;
-  			((EVal)$$).declareds.add($2);
-  			((EVal)$$).initializersList = $1.initializersList;
-  			((EVal)$$).initializersList.add($2.initializers);
-  		} else {
-  			System.err.println("Error! Declarator type mismatch.");
-  			return YYABORT;
-  		}
+	| declarator_list COLON declarator {
+		System.out.println("Rule 10 :  type_specifieirs ->  declarator_list ->  declarator_list,declarator") ;
+		if($1.type == Eval.TYPECODES.UNKNOWN.getType()
+			|| $1.type == $3.type) {
+			$$ = new Eval();
+			((Eval)$$).type = $3.type;
+			((Eval)$$).declareds = $1.declareds;
+			((Eval)$$).declareds.add($3);
+			((Eval)$$).initializersList = $1.initializersList;
+			((Eval)$$).initializersList.add($3.initializers);
+		} else {
+			System.err.println("Error! Declarator type mismatch.");
+			return YYABORT;
+		}
 	}
-
-  declarator_end:
-  	dec SEMICOLON_KW {
-  		System.out.println("Rule 7.1: " +
-  			"declarator_end: dec SEMICOLON_KW");
-  		$$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = EVal.TYPE_CODE_UNKNOWN;
-  		((EVal)$$).initializers = null;
-  	}
-  	| dec ASSIGN_KW initializer SEMICOLON_KW {
-  		System.out.println("Rule 7.2: " +
-  			"declarator_end: dec ASSIGN_KW initializer SEMICOLON_KW");
-  		if($1.array != $3.array) {
-  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
-  			return YYABORT;
-  		}
-  		$$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $3.type;
-  		((EVal)$$).array = $1.array;
-  		((EVal)$$).initializers = $3.initializers;
-  	}
-  	| dec ASSIGN_KW initializer_end {
-  		System.out.println("Rule 7.3: " +
-  			"declarator_end: dec ASSIGN_KW initializer_end");
-  		if($1.array != $3.array) {
-  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
-  			return YYABORT;
-  		}
-  		$$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $3.type;
-  		((EVal)$$).array = $1.array;
-  		((EVal)$$).initializers = $3.initializers;
-  	}
-
 declarator:
-	 dec {
-		System.out.println("Rule 6.1: " +
-			"declarator -> dec");
+	dec {
+		System.out.println("Rule 11 :  declarator -> dec") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = Eval.TYPECODES.UNKNOWN.getType();
+		((Eval)$$).array = $1.array;
+		((Eval)$$).initializers = null;
 	}
-	| dec ASSIGN_KW initializer {
-		System.out.println("Rule 6.2: " +
-			"declarator -> dec ASSIGN_KW initializer");
-      if($1.array != $3.array) {
-  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
-  			return YYABORT;
-  		}
-  		$$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $3.type;
-  		((EVal)$$).array = $1.array;
-  		((EVal)$$).initializers = $3.initializers;
+	| dec ASSIGN initializer {
+		System.out.println("Rule 12 :  declarator -> dec := initializer") ;
+		if($1.array != $3.array) {
+			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
+			return YYABORT;
+		}
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $3.type;
+		((Eval)$$).array = $1.array;
+		((Eval)$$).initializers = $3.initializers;
 	}
-
-
 dec:
-	saved_identifier {
-		System.out.println("Rule 7.1: " +
-			"dec -> ID");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).array = false;
+	saved_id {
+		System.out.println("Rule 13 :  dec -> saved_id ") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).array = false;
 	}
-	| saved_identifier OPENBRACKET_KW range CLOSEBRACKET_KW {
-		System.out.println("Rule 7.2: " +
-			"dec -> ID OPENBRACKET_KW range CLOSEBRACKET_KW");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).array = true;
-      symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		emit(":=", startStr + $3.place, null , startStr + ((EVal)$$).place);
+	| saved_id BRACKETOPEN range BRACKETCLOSE {
+		System.out.println("Rule 14 :  dec -> saved_id[range] ") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).array = true;
 
-  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		emit(":=", sizeStr + $3.place, null , sizeStr + ((EVal)$$).place);
+		symbolTable.setSymbol(startStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
+		emit(":=", startStr + $3.place, null , startStr + ((Eval)$$).place);
 
-  		symbolTable.addToSymbolTable(indexStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+		symbolTable.setSymbol(sizeStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
+		emit(":=", sizeStr + $3.place, null , sizeStr + ((Eval)$$).place);
+
+		symbolTable.setSymbol(indexStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
+		symbolTable.setSymbol(condStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
 	}
-	| saved_identifier OPENBRACKET_KW saved_integer CLOSEBRACKET_KW {
-		System.out.println("Rule 7.3: " +
-			"dec -> ID OPENBRACKET_KW NUMCONST CLOSEBRACKET_KW");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).array = true;
-      symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		emit(":=", "0", null , startStr + ((EVal)$$).place);
+	| saved_id BRACKETOPEN saved_integer BRACKETCLOSE {
+		System.out.println("Rule 15 :  dec -> saved_id[saved_integer] ") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).array = true;
 
-  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		emit(":=", $3.place, null , sizeStr + ((EVal)$$).place);
+		symbolTable.setSymbol(startStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
+		emit(":=", "0", null , startStr + ((Eval)$$).place);
 
-  		symbolTable.addToSymbolTable(indexStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
+		symbolTable.setSymbol(sizeStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
+		emit(":=", $3.place, null , sizeStr + ((Eval)$$).place);
+
+		symbolTable.setSymbol(indexStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
+		symbolTable.setSymbol(condStr + ((Eval)$$).place, Eval.TYPECODES.INTEGER.getType(), false);
 	}
-
-  declarator_end:
-  	dec SEMICOLON_KW {
-  		System.out.println("Rule 7.4: " +
-  			"declarator_end: dec SEMICOLON_KW");
-  		$$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = EVal.TYPE_CODE_UNKNOWN;
-  		((EVal)$$).initializers = null;
-  	}
-  	| dec ASSIGN_KW initializer SEMICOLON_KW {
-  		System.out.println("Rule 7.5: " +
-  			"declarator_end: dec ASSIGN_KW initializer SEMICOLON_KW");
-  		if($1.array != $3.array) {
-  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
-  			return YYABORT;
-  		}
-  		$$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $3.type;
-  		((EVal)$$).array = $1.array;
-  		((EVal)$$).initializers = $3.initializers;
-  	}
-  	| dec ASSIGN_KW initializer_end {
-  		System.out.println("Rule 7.6: " +
-  			"declarator_end: dec ASSIGN_KW initializer_end");
-  		if($1.array != $3.array) {
-  			System.err.println("Error! Array mismatch: " + $1.place + " and " + $3.place + " are not the same.");
-  			return YYABORT;
-  		}
-  		$$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $3.type;
-  		((EVal)$$).array = $1.array;
-  		((EVal)$$).initializers = $3.initializers;
-  	}
-
-
-
 range:
-	saved_identifier DOT_KW saved_identifier {
-		System.out.println("Rule 8.1: " +
-			"range -> ID DOT_KW ID");
-      int index1 = symbolTable.lookUp($1.place);
-  		int index2 = symbolTable.lookUp($3.place);
-  		if (index1 == SymbolTable.NOT_IN_SYMBOL_TABLE) {
-  			System.err.println("Error! \"" + $1.place + "\" is not declared.");
-  			return YYABORT;
-  		}
-  		if (index2 == SymbolTable.NOT_IN_SYMBOL_TABLE) {
-  			System.err.println("Error! \"" + $3.place + "\" is not declared.");
-  			return YYABORT;
-  		}
-
-  		if(symbolTable.types.get(index1) != EVal.TYPE_CODE_INTEGER) {
-  			System.err.println("Error! Type mismatch: " + $1.place + "is not integer.");
-  			return YYABORT;
-  		}
-  		if(symbolTable.types.get(index2) != EVal.TYPE_CODE_INTEGER) {
-  			System.err.println("Error! Type mismatch: " + $3.place + "is not integer.");
-  			return YYABORT;
-  		}
-
-  		$$ = new EVal();
-  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_RANGE, true);
-  		((EVal)$$).type = EVal.TYPE_CODE_RANGE;
-  		((EVal)$$).array = true;
-
-  		// Set start and size
-  		symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		emit(":=", $1.place, null , startStr + ((EVal)$$).place);
-  		emit("-", $3.place, $1.place , sizeStr + ((EVal)$$).place);
-  		emit("+", sizeStr + ((EVal)$$).place, "1", sizeStr + ((EVal)$$).place);
-
-  		// Check size
-  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		EVal.invalidArraySizeList.add(nextQuad() + 1);
-  		emit("<=", sizeStr + ((EVal)$$).place, "0", condStr + ((EVal)$$).place);
-  		emit("check", condStr + ((EVal)$$).place, null, String.valueOf(nextQuad() + 1));
+	saved_id DOT DOT  saved_id {
+		System.out.println("Rule 16 :  range -> saved_id .. saved_id ") ;
 	}
-	| saved_integer  DOT_KW saved_integer  {
-		System.out.println("Rule 8.2: " +
-			"range -> NUMCONST DOT_KW NUMCONST");
-      $$ = new EVal();
-  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_RANGE, true);
-  		((EVal)$$).type = EVal.TYPE_CODE_RANGE;
-  		((EVal)$$).array = true;
-
-  		// Set start and size
-  		symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		emit(":=", $1.place, null , startStr + ((EVal)$$).place);
-  		emit("-", $3.place, $1.place , sizeStr + ((EVal)$$).place);
-  		emit("+", sizeStr + ((EVal)$$).place, "1", sizeStr + ((EVal)$$).place);
-
-  		// Check size
-  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		EVal.invalidArraySizeList.add(nextQuad() + 1);
-  		emit("<=", sizeStr + ((EVal)$$).place, "0", condStr + ((EVal)$$).place);
-  		emit("check", condStr + ((EVal)$$).place, null, String.valueOf(nextQuad() + 1));
+	| saved_integer DOT DOT saved_integer {
+		System.out.println("Rule 17 :  range -> saved_integer .. saved_integer ") ;
 	}
-	| arithmetic_expressions DOT_KW arithmetic_expressions {
-		System.out.println("Rule 8.3: " +
-			"range -> arithmetic_expressions DOT_KW arithmetic_expressions");
-      if($1.type != EVal.TYPE_CODE_INTEGER) {
-  			System.err.println("Error! Type mismatch: " + $1.place + "is not integer.");
-  			return YYABORT;
-  		}
-  		if($3.type != EVal.TYPE_CODE_INTEGER) {
-  			System.err.println("Error! Type mismatch: " + $3.place + "is not integer.");
-  			return YYABORT;
-  		}
-
-  		$$ = new EVal();
-  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_RANGE, true);
-  		((EVal)$$).type = EVal.TYPE_CODE_RANGE;
-  		((EVal)$$).array = true;
-
-  		// Set start and size
-  		symbolTable.addToSymbolTable(startStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		symbolTable.addToSymbolTable(sizeStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		emit(":=", $1.place, null , startStr + ((EVal)$$).place);
-  		emit("-", $3.place, $1.place , sizeStr + ((EVal)$$).place);
-  		emit("+", sizeStr + ((EVal)$$).place, "1", sizeStr + ((EVal)$$).place);
-
-  		// Check size
-  		symbolTable.addToSymbolTable(condStr + ((EVal)$$).place, EVal.TYPE_CODE_INTEGER, false);
-  		EVal.invalidArraySizeList.add(nextQuad() + 1);
-  		emit("<=", sizeStr + ((EVal)$$).place, "0", condStr + ((EVal)$$).place);
-  		emit("check", condStr + ((EVal)$$).place, null, String.valueOf(nextQuad() + 1));
+	| arithmetic_expressions DOT DOT arithmetic_expressions {
+		System.out.println("Rule 18 : range -> arithmetic_expressions .. arithmetic_expressions") ;
 	}
-
 initializer:
-initer CLOSEACCOLADE_KW {
-		System.out.println("Rule 11.2: " +
-			"initializer_list_in_cb: constant_expressions RCB_KW");
-		$$ = new EVal();
-		((EVal)$$).type = $1.type;
-		((EVal)$$).array = true;
-		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
+	constant_expressions {
+		System.out.println("Rule 19 :  initializer -> constant_expressions ") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).nextList = $1.nextList;
+		((Eval)$$).initializers.add($1);
 	}
-	| OPENACCOLADE_KW initializer_list_in_cb{
-		System.out.println("Rule 9.2: " +
-			"initializer -> OPENACCOLADE_KW initializer CLOSEACCOLADE_KW");
-      $$ = new EVal();
-  		((EVal)$$).type = $2.type;
-  		((EVal)$$).array = $2.array;
-  		((EVal)$$).initializers = $2.initializers;
+	| ACOLADEOPEN initializer_list ACOLADECLOSE {
+		System.out.println("Rule 19 :  initializer -> {initializer_list} ") ;
+		$$ = new Eval();
+		((Eval)$$).type = $2.type;
+		((Eval)$$).array = $2.array;
+		((Eval)$$).initializers = $2.initializers;
 	}
-
-  initializer_list_in_cb:
-  	initializer_list initer CLOSEACCOLADE_KW {
-  		System.out.println("Rule 11.1: " +
-  			"initializer_list_in_cb: initializer_list constant_expressions RCB_KW");
-  		if($1.type == $2.type) {
-  			$$ = new EVal();
-  			((EVal)$$).type = $1.type;
-  			((EVal)$$).array = true;
-  			((EVal)$$).initializers = $1.initializers;
-  			((EVal)$$).initializers.add($2);
-  		} else {
-  			System.err.println("Error! " + "Initializer type mismatch.");
-  			return YYABORT;
-  		}
-  	}
-  	| initer CLOSEACCOLADE_KW {
-  		System.out.println("Rule 11.2: " +
-  			"initializer_list_in_cb: constant_expressions RCB_KW");
-  		$$ = new EVal();
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).array = true;
-  		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
-  	}
-
-
-
-
 initializer_list:
-    initializer_list initer COMMA_KW {
-    		System.out.println("Rule 12.1: " +
-    			"initializer_list: initializer_list constant_expressions COMMA_KW");
-    		if($1.type == $2.type) {
-    			$$ = new EVal();
-    			((EVal)$$).type = $1.type;
-    			((EVal)$$).array = true;
-    			((EVal)$$).initializers = $1.initializers;
-    			((EVal)$$).initializers.add($2);
-    		} else {
-    			System.err.println("Error! Initializer type mismatch.");
-    			return YYABORT;
-    		}
-    	}
-    	| initer COMMA_KW {
-    		System.out.println("Rule 12.2: " +
-    			"initializer_list: constant_expressions COMMA_KW");
-    		$$ = new EVal();
-    		((EVal)$$).type = $1.type;
-    		((EVal)$$).array = false;
-    		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
-    	}
-
-      initer:
-      	constant_expressions {
-      		System.out.println("Rule 14.1: " +
-      			"initer: constant_expressions");
-      		$$ = new EVal();
-      		((EVal)$$).place = $1.place;
-      		((EVal)$$).type = $1.type;
-      		((EVal)$$).nextList = $1.nextList;
-      	}
-      	| SUB_KW constant_expressions {
-      		System.out.println("Rule 14.2: " +
-      			"initer: SUB_KW constant_expressions");
-      		$$ = new EVal();
-      		((EVal)$$).place = newTemp($2.type, false);
-      		((EVal)$$).type = $2.type;
-      		emit("usub", $2.place, null, ((EVal)$$).place);
-      	}
-
-initializer_end:
-      	initializer_list initer SEMICOLON_KW {
-      		System.out.println("Rule 13.1: " +
-      			"initializer_end: initializer_list constant_expressions SEMICOLON_KW");
-      		if($1.type == $2.type) {
-      			$$ = new EVal();
-      			((EVal)$$).type = $1.type;
-      			((EVal)$$).array = true;
-      			((EVal)$$).initializers = $1.initializers;
-      			((EVal)$$).initializers.add($2);
-      		} else {
-      			System.err.println("Error! Initializer type mismatch.");
-      			return YYABORT;
-      		}
-      	}
-      	| initer SEMICOLON_KW {
-      		System.out.println("Rule 13.2: " +
-      			"initializer_end: constant_expressions SEMICOLON_KW");
-      		$$ = new EVal();
-      		((EVal)$$).type = $1.type;
-      		((EVal)$$).array = false;
-      		((EVal)$$).initializers = EVal.makeInitializersOrDeclareds($1);
-      	}
-
-
+	constant_expressions COLON initializer_list {
+		System.out.println("Rule 20 :  initializer_list -> constant_expressions, initializer_list ") ;
+		if($1.type == $3.type) {
+			$$ = new Eval();
+			((Eval)$$).type = $1.type;
+			((Eval)$$).array = true;
+			((Eval)$$).initializers = $3.initializers;
+			((Eval)$$).initializers.add($1);
+		} else {
+			System.err.println("Error! Initializer type mismatch.");
+			return YYABORT;
+		}
+	}
+	| constant_expressions {
+		System.out.println("Rule 21 :  initializer_list -> constant_expressions ") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).nextList = $1.nextList;
+		((Eval)$$).initializers.add($1);
+	}
 procedure_list:
-	procedure_list procedure {
-		System.out.println("Rule 11.1: " +
-			"procedure_list -> procedure_list procedure");
+	procedure_list procedure  {
+		System.out.println("Rule 22.1 : procedure_list -> procedure_list procedure") ;
 	}
-	| procedure {
-		System.out.println("Rule 11.2: " +
-			"procedure_list -> procedure");
+	| procedure  {
+		System.out.println("Rule 22.2 : procedure_list -> procedure") ;
 	}
-
-
 procedure:
-  PROCEDURE_KW saved_identifier parameters OPENACCOLADE_KW block CLOSEACCOLADE_KW SEMICOLON_KW {
-   System.out.println("Rule 12.1: " +
-     "procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW block CLOSEACCOLADE_KW SEMICOLON_KW");
-  }
-  |PROCEDURE_KW saved_identifier parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW {
-		System.out.println("Rule 12.2: " +
-			"procedure -> PROCEDURE_KW ID parameters OPENACCOLADE_KW declarations_list block CLOSEACCOLADE_KW SEMICOLON_KW");
+	PROCEDURE_KW saved_id parameters ACOLADEOPEN declarations_list block ACOLADECLOSE SEMICOLON {
+		System.out.println("Rule 23 :  procedure -> PROCEDURE_KW saved_id parameters {declarations_list block} ") ;
 	}
-
 parameters:
-	OPENPARENTHESIS_KW declarations_list CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 13.1: " +
-			"parameters -> OPENPARENTHESIS_KW declarations_list CLOSEPARENTHESIS_KW");
+	PARANTHESISOPEN declarations_list PARANTHESISCLOSE {
+		System.out.println("Rule 24 :  parameters -> ( declarations_list ) ") ;
 	}
-
 block:
-	OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW {
-		System.out.println("Rule 14.1: " +
-			"block -> OPENACCOLADE_KW statement_list CLOSEACCOLADE_KW");
-      $$ = new EVal();
-  		((EVal)$$).nextList = $2.nextList;
+	ACOLADEOPEN statment_list ACOLADECLOSE {
+		System.out.println("Rule 25 :  block -> {statment_list} ") ;
+		$$ = new Eval();
+		((Eval)$$).nextList = $2.nextList;
 	}
-
-statement_list:
-SEMICOLON_KW M {
-  System.out.println("Rule 18.1: " +
-    "statement_list: SEMICOLON_KW M");
-  $$ = new EVal();
-  ((EVal)$$).nextList = EVal.makeList($2.quad);
-}
-| statement SEMICOLON_KW M {
-  System.out.println("Rule 18.2: " +
-    "statement_list: statement SEMICOLON_KW M");
-  $$ = new EVal();
-  ((EVal)$$).nextList = $1.nextList;
-}
-| statement_list M statement SEMICOLON_KW {
-  System.out.println("Rule 18.3: " +
-    "statement_list: statement_list M statement SEMICOLON_KW");
-  $$ = new EVal();
-  ((EVal)$$).nextList = $3.nextList;
-  backpatch($1.nextList, $2.quad);
-}
-
-statement:
-	saved_identifier ASSIGN_KW expressions {
-		System.out.println("Rule 16.1: " +
-			"statement -> ID ASSIGN_KW expressions");
+	| ACOLADEOPEN ACOLADECLOSE {
+		$$ = new Eval();
+		((Eval)$$).nextList = Eval.makeList(nextQuad());
+		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 	}
-	| IF_KW bool_expressions THEN_KW statement {
-		System.out.println ("Rule 16.2: " +
-			"statement -> IF_KW bool_expressions THEN_KW statement");
+statment_list:
+	statment SEMICOLON {
+		System.out.println("Rule 26 :  statment_list -> statment ") ;
 	}
-	| IF_KW bool_expressions THEN_KW statement ELSE_KW statement {
-		System.out.println("Rule 16.3: " +
-			"statement -> IF_KW bool_expressions THEN_KW statement ELSE_KW statement");
+	| statment_list statment SEMICOLON {
+		System.out.println("Rule 27 :  statment_list -> statment_list statment; ") ;
 	}
-	| DO_KW statement WHILE_KW bool_expressions {
-		System.out.println("Rule 16.4: " +
-			"statement -> DO_KW statement WHILE_KW bool_expressions");
+statment:
+	saved_id ASSIGN expressions {
+		System.out.println("Rule 28 :  statment -> saved_id := expressions ") ;
 	}
-	| FOR_KW saved_identifier ASSIGN_KW counter DO_KW statement {
-		System.out.println("Rule 16.5: " +
-			"statement -> FOR_KW ID ASSIGN_KW counter DO_KW statement");
+	| IF_KW bool_expression THEN_KW statment ELSE_KW statment {
+		System.out.println("Rule 29 :  statment -> IF bool_expression THEN statment ELSE_KW statment") ;
+	}
+	| IF_KW bool_expression THEN_KW statment {
+		System.out.println("Rule 29 :  statment -> IF bool_expression THEN statment ") ;
+	}
+	| DO_KW statment WHILE_KW bool_expression {
+		System.out.println("Rule 30 :  statment -> DO statment WHILE bool_expression ") ;
+	}
+	| FOR_KW saved_id ASSIGN counter DO_KW statment {
+		System.out.println("Rule 31 :  statment -> FOR saved_id := counter DO statment ") ;
 	}
 	| SWITCH_KW expressions case_element default END_KW {
-		System.out.println("Rule 16.6: " +
-			"statement -> SWITCH_KW expressions case_element default END_KW");
+		System.out.println("Rule 31.1 :  statment -> SWITCH_KW expressions case_element default END_KW ") ;
 	}
-	| saved_identifier OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 16.7: " +
-			"statement -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
+	| saved_id PARANTHESISOPEN arguments_list PARANTHESISCLOSE {
+		System.out.println("Rule 32 :  statment ->  saved_id (arguments_list)") ;
 	}
-	| saved_identifier OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions {
-		System.out.println("Rule 16.8: " +
-			"statement -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW ASSIGN_KW expressions");
+	| saved_id BRACKETOPEN expressions BRACKETCLOSE ASSIGN expressions {
+		System.out.println("Rule 33 :  statment ->  saved_id [ expressions ] := expressions") ;
 	}
 	| RETURN_KW expressions {
-		System.out.println("Rule 16.9: " +
-			"statement -> RETURN_KW expressions");
+		System.out.println("Rule 34 :  statment -> RETURN expressions ") ;
 	}
-	| EXIT_KW WHEN_KW bool_expressions {
-		System.out.println("Rule 16.10: " +
-			"statement -> EXIT_KW WHEN_KW bool_expressions");
+	| EXIT_KW WHEN_KW bool_expression {
+		System.out.println("Rule 35 :  statment ->  EXIT WHEN_KW bool_expression") ;
 	}
 	| block {
-		System.out.println("Rule 16.11: " +
-			"statement -> block");
-	}
-	| saved_identifier OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 16.12: " +
-			"statement -> ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW");
-	}
-	| SWITCH_KW expressions case_element END_KW {
-		System.out.println("Rule 16.13: " +
-			"statement -> SWITCH_KW expressions case_element END_KW");
+		System.out.println("Rule 36.1 :  statment ->  block") ;
 	}
 
 arguments_list:
-  multi_arguments {
-		System.out.println("Rule 17.1: " +
-			"arguments_list -> multi_arguments");
+	multi_arguments {
+		System.out.println("Rule 37 :  arguments_list -> multi_arguments") ;
 	}
 
 multi_arguments:
-	multi_arguments COMMA_KW expressions {
-		System.out.println("Rule 18.1: " +
-			"multi_arguments -> multi_arguments COMMA_KW expressions");
+	multi_arguments "," expressions {
+		System.out.println("Rule 39 :  multi_arguments -> multi_arguments,expressions") ;
 	}
 	| expressions {
-		System.out.println("Rule 18.2: " +
-			"multi_arguments -> expressions");
+		System.out.println("Rule 40 :  multi_arguments -> expressions") ;
 	}
-
 counter:
-	saved_integer  UPTO_KW saved_integer  {
-		System.out.println("Rule 19.1: " +
-			"counter -> NUMCONST UPTO_KW NUMCONST");
+	saved_integer UPTO_KW saved_integer {
+		System.out.println("Rule 41 :  counter -> saved_integer UPTO_KW saved_integer") ;
 	}
-	| saved_integer  DOWNTO_KW saved_integer  {
-		System.out.println("Rule 19.2: " +
-			"counter -> NUMCONST DOWNTO_KW NUMCONST");
+	| saved_integer DOWNTO_KW saved_integer {
+		System.out.println("Rule 42 :  counter -> saved_integer DOWNTO_KW saved_integer") ;
 	}
-
 case_element:
-	CASE_KW saved_integer  COLON_KW block {
-		System.out.println("Rule 20.1: " +
-			"case_element -> CASE_KW NUMCONST COLON_KW block");
+	CASE_KW saved_integer DOUBLEDOT block {
+		System.out.println("Rule 43 :  case_element -> CASE_KW saved_integer : block") ;
 	}
-	| case_element CASE_KW saved_integer  COLON_KW block {
-		System.out.println("Rule 20.2: " +
-			"case_element -> case_element CASE_KW NUMCONST COLON_KW block");
+	| case_element CASE_KW saved_integer DOUBLEDOT block {
+		System.out.println("Rule 44 :  case_element -> case_element CASE_KW saved_integer : block") ;
 	}
-
 default:
-	DEFAULT_KW COLON_KW block {
-		System.out.println("Rule 21.1: " +
-			"default -> DEFAULT_KW COLON_KW block");
+	DEFAULT_KW DOUBLEDOT block {
+		System.out.println("Rule 45 :  default -> DEFAULT_KW ':' block") ;
 	}
 
 expressions:
 	constant_expressions {
-		System.out.println("Rule 22.1: " +
-			"expressions -> constant_expressions");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).nextList = $1.nextList;
-  		((EVal)$$).trueList = $1.trueList;
-  		((EVal)$$).falseList = $1.falseList;
+		System.out.println("Rule 47 :  expressions -> constant_expressions") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).nextList = $1.nextList;
+		((Eval)$$).trueList = $1.trueList;
+		((Eval)$$).falseList = $1.falseList;
 	}
-	| bool_expressions {
-		System.out.println("Rule 22.2: " +
-			"expressions -> bool_expressions");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = EVal.TYPE_CODE_BOOLEAN;
-  		((EVal)$$).nextList = $1.nextList;
-  		((EVal)$$).trueList = $1.trueList;
-  		((EVal)$$).falseList = $1.falseList;
+	| bool_expression {
+		System.out.println("Rule 48 :  expressions -> bool_expression") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
+		((Eval)$$).nextList = $1.nextList;
+		((Eval)$$).trueList = $1.trueList;
+		((Eval)$$).falseList = $1.falseList;
 	}
 	| arithmetic_expressions {
-		System.out.println("Rule 22.3: " +
-			"expressions -> arithmetic_expressions");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).nextList = $1.nextList;
-  		((EVal)$$).trueList = $1.trueList;
-  		((EVal)$$).falseList = $1.falseList;
+		System.out.println("Rule 49 :  expressions -> arithmetic_expressions") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).nextList = $1.nextList;
+		((Eval)$$).trueList = $1.trueList;
+		((Eval)$$).falseList = $1.falseList;
 	}
-	| saved_identifier {
-		System.out.println("Rule 22.4: " +
-			"expressions -> ID");
-      System.out.println("Rule 26.4: " +
-  			"expressions: saved_identifier");
-  		int index = symbolTable.lookUp($1.place);
-  		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
-  			System.err.println("Error! \"" + lexIdentifier + "\" is not declared.");
-  			return YYABORT;
-  		}
-  		if (symbolTable.arrays.get(index)) {
-  			System.err.println("Error! \"" + lexIdentifier + "\" is an array, it can not be used without index.");
-  			return YYABORT;
-  		}
-  		$$ = new EVal();
-  		((EVal)$$).place = symbolTable.names.get(index);
-  		((EVal)$$).type = symbolTable.types.get(index);
+	| saved_id BRACKETOPEN expressions BRACKETCLOSE {
+		System.out.println("Rule 51 :  expressions -> saved_id [expressions]") ;
+		int index = symbolTable.lookUp($1.place);
+		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+			System.err.println("Error! \"" + lexIdentifier + "\" is not declared.");
+			return YYABORT;
+		}
+		if (!symbolTable.arrays.get(index)) {
+			System.err.println("Error! \"" + lexIdentifier + "\" is not an array, it can not be used with index.");
+			return YYABORT;
+		}
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(symbolTable.types.get(index), false);
+		((Eval)$$).type = symbolTable.types.get(index);
+		Eval.arrayIndexOutOfBoundList.add(nextQuad() + 2);
+		Eval.arrayIndexOutOfBoundList.add(nextQuad() + 4);
+		emit("-", $3.place, startStr + $1.place, indexStr + $1.place);
+		emit(">=", indexStr + $1.place, sizeStr + $1.place, condStr + $1.place);
+		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 3));
+		emit("<", indexStr + $1.place, "0", condStr + $1.place);
+		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 1));
 
-  		((EVal)$$).trueList = EVal.makeList(nextQuad());
-  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 1);
-  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+		emit("=[]", $1.place, indexStr + $1.place, ((Eval)$$).place);
 
-  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result will be backpatched.
-  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result will be backpatched.
+		((Eval)$$).trueList = Eval.makeList(nextQuad());
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).nextList = Eval.merge(((Eval)$$).trueList, ((Eval)$$).falseList);
+
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
+		emit("goto", null, null, String.valueOf(nextQuad() + 1));
+
 	}
-	| saved_identifier OPENBRACKET_KW expressions CLOSEBRACKET_KW {
-		System.out.println("Rule 22.5: " +
-			"expressions -> ID OPENBRACKET_KW expressions CLOSEBRACKET_KW");
-      System.out.println("Rule 26.5: " +
-  			"expressions: saved_identifier LB_KW arithmatic_expressions RB_KW");
-  		int index = symbolTable.lookUp($1.place);
-  		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
-  			System.err.println("Error! \"" + lexIdentifier + "\" is not declared.");
-  			return YYABORT;
-  		}
-  		if (!symbolTable.arrays.get(index)) {
-  			System.err.println("Error! \"" + lexIdentifier + "\" is not an array, it can not be used with index.");
-  			return YYABORT;
-  		}
-  		$$ = new EVal();
-  		((EVal)$$).place = newTemp(symbolTable.types.get(index), false);
-  		((EVal)$$).type = symbolTable.types.get(index);
-  		EVal.arrayIndexOutOfBoundList.add(nextQuad() + 2);
-  		EVal.arrayIndexOutOfBoundList.add(nextQuad() + 4);
-  		emit("-", $3.place, startStr + $1.place, indexStr + $1.place);
-  		emit(">=", indexStr + $1.place, sizeStr + $1.place, condStr + $1.place);
-  		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 3)); // Result will be backpatched.
-  		emit("<", indexStr + $1.place, "0", condStr + $1.place);
-  		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 1)); // Result will be backpatched.
+	| saved_id PARANTHESISOPEN expressions PARANTHESISCLOSE {
+		System.out.println("Rule 52 :  expressions -> saved_id (arguments_list)") ;
+		int index = symbolTable.lookUp($1.place);
+		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+			System.err.println("Error! \"" + lexIdentifier + "\" is not declared.");
+			return YYABORT;
+		}
+		if (!symbolTable.arrays.get(index)) {
+			System.err.println("Error! \"" + lexIdentifier + "\" is not an array, it can not be used with index.");
+			return YYABORT;
+		}
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(symbolTable.types.get(index), false);
+		((Eval)$$).type = symbolTable.types.get(index);
+		Eval.arrayIndexOutOfBoundList.add(nextQuad() + 2);
+		Eval.arrayIndexOutOfBoundList.add(nextQuad() + 4);
+		emit("-", $3.place, startStr + $1.place, indexStr + $1.place);
+		emit(">=", indexStr + $1.place, sizeStr + $1.place, condStr + $1.place);
+		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 3));
+		emit("<", indexStr + $1.place, "0", condStr + $1.place);
+		emit("check", condStr + $1.place, null, String.valueOf(nextQuad() + 1));
 
-  		emit("=[]", $1.place, indexStr + $1.place, ((EVal)$$).place);
+		emit("=()", $1.place, indexStr + $1.place, ((Eval)$$).place);
 
-  		((EVal)$$).trueList = EVal.makeList(nextQuad());
-  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 1);
-  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+		((Eval)$$).trueList = Eval.makeList(nextQuad());
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).nextList = Eval.merge(((Eval)$$).trueList, ((Eval)$$).falseList);
 
-  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result will be backpatched.
-  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); //result will be backpatched.
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
+		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 	}
-	| saved_identifier OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 22.6: " +
-			"expressions -> ID OPENPARENTHESIS_KW arguments_list CLOSEPARENTHESIS_KW");
-	}
-	| OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 22.7: " +
-			"expressions -> OPENPARENTHESIS_KW expressions CLOSEPARENTHESIS_KW");
-      $$ = new EVal();
-  		((EVal)$$).place = $2.place;
-  		((EVal)$$).type = $2.type;
-  		((EVal)$$).nextList = $2.nextList;
-  		((EVal)$$).trueList = $2.trueList;
-  		((EVal)$$).falseList = $2.falseList;
-	}
-	| saved_identifier OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 22.8: " +
-			"expressions -> ID OPENPARENTHESIS_KW CLOSEPARENTHESIS_KW");
-	}
+	| saved_id {
+		System.out.println("Rule 50 :  expressions -> saved_id") ;
+		int index = symbolTable.lookUp($1.place);
+		if (index == SymbolTable.NOT_IN_SYMBOL_TABLE) {
+			System.err.println("Error! \"" + lexIdentifier + "\" is not declared.");
+			return YYABORT;
+		}
+		if (symbolTable.arrays.get(index)) {
+			System.err.println("Error! \"" + lexIdentifier + "\" is an array, it can not be used without index.");
+			return YYABORT;
+		}
+		$$ = new Eval();
+		((Eval)$$).place = symbolTable.names.get(index);
+		((Eval)$$).type = symbolTable.types.get(index);
 
+		((Eval)$$).trueList = Eval.makeList(nextQuad());
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).nextList = Eval.merge(((Eval)$$).trueList, ((Eval)$$).falseList);
+
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
+		emit("goto", null, null, String.valueOf(nextQuad() + 1));
+	}
+	| PARANTHESISOPEN expressions PARANTHESISCLOSE {
+		System.out.println("Rule 53 :  expressions -> (expressions)") ;
+		$$ = new Eval();
+		((Eval)$$).place = $2.place;
+		((Eval)$$).type = $2.type;
+		((Eval)$$).nextList = $2.nextList;
+		((Eval)$$).trueList = $2.trueList;
+		((Eval)$$).falseList = $2.falseList;
+	}
 constant_expressions:
-	saved_integer  {
-		System.out.println("Rule 23.1: " +
-			"constant_expressions -> NUMCONST");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).trueList = $1.trueList;
-  		((EVal)$$).falseList = $1.falseList;
-  		((EVal)$$).nextList = $1.nextList;
+	saved_integer {
+		System.out.println("Rule 54 :  constant_expressions -> saved_integer") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).trueList = $1.trueList;
+		((Eval)$$).falseList = $1.falseList;
+		((Eval)$$).nextList = $1.nextList;
 	}
 	| saved_real {
-		System.out.println("Rule 23.2: " +
-			"constant_expressions -> REALCONST");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).trueList = $1.trueList;
-  		((EVal)$$).falseList = $1.falseList;
-  		((EVal)$$).nextList = $1.nextList;
+		System.out.println("Rule 55 :  constant_expressions -> saved_real") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).trueList = $1.trueList;
+		((Eval)$$).falseList = $1.falseList;
+		((Eval)$$).nextList = $1.nextList;
 	}
 	| saved_char {
-		System.out.println("Rule 23.3: " +
-			"constant_expressions -> CHARCONST");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).trueList = $1.trueList;
-  		((EVal)$$).falseList = $1.falseList;
-  		((EVal)$$).nextList = $1.nextList;
+		System.out.println("Rule 56 :  constant_expressions -> saved_char") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).trueList = $1.trueList;
+		((Eval)$$).falseList = $1.falseList;
+		((Eval)$$).nextList = $1.nextList;
 	}
 	| saved_boolean {
-		System.out.println("Rule 23.4: " +
-			"constant_expressions -> BOOLEAN_KW");
-      $$ = new EVal();
-  		((EVal)$$).place = $1.place;
-  		((EVal)$$).type = $1.type;
-  		((EVal)$$).trueList = $1.trueList;
-  		((EVal)$$).falseList = $1.falseList;
-  		((EVal)$$).nextList = $1.nextList;
+		System.out.println("Rule 57 :  constant_expressions -> saved_boolean") ;
+		$$ = new Eval();
+		((Eval)$$).place = $1.place;
+		((Eval)$$).type = $1.type;
+		((Eval)$$).trueList = $1.trueList;
+		((Eval)$$).falseList = $1.falseList;
+		((Eval)$$).nextList = $1.nextList;
 	}
+bool_expression:
+	NEQ PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 58 :  bool_expression -> <> pair") ;
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
+		((Eval)$$).trueList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 2);
 
-bool_expressions:
-	LT_KW pair {
-		System.out.println("Rule 24.1: " +
-			"bool_expressions -> LT_KW pair");
+		emit("<>", $1.place, $3.place, ((Eval)$$).place);
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
+		emit("goto", null, null, String.valueOf(nextQuad() + 1));
+	}
+	| LE PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 59 :  bool_expression -> <= pair") ;
+	}
+	| LT PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 60 :  bool_expression -> < pair") ;
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
+		((Eval)$$).trueList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 2);
 
+		emit("<", $1.place, $3.place, ((Eval)$$).place);
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2));
+		emit("goto", null, null, String.valueOf(nextQuad() + 1));
 	}
-	| LTE_KW pair {
-		System.out.println("Rule 24.2: " +
-			"bool_expressions -> LTE_KW pair");
+	| GTE PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 61 :  bool_expression -> >= pair") ;
 	}
-  | GT_KW pair {
-    System.out.println("Rule 24.3: " +
-      "bool_expressions -> GT_KW pair");
-  }
-  | GTE_KW pair {
-    System.out.println("Rule 24.4: " +
-      "bool_expressions -> GTE_KW pair");
-  }
-  | EQ_KW pair {
-    System.out.println("Rule 24.5: " +
-      "bool_expressions -> EQ_KW pair");
-  }
-  | NEQ_KW pair {
-    System.out.println("Rule 24.6: " +
-      "bool_expressions -> NEQ_KW pair");
-  }
-	| AND_KW THEN_KW pair {
-		System.out.println("Rule 24.7: " +
-			"bool_expressions -> AND_KW THEN_KW pair");
+	| GT PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 62 :  bool_expression -> > pair") ;
 	}
-	| OR_KW ELSE_KW pair {
-		System.out.println("Rule 24.8: " +
-			"bool_expressions -> OR_KW ELSE_KW pair");
+	| EQ PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 63 :  bool_expression -> = pair") ;
 	}
-
+	| AND_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 64 :  bool_expression -> AND pair") ;
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
+		backpatch($1.trueList, $5.quad);
+		((Eval)$$).trueList = $6.trueList;
+		((Eval)$$).falseList = Eval.merge($1.falseList, $6.falseList);
+	}
+	| OR_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 65 :  bool_expression -> OR pair") ;
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
+		backpatch($1.trueList, $5.quad);
+		((Eval)$$).trueList = $6.trueList;
+		((Eval)$$).falseList = Eval.merge($1.falseList, $6.falseList);
+	}
+	| AND_KW THEN_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 66 :  bool_expression -> AND THEN pair") ;
+	}
+	| OR_KW ELSE_KW PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 67 :  bool_expression -> OR ELSE pair") ;
+	}
+	| NOT_KW expressions {
+		System.out.println("Rule 68 :  bool_expression -> NOT expressions") ;
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
+		((Eval)$$).trueList = $2.falseList;
+		((Eval)$$).falseList = $2.trueList;
+	}
 arithmetic_expressions:
-	ADD_KW pair {
-		System.out.println("Rule 25.1: " +
-			"arithmetic_expressions -> ADD_KW pair");
+	PLUS PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 69 :  arithmetic_expressions -> + pair") ;
+
 	}
-	| SUB_KW pair {
-		System.out.println("Rule 25.2: " +
-			"arithmetic_expressions -> SUB_KW pair");
+	| MINUS PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 70 :  arithmetic_expressions -> - pair") ;
 	}
-	| MUL_KW pair {
-		System.out.println("Rule 25.3: " +
-			"arithmetic_expressions -> MUL_KW pair");
+	| MULTIPLY PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 71 :  arithmetic_expressions -> * pair") ;
 	}
-	| DIV_KW pair {
-		System.out.println("Rule 25.4: " +
-			"arithmetic_expressions -> DIV_KW pair");
+	| DIVISION PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 72 :  arithmetic_expressions -> / pair") ;
 	}
-	| MOD_KW pair {
-		System.out.println("Rule 25.5: " +
-			"arithmetic_expressions -> MOD_KW pair");
+	| MODE PARANTHESISOPEN expressions COLON expressions PARANTHESISCLOSE {
+		System.out.println("Rule 73 :  arithmetic_expressions -> % pair") ;
 	}
-	| SUB_KW expressions {
-		System.out.println("Rule 25.6: " +
-			"arithmetic_expressions -> SUB_KW expressions");
+	| MINUS expressions {
+		System.out.println("Rule 74 :  arithmetic_expressions -> - expressions") ;
 	}
 
-pair:
-	OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
-		System.out.println("Rule 26.1: " +
-			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
+saved_id:
+	ID {
+		System.out.println("Rule 76: " +
+			"saved_identifier: IDENTIFIER");
+		$$ = new Eval();
+		((Eval)$$).place = lexIdentifier;
 	}
 
-  saved_identifier:
-  	saved_identifier {
-  		System.out.println("Rule 30: " +
-  			"saved_identifier: ID");
-  		$$ = new EVal();
-  		((EVal)$$).place = lexIdentifier;
-  	}
+saved_integer:
+	NUMCONSTANT {
+		System.out.println("Rule 77: " +
+			"saved_integer: NUMCONSTANT");
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.INTEGER.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.INTEGER.getType();
+		((Eval)$$).trueList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 2);
+		((Eval)$$).nextList = Eval.merge(((Eval)$$).trueList, ((Eval)$$).falseList);
 
-  saved_integer:
-  	NUMCONST {
-  		System.out.println("Rule 31: " +
-  			"saved_integer: NUMCONST");
-  		$$ = new EVal();
-  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_INTEGER, false);
-  		((EVal)$$).type = EVal.TYPE_CODE_INTEGER;
-  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
-  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
-  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+		emit(":=", String.valueOf(lexInt), null, ((Eval)$$).place);
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
 
-  		emit(":=", String.valueOf(lexInt), null, ((EVal)$$).place);
-  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
-  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+	}
 
-  	}
+saved_real:
+	REALCONST {
+		System.out.println("Rule 78: " +
+			"saved_real: REAL_CONSTANT");
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.REAL.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.REAL.getType();
+		((Eval)$$).trueList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 2);
+		((Eval)$$).nextList = Eval.merge(((Eval)$$).trueList, ((Eval)$$).falseList);
 
-  saved_real:
-  	REALCONST {
-  		System.out.println("Rule 32: " +
-  			"saved_real: REALCONST");
-  		$$ = new EVal();
-  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_REAL, false);
-  		((EVal)$$).type = EVal.TYPE_CODE_REAL;
-  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
-  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
-  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+		emit(":=", String.valueOf(lexReal), null, ((Eval)$$).place);
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+	}
 
-  		emit(":=", String.valueOf(lexReal), null, ((EVal)$$).place);
-  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
-  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
-  	}
+saved_char:
+	CHARCONST {
+		System.out.println("Rule 79: " +
+			"saved_char: CHAR_CONSTANT");
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.CHAR.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.CHAR.getType();
+		((Eval)$$).trueList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 2);
+		((Eval)$$).nextList = Eval.merge(((Eval)$$).trueList, ((Eval)$$).falseList);
 
-  saved_char:
-  	CHARCONST {
-  		System.out.println("Rule 33: " +
-  			"saved_char: CHARCONST");
-  		$$ = new EVal();
-  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_CHAR, false);
-  		((EVal)$$).type = EVal.TYPE_CODE_CHAR;
-  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
-  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
-  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+		emit(":=", "'" + String.valueOf(lexChar) + "'", null, ((Eval)$$).place);
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+	}
 
-  		emit(":=", "'" + String.valueOf(lexChar) + "'", null, ((EVal)$$).place);
-  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
-  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
-  	}
+saved_boolean:
+	BOOLCONST {
+		System.out.println("Rule 80: " +
+			"saved_boolean: BOOLEAN_CONSTANT");
+		$$ = new Eval();
+		((Eval)$$).place = newTemp(Eval.TYPECODES.BOOLEAN.getType(), false);
+		((Eval)$$).type = Eval.TYPECODES.BOOLEAN.getType();
+		((Eval)$$).trueList = Eval.makeList(nextQuad() + 1);
+		((Eval)$$).falseList = Eval.makeList(nextQuad() + 2);
+		((Eval)$$).nextList = Eval.merge(((Eval)$$).trueList, ((Eval)$$).falseList);
 
-  saved_boolean:
-  	BOOLCONST {
-  		System.out.println("Rule 34: " +
-  			"saved_boolean: BOOLCONST");
-  		$$ = new EVal();
-  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_BOOLEAN, false);
-  		((EVal)$$).type = EVal.TYPE_CODE_BOOLEAN;
-  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
-  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
-  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
-
-  		if(lexBoolean)
-  			emit(":=", "1", null, ((EVal)$$).place);
-  		else
-  			emit(":=", "0", null, ((EVal)$$).place);
-  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
-  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
-  	}
-
-  M:
-  	{
-  		System.out.println("Rule 35: " +
-  			"M: ");
-  		$$ = new EVal();
-  		((EVal)$$).quad = nextQuad();
-  	}
-
-  N:
-  	{
-  		System.out.println("Rule 36: " +
-  			"N: ");
-  		$$ = new EVal();
-  		((EVal)$$).nextList = EVal.makeList(nextQuad());
-  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result will be backpatched.
-  	}
+		if(lexBoolean)
+			emit(":=", "1", null, ((Eval)$$).place);
+		else
+			emit(":=", "0", null, ((Eval)$$).place);
+		emit("check", ((Eval)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+	}
 
 %%
-// Classes
-// // EVal
-class EVal {
 
-	public static final int TYPE_CODE_UNKNOWN = -1;
-	public static final int TYPE_CODE_INTEGER = 0;
-	public static final int TYPE_CODE_REAL = 1;
-	public static final int TYPE_CODE_CHAR = 2;
-	public static final int TYPE_CODE_BOOLEAN = 3;
-	public static final int TYPE_CODE_RANGE = 4;
-
-
-	public String place;
-	public int type;
-	public boolean array;
-
-	public int quad;
-
-	public static ArrayList<Integer> arrayIndexOutOfBoundList = new ArrayList<>();
-	public static ArrayList<Integer> invalidArraySizeList = new ArrayList<>();
-	public ArrayList<Integer> initList;
-	public ArrayList<Integer> nextList;
-	public ArrayList<Integer> trueList;
-	public ArrayList<Integer> falseList;
-
-	public ArrayList<ArrayList<EVal>> initializersList;
-	public ArrayList<EVal> declareds;
-
-	public ArrayList<EVal> initializers;
-
-	public EVal() {
-	}
-
-	public static ArrayList<Integer> makeList(int number) {
-		ArrayList<Integer> result = new ArrayList<>();
-		result.add(number);
-		return result;
-	}
-
-	public static ArrayList<Integer> merge(ArrayList<Integer> al1, ArrayList<Integer> al2) {
-		ArrayList<Integer> result = new ArrayList<>();
-		result.addAll(al1);
-		result.addAll(al2);
-		return result;
-	}
-
-	public static ArrayList<ArrayList<EVal>> makeInitializersList(ArrayList<EVal> initializers) {
-		ArrayList<ArrayList<EVal>> result = new ArrayList<>();
-		result.add(initializers);
-		return result;
-	}
-
-	public static ArrayList<EVal> makeInitializersOrDeclareds(EVal initializerOrdDeclared) {
-		ArrayList<EVal> result = new ArrayList<>();
-		result.add(initializerOrdDeclared);
-		return result;
-	}
-}
-
-// // Quadruple
-/*  ______________________________________________________________________________
- * |                                                                              |
- * |                                  Quadruples                                  |
- * |______________________________________________________________________________|
- * |              Statement             | Operation |    Arg0   |  Arg1 |  Result |
- * |____________________________________|___________|___________|_______|_________|
- * |               goto L               |    goto   |           |       |    L    |
- * |       if BOOLEAN then goto L       |   check   |  BOOLEAN  |       |    L    |
- * |             E = E1 < E2            |     <     |     E1    |   E2  |    E    |
- * |            E = E1 <= E2            |     <=    |     E1    |   E2  |    E    |
- * |             E = E1 > E2            |     >     |     E1    |   E2  |    E    |
- * |            E = E1 >= E2            |     >=    |     E1    |   E2  |    E    |
- * |            E = E1 == E2            |     =     |     E1    |   E2  |    E    |
- * |            E = E1 <> E2            |     <>    |     E1    |   E2  |    E    |
- * |             E = E1 + E2            |     +     |     E1    |   E2  |    E    |
- * |             E = E1 - E2            |     -     |     E1    |   E2  |    E    |
- * |             E = E1 * E2            |     *     |     E1    |   E2  |    E    |
- * |             E = E1 / E2            |     /     |     E1    |   E2  |    E    |
- * |             E = E1 % E2            |     %     |     E1    |   E2  |    E    |
- * |               E = -E1              |    usub   |     E1    |       |    E    |
- * |               E = E1               |     :=    |     E1    |       |    E    |
- * |            E = (TYPE) E1           |    cast   |     E1    |  TYPE |    E    |
- * |               TYPE E               |    init   |           |  TYPE |    E    |
- * |         printf("E = E.val")        |   iprint  |           |       |   int   |
- * |         printf("E = E.val")        |   rprint  |           |       |   real  |
- * |         printf("E = E.val")        |   cprint  |           |       |   char  |
- * |         printf("E = E.val")        |   bprint  |           |       | boolean |
- * |  printf("E[PLACE] = E[INDEX].val") |  aiprint  |   PLACE   | INDEX |   int   |
- * |  printf("E[PLACE] = E[INDEX].val") |  arprint  |   PLACE   | INDEX |   real  |
- * |  printf("E[PLACE] = E[INDEX].val") |  acprint  |   PLACE   | INDEX |   char  |
- * |  printf("E[PLACE] = E[INDEX].val") |  abprint  |   PLACE   | INDEX | boolean |
- * | NAME = malloc(sizeOf(TYPE) * SIZE) |   malloc  |    TYPE   |  SIZE |   NAME  |
- * |          *(E + INDEX) = E1         |    []=    |     E1    | INDEX |    E    |
- * |          E = *(E1 + INDEX)         |    =[]    |     E1    | INDEX |    E    |
- * |____________________________________|___________|___________|_______|_________|
- */
-class Quadruple {
-
-	public static final String LINE_STR = "Line";
-
-	public String operation;
-	public String arg0;
-	public String arg1;
-	public String result;
-
-	public Quadruple(String operation, String arg0, String arg1, String result) {
-		this.operation = operation;
-		this.arg0 = arg0;
-		this.arg1 = arg1;
-		this.result = result;
-	}
-
-	@Override
-	public String toString() {
-		switch(operation.toLowerCase()){
-			case "goto":
-				return operation + " " + LINE_STR + result + ";";
-			case "check":
-				return "if (" + arg0 + ") goto " + LINE_STR + result + ";";
-			case "<":
-			case "<=":
-			case ">":
-			case ">=":
-			case "+":
-			case "-":
-			case "*":
-			case "/":
-			case "%":
-				return result + " = " + arg0 + " " + operation + " " + arg1 + ";";
-			case "=":
-				return result + " = " + arg0 + " " + "==" + " " + arg1 + ";";
-			case "<>":
-				return result + " != " + arg0 + " " + "==" + " " + arg1 + ";";
-			case "usub":
-				return result + " = -" + arg0 + ";";
-			case ":=":
-				return result + " = " + arg0 + ";";
-			case "cast":
-				return result + " = (" + arg1 + ") " + arg0 + ";";
-			case "init":
-				return arg1 + " " + result + ";";
-			case "iprint":
-				return "printf(\"%s = %d\\n\", \"" + result + "\", " + result + ");";
-			case "rprint":
-				return "printf(\"%s = %f\\n\", \"" + result + "\", " + result + ");";
-			case "cprint":
-				return "printf(\"%s = '%c'\\n\", \"" + result + "\", " + result + ");";
-			case "bprint":
-				return "printf(\"%s = %s\\n\", \"" + result + "\", " + result + " ? \"true\" : \"false\");";
-			case "aiprint":
-				return "printf(\"%s[%d] = %d\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
-			case "arprint":
-				return "printf(\"%s[%d] = %f\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
-			case "acprint":
-				return "printf(\"%s[%d] = '%c'\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
-			case "abprint":
-				return "printf(\"%s[%d] = %s\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "] ? \"true\" : \"false\");";
-			case "[]=":
-				return "*(" + result + " + " + arg1 + ") = " + arg0 + ";";
-			case "=[]":
-				return result + " = *(" + arg0 + " + " + arg1 + ");";
-			case "malloc":
-				return result + " = " + "malloc(sizeof(" + arg0 + ") * " + arg1+ ");";
-			default:
-				return null;
-		}
-	}
-}
-
-// Symbol Table
 class SymbolTable {
 
 	public static final int NOT_IN_SYMBOL_TABLE = -1;
 
-	public ArrayList<String> names;
-	public ArrayList<Integer> types;
-	public ArrayList<Boolean> arrays;
+	public Vector<String> names;
+	public Vector<Integer> types;
+	public Vector<Boolean> arrays;
 
 	public SymbolTable() {
-		names = new ArrayList<>();
-		types = new ArrayList<>();
-		arrays = new ArrayList<>();
+		names = new Vector<>();
+		types = new Vector<>();
+		arrays = new Vector<>();
 	}
 
 	public int lookUp(String name) {
 		return names.indexOf(name);
 	}
 
-	public boolean addToSymbolTable(String name, int type, boolean array) {
+	public boolean setSymbol(String name, int type, boolean array) {
 		if (lookUp(name) == -1) {
 			names.add(name);
 			types.add(type);
@@ -1349,31 +877,198 @@ class SymbolTable {
 		return false;
 	}
 
-	@Override
-    public String toString() {
+    public String print() {
         if(names.size() == 0)
             return null;
         String res = "";
         for(int i = 0; i < names.size(); i++) {
             switch (types.get(i)) {
-                case EVal.TYPE_CODE_INTEGER:
-                    res += "\t" + YYParser.TYPE_STRING_INTEGER;
+                case 1://Eval.TYPECODES.INTEGER.getType():
+                    res += "\t" + Eval.TYPES.INTEGER.getType();
                     break;
-                case EVal.TYPE_CODE_REAL:
-                    res += "\t" + YYParser.TYPE_STRING_REAL;
+                case 2://Eval.TYPECODES.REAL.getType():
+                    res += "\t" + Eval.TYPES.REAL.getType();
                     break;
-                case EVal.TYPE_CODE_CHAR:
-                    res += "\t" + YYParser.TYPE_STRING_CHAR;
+                case 3://Eval.TYPECODES.CHAR.getType():
+                    res += "\t" + Eval.TYPES.CHAR.getType();
                     break;
-                case EVal.TYPE_CODE_BOOLEAN:
-                    res += "\t" + YYParser.TYPE_STRING_BOOLEAN;
+                case 4://Eval.TYPECODES.BOOLEAN.getType():
+                    res += "\t" + Eval.TYPES.BOOLEAN.getType();
                     break;
-                case EVal.TYPE_CODE_RANGE:
+                case 5://Eval.TYPECODES.RANGE.getType():
                     continue;
             }
             res += (arrays.get(i) ? " *" : " ") + names.get(i) + ";\n";
         }
         return res;
 	}
+
+}
+
+class Eval{
+    public static Vector<Integer> arrayIndexOutOfBoundList = new Vector<>();
+	public static Vector<Integer> invalidArraySizeList = new Vector<>();
+
+	public String place;
+	public int type;
+	public boolean array;
+
+	public int quad;
+
+	public Eval defaultInit;
+	public Vector<Eval> typeInitList = new Vector<>();
+	public Vector<Vector<Eval>> initializersList = new Vector<>();
+	public Vector<Eval> declareds = new Vector<>();
+	public Vector<Eval> initializers = new Vector<>();
+    public Vector<Integer> trueList = new Vector<>();
+    public Vector<Integer> falseList = new Vector<>();
+    public Vector<Integer> nextList = new Vector<>();
+
+    public static Vector<Integer> makeList(int i) {
+        Vector<Integer> list = new Vector<>();
+        list.add(i);
+        return list;
+    }
+
+    public static Vector<Integer> merge(Vector i , Vector j) {
+        Vector<Integer> list = new Vector<>();
+        if(i!=null && i.size()>0) {
+            list.addAll(i);
+        }
+        if(j!=null && j.size()>0) {
+            list.addAll(j);
+        }
+        return list;
+    }
+
+	public static enum TYPES {
+        INTEGER("int"),
+        BOOLEAN("bool"),
+        REAL("float"),
+        CHAR("char"),
+        STRING("string"),
+        Func("function"),
+        rectype("rectype"),
+        unknownType("unknown"),
+        constOp("const"),
+        assignOp(":="),
+        andOp("and"),
+        orOp("or"),
+        notOp("not"),
+        initOp("init"),
+        ifOp("if"),
+        stackPop("stackPop"),
+        stackPush("stackPush"),
+        castOP("cast"),
+        gotoOp("gotoOp"),
+        variableGotoOp("varGotoOp");
+        String[] relopOpList = new String[]{".lte",".lt",".gt",".gte",".eq",".ne"};
+        String[] mathOpList = new String[]{"+","-","*","/","%"};
+        String type;
+        TYPES(String type) {
+            this.type = type;
+        }
+        String getType() {
+            return type;
+        }
+
+    }
+    public static enum TYPECODES {
+        UNKNOWN(-1),
+        INTEGER(0),
+        REAL(1),
+        CHAR(2),
+        BOOLEAN(3),
+        RANGE(4);
+        int type;
+        TYPECODES(int type) {
+            this.type = type;
+        }
+        int getType() {
+            return type;
+        }
+    }
+
+	public static Vector<Vector<Eval>> makeInitializersList(Vector<Eval> initializers) {
+		Vector<Vector<Eval>> result = new Vector<>();
+		result.add(initializers);
+		return result;
+	}
+
+	public static Vector<Eval> makeInitializersOrDeclareds(Eval initializerOrdDeclared) {
+		Vector<Eval> result = new Vector<>();
+		result.add(initializerOrdDeclared);
+		return result;
+	}
+}
+
+class Quadruple {
+    public static final String LINE_STR = "Line";
+    public String operation;
+    public String arg0;
+    public String arg1;
+    public String result;
+
+    public Quadruple(String operation, String arg0, String arg1, String result){
+        this.operation = operation;
+        this.arg0 = arg0;
+        this.arg1 = arg1;
+        this.result = result;
+    }
+
+    public String print() {
+        switch(operation.toLowerCase()){
+            case "goto":
+                return operation + " " + LINE_STR + result + ";";
+            case "check":
+                return "if (" + arg0 + ") goto " + LINE_STR + result + ";";
+            case "<":
+            case "<=":
+            case ">":
+            case ">=":
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+            case "%":
+                return result + " = " + arg0 + " " + operation + " " + arg1 + ";";
+            case "=":
+                return result + " = " + arg0 + " " + "==" + " " + arg1 + ";";
+            case "<>":
+                return result + " != " + arg0 + " " + "==" + " " + arg1 + ";";
+            case "usub":
+                return result + " = -" + arg0 + ";";
+            case ":=":
+                return result + " = " + arg0 + ";";
+            case "cast":
+                return result + " = (" + arg1 + ") " + arg0 + ";";
+            case "init":
+                return arg1 + " " + result + ";";
+            case "iprint":
+                return "printf(\"%s = %d\\n\", \"" + result + "\", " + result + ");";
+            case "rprint":
+                return "printf(\"%s = %f\\n\", \"" + result + "\", " + result + ");";
+            case "cprint":
+                return "printf(\"%s = '%c'\\n\", \"" + result + "\", " + result + ");";
+            case "bprint":
+                return "printf(\"%s = %s\\n\", \"" + result + "\", " + result + " ? \"true\" : \"false\");";
+            case "aiprint":
+                return "printf(\"%s[%d] = %d\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+            case "arprint":
+                return "printf(\"%s[%d] = %f\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+            case "acprint":
+                return "printf(\"%s[%d] = '%c'\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+            case "abprint":
+                return "printf(\"%s[%d] = %s\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "] ? \"true\" : \"false\");";
+            case "[]=":
+                return "*(" + result + " + " + arg1 + ") = " + arg0 + ";";
+            case "=[]":
+                return result + " = *(" + arg0 + " + " + arg1 + ");";
+            case "malloc":
+                return result + " = " + "malloc(sizeof(" + arg0 + ") * " + arg1+ ");";
+            default:
+                return null;
+        }
+    }
 
 }
