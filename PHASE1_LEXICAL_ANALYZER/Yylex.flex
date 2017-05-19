@@ -117,7 +117,7 @@ SHARP_KW = [#]
 BOOLCONST = (true)|(false)
 CHARCONST = {SINGLE_QUOTE_KW} ({LETTER} | {DIGIT}) {SINGLE_QUOTE_KW}
 REALCONST = {SHARP_KW}((({DIGIT})|({NONZERO_DIGIT}({DIGIT})*))({DOT_KW})({DIGIT})*{NONZERO_DIGIT})
-NUMCONST = {SHARP_KW}({DIGIT}|{NONZERO_DIGIT}{DIGIT}*)
+NUMCONSTANT = {SHARP_KW}({DIGIT}|{NONZERO_DIGIT}{DIGIT}*)
 ID = {LETTER}+
 %%
 /* Rules Section */
@@ -369,6 +369,11 @@ ID = {LETTER}+
 	// System.out.println(yytext() + "\t" + "SHARP_KW\t" + '-');
 	return YYParser.SHARP_KW;
 }
+{NUMCONSTANT} {
+	// System.out.println(yytext() + "\t" + "NUMCONSTANT\t" + '-');
+	return YYParser.NUMCONSTANT;
+}
+
 
 {BOOLCONST} {
 	// System.out.println(yytext() + "\t" + "BOOLCONST\t" + '-');
@@ -383,11 +388,6 @@ ID = {LETTER}+
 {REALCONST} {
 	// System.out.println(yytext() + "\t" + "REALCONST\t" + '-');
 	return YYParser.REALCONST;
-}
-
-{NUMCONST} {
-	// System.out.println(yytext() + "\t" + "NUMCONST\t" + '-');
-	return YYParser.NUMCONST;
 }
 
 {ID} {
