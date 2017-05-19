@@ -1,0 +1,12 @@
+program sample
+	int i := #1;
+	int k := #1;
+	real r := #1.10000;
+	real r1 := #1000.0001;
+	real r2 := #00001.1;
+	boolean b := true;
+
+	main {
+	    b := false;
+
+	}
