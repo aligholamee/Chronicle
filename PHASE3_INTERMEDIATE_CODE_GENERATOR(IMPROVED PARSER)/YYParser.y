@@ -940,6 +940,76 @@ class Eval
   }
 }
 
+
+/* Scoping classes */
+class ScopeRecord {
+  public int symbolTableIndex;
+  public int scopeStart;
+  public int scopeEnd;
+  public int emitStart;
+  public int emitEnd;
+  public boolean isFunction;
+  public List<Integer>params;
+  public String returnValue;
+  public String returnType;
+  public String startLine;
+  public ScopeRecord(int symbolTableIndex,int scopeStart,int scopeEnd,int emitStart,int emitEnd,boolean isFunction,List<Integer>params,String returnValue,String returnType,String startLine)
+  {
+    this.symbolTableIndex = symbolTableIndex;
+    this.scopeStart = scopeStart;
+    this.scopeEnd = scopeEnd;
+    this.emitStart = emitStart;
+    this.emitEnd = emitEnd;
+    this.isFunction = isFunction;
+    this.params = params;
+    this.returnValue = returnValue;
+    this.returnType = returnType;
+    this.startLine = startLine;
+  }
+}
+//ScopeTableClass
+class ScopeTable {
+  private List<ScopeRecord> table;
+  private SymbolTable symbolTable;
+  public ScopeTable(SymbolTable symbolTable)
+  {
+    table = new ArrayList<>();
+    this.symbolTable = symbolTable;
+  }
+  //It's symbolTable index not it's index
+  public ScopeRecord getByIndex(int index){
+    for(int i=0;i<table.size();i++){
+      if(table.get(i).symbolTableIndex==index){
+        return table.get(i);
+      }
+    }
+    return null;
+  }
+
+  public ScopeRecord getByName(String name)
+  {
+    int index = symbolTable.lookUp(name);
+    if(index==-1){
+      return null;
+    }
+    return getByIndex(index);
+  }
+
+  public List<ScopeRecord> getAll(){
+    return table;
+  }
+
+  public void addNewScope(int symbolTableIndex,int scopeStart,int scopeEnd,int emitStart,int emitEnd)
+  {
+    table.add(new ScopeRecord(symbolTableIndex,scopeStart,scopeEnd,emitStart,emitEnd,false,null,"",Eval.unknownType,""));
+  }
+  public void addNewScope(int symbolTableIndex,int scopeStart,int scopeEnd,int emitStart,int emitEnd,List<Integer>params,String funcName,String returnType,String startLine)
+  {
+    table.add(new ScopeRecord(symbolTableIndex,scopeStart,scopeEnd,emitStart,emitEnd,true,params,funcName,returnType,startLine));
+  }
+}
+
+
 class SymbolTable {
 
 	public static final int NOT_IN_SYMBOL_TABLE = -1;
