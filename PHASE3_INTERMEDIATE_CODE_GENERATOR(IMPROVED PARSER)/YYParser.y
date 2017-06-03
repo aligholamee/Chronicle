@@ -1126,6 +1126,33 @@ class SymbolTable
   }
 }
 
+/* Struct Table Class */
+
+class StructTable{
+  private List<Record> structRecords;
+  protected class Record{
+      public int symbolTableIndex;
+      public List<Quad>params;
+      public Record(int symbolTableIndex, List<Quad>params){
+            this.symbolTableIndex = symbolTableIndex;
+          this.params = params;
+      }
+    }
+    public StructTable(){
+      structRecords = new ArrayList<>();
+    }
+    // private void emit(String operation,String arg0,String arg1,String result)
+    public void addnewStruct(int symbolTableIndex,List<Quad>params){
+      structRecords.add(new Record(symbolTableIndex,params));
+    }
+
+    public List<Record> getAll()
+    {
+      return structRecords;
+    }
+
+}
+
 class Quadruple {
     public static final String LINE_STR = "Line";
     public String operation;
