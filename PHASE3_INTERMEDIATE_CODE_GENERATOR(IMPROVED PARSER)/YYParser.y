@@ -20,160 +20,357 @@
 
 
 %code {
+  public static final String ANSI_RESET = "\u001B[0m";
+  public static final String ANSI_BLACK = "\u001B[30m";
+  public static final String ANSI_RED = "\u001B[31m";
+  public static final String ANSI_GREEN = "\u001B[32m";
+  public static final String ANSI_YELLOW = "\u001B[33m";
+  public static final String ANSI_BLUE = "\u001B[34m";
+  public static final String ANSI_PURPLE = "\u001B[35m";
+  public static final String ANSI_CYAN = "\u001B[36m";
+  public static final String ANSI_WHITE = "\u001B[37m";
 
-    public static String lexIdentifier;
-    public static int lexInt;
-    public static double lexReal;
-    public static boolean lexBoolean;
-    public static char lexChar;
+  public static final String Arrstart = "start";
+  public static final String Arrsize = "size";
+  public static final String Arrindex = "index";
 
-    private static final String tempStr = "TempVar";
-    public static final String startStr = "StartVar";
-    public static final String sizeStr = "SizeVar";
-    public static final String indexStr = "IndexVar";
-    public static final String condStr = "ConditionVar";
+  public static String idVal,intVal,realVal,charVal,boolVal,mathOpVal,typeVal,unaryMathOpVal,unaryOpVal,mathOpAssignVal,relOpVal;
+  private List<Quad> quadTable = new ArrayList();
+  private SymbolTable symbolTable = new SymbolTable();
+  private ScopeTable scopeTable = new ScopeTable(symbolTable);
+  private CallTable callTable = new CallTable();
+  private StructTable structTable = new StructTable();
+  //emitMethod
+  private void emit(String operation,String arg0,String arg1,String result)
+  {
+    quadTable.add(new Quad(operation,arg0,arg1,result));
+    System.out.println(ANSI_PURPLE+"EMIT:"+operation+":"+arg0+":"+arg1+":"+result+ANSI_RESET);
+  }
 
-    public int tempCounter = 0;
+  private int tempCounter = 0;//newTempMethod
+  private String newTemp(String type,boolean isArray,int size)
+  {
+    String name = "Temp"+(tempCounter++);
+    emit(Eval.initOp,type,"",name);
+    symbolTable.addToSymbolTable(name,type,isArray,size);
+    return name;
+  }
 
-	public Vector<Quadruple> quadTable = new Vector<>();
-    public SymbolTable symbolTable = new SymbolTable();
-    private void emit(String operation,String arg0,String arg1,String result)
-    {
-        quadTable.add(new Quadruple(operation,arg0,arg1,result));
-        System.out.println("EMIT:"+operation+":"+arg0+":"+arg1+":"+result);
+  private String newFunc(String funcName,String type)
+  {
+    String name = "Func"+funcName;
+    symbolTable.addToSymbolTable(name,type,false,0);
+    return name;
+  }
+  //backpatchMethod
+  private void backpatch(ArrayList<Integer> list, int quadNumber) {
+    for (int i = 0; i < list.size(); i++){
+      if(quadTable.get(list.get(i)).operation.equals(Eval.assignOp)){
+        quadTable.get(list.get(i)).arg0 = String.valueOf(quadNumber);
+      }else{
+        quadTable.get(list.get(i)).result = String.valueOf(quadNumber);
+      }
     }
+ }
 
+ private void backpatch(ArrayList<Integer> list, String quadValue) {
+   for (int i = 0; i < list.size(); i++){
+     if(quadTable.get(list.get(i)).operation.equals(Eval.assignOp)){
+       quadTable.get(list.get(i)).arg0 = quadValue;
+     }else{
+       quadTable.get(list.get(i)).result = quadValue;
+     }
+   }
+}
 
-    /* nextQuad function */
-    /* Give us the address of the current(+1 is next) quad in the table which is equal to the size of the quadRuple table */
-    private int nextQuad() {
-        return quadTable.size();
+ private void backpatch(int index, int quadNumber) {
+    if(quadTable.get(index).operation.equals(Eval.assignOp)){
+      quadTable.get(index).arg0 = String.valueOf(quadNumber);
+    }else{
+      quadTable.get(index).result = String.valueOf(quadNumber);
     }
+ }
 
-    /* backpatch Function #1*/
-    private void backpatch(Vector<Integer> list, int quadNumber) {
-        for (int i:list)
-            quadTable.get(i).result = String.valueOf(quadNumber);
-    }
+ private void setReturn(List<Integer>list,String result){
+   for (int i = 0; i < list.size(); i++){
+     quadTable.get(list.get(i)).result = result;
+   }
+ }
+ //newQuadMethod
+ private int nextQuad(){
+   return quadTable.size();
+ }
+ //convertToTrueFalseIfPossibleMethod
+ private String convertToTrueFalseIfPossible(String value)
+ {
+   if(value.equals(1+"")){
+     value = "true";
+   }else if(value.equals(0+"")) {
+     value = "false";
+   }
+   return value;
+ }
 
-    /* backpatch Function #2*/
-    private void backpatch(int quadNumber, int destination) {
-        quadTable.get(quadNumber).result = String.valueOf(destination);
-    }
+ private void writeFinalCode(String message)
+ {
+   message=message.replaceAll("#","");
+   System.out.println(ANSI_YELLOW+message+ANSI_RESET);
+ }
+//generateCodeMethod
+ private void generateCode()
+ {
+  String result = "";
+  result = "#include<stdio.h>";
+  System.out.println(ANSI_YELLOW+result+ANSI_RESET);
+  result = "#include<iostream>";
+  System.out.println(ANSI_YELLOW+result+ANSI_RESET);
+  result = "#include<string>";
+  System.out.println(ANSI_YELLOW+result+ANSI_RESET);
+  result = "using namespace std;";
+  System.out.println(ANSI_YELLOW+result+ANSI_RESET);
+  List<StructTable.Record> structRecords = structTable.getAll();
+  for(int i=0; i<structRecords.size();i++){
+    result="struct "+ symbolTable.getByIndex(structRecords.get(i).symbolTableIndex).name+"{";
+    writeFinalCode(result);
+    StructTable.Record currentStruct= structRecords.get(i);
+    for(int j=0 ; j < currentStruct.params.size(); j++){
+      Quad current= currentStruct.params.get(j);
+      if (current.operation.equals(Eval.constOp)) {
+           result = "const "+current.arg0+" "+current.result+"="+current.arg1;
 
-    private String newTemp(int type, boolean array) {
-        String name = tempStr + tempCounter++;
-        symbolTable.setSymbol(name, type, array);
-        return name;
-    }
-
-	private String getTypeString(int typeCode){
-		switch(typeCode){
-			case 0://Eval.TYPE_CODE_INTEGER:
-				return Eval.TYPES.INTEGER.getType();
-			case 1://Eval.TYPE_CODE_REAL:
-				return Eval.TYPES.REAL.getType();
-			case 2://Eval.TYPE_CODE_CHAR:
-				return Eval.TYPES.CHAR.getType();
-			case 3://Eval.TYPE_CODE_BOOLEAN:
-				return Eval.TYPES.BOOLEAN.getType();
-			case -1:
-			case 4:
-			default:
-				return null;
-		}
-	}
-
-    /* Code Exporting Function */
-    private void exportIntermediateCode() {
-        DataOutputStream dos = null;
-        try {
-            dos = new DataOutputStream(new FileOutputStream("./output.txt"));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            dos.writeBytes("#include <stdio.h>\n\nint main() {\n\t// ////////////////// Symbol Table \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
-            dos.writeBytes(symbolTable.print());
-            dos.writeBytes("\n\t// ////////////////// Quadruples \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
-            // Backpatch of error controllers.
-            backpatch(Eval.arrayIndexOutOfBoundList, (quadTable.size() + 1)); // Array index out of bound error.
-            backpatch(Eval.invalidArraySizeList, (quadTable.size() + 2)); // Invalid array size error.
-            for (int i = 0; i < quadTable.size() && i < 100; i++) {
-                dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadTable.get(i).print() + "\n");
-            }
-            for (int i = 100; i < quadTable.size(); i++) {
-                dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadTable.get(i).print() + "\n");
-            }
-            // Normal Finish
-            if(quadTable.size() < 100)
-                dos.writeBytes(Quadruple.LINE_STR + quadTable.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
-                    "\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
-            else
-                dos.writeBytes(Quadruple.LINE_STR + quadTable.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
-                    "\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
-
-            // Array index out of bound error.
-            if(quadTable.size() < 100)
-                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
-                    "\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
-            else
-                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
-                    "\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
-
-            // Invalid array size error.
-            if(quadTable.size() < 100)
-                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
-                    "\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
-            else
-                dos.writeBytes(Quadruple.LINE_STR + (quadTable.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
-                    "\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
-
-            dos.writeBytes("}\n");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    static PrintStream writer;
-
-    public static void main(String args[]) throws IOException, FileNotFoundException {
-        YYParser yyparser;
-        final Yylex lexer;
-
-        writer = new PrintStream(new File("output.txt"));
-        lexer = new Yylex(new InputStreamReader(new FileInputStream("java_code.txt")));
-
-        yyparser = new YYParser(new Lexer() {
-
-            @Override
-            public int yylex() {
-                int yyl_return = -1;
-                try {
-
-                    yyl_return = lexer.yylex();
-                } catch (IOException e) {
-                    System.err.println("IO error :" + e);
+         }else if (current.operation.equals(Eval.initOp)) {
+           SymbolTable.Record record=symbolTable.getSymbol(current.result);
+           if(record.isArray==true){
+            result = current.arg0+" "+current.result+"["+record.size+"]"+";";
+            if(!current.arg1.equals("")){
+                for(int p=0;p<record.size;p++){
+                    result += "\n"+current.result+"["+p+"]"+"="+current.arg1+";";
                 }
-                return yyl_return;
             }
 
-            @Override
-            public void yyerror(String error) {
-                System.err.println("Error : " + error);
+            }else {
+            result = current.arg0+" "+current.result+";";
+            if(!current.arg1.equals("")){
+              result += "\n"+current.result+"="+current.arg1+";";
             }
-
-            @Override
-            public Object getLVal() {
-                return null;//lexer.yytext();
-            }
-        });
-        yyparser.parse();
-
-        return;
+        }
+       }
+      writeFinalCode(result);
+       }
+       result = "};";
+       writeFinalCode(result);
     }
+   result = "int top = 0;";
+   writeFinalCode(result);
+   result = "string globalStack[1024];";
+   writeFinalCode(result);
+   List<ScopeRecord> scopeRecords = scopeTable.getAll();
+   for(int i=0;i<scopeRecords.size();i++){
+      if(scopeRecords.get(i).returnType!=Eval.unknownType){
+        result = scopeRecords.get(i).returnType+" "+scopeRecords.get(i).returnValue+";";
+        writeFinalCode(result);
+      }
+      String funcName = symbolTable.getByIndex(scopeRecords.get(i).symbolTableIndex).name;
+      for(int j=scopeRecords.get(i).scopeStart;j<scopeRecords.get(i).scopeEnd;j++){
+        if(j<0){
+          continue;
+        }
+        SymbolTable.Record r=symbolTable.getByIndex(j);
+        if(r.scope.equals("GLOBAL")||r.name.contains("Temp")){
+          continue;
+        }
+        String newName = "L"+funcName+r.name;
+        //for(int k=scopeRecords.get(i).emitStart;k<scopeRecords.get(i).emitEnd;k++){
+        for(int k=scopeRecords.get(i).emitStart;k<scopeRecords.get(i).emitEnd;k++){
+          Quad q = quadTable.get(k);
+          // if(q.arg0.contains(funcName)
+          //   ||q.arg1.contains(funcName)
+          //   ||q.result.contains(funcName)
+          //   // ||q.arg0.contains("Temp")
+          //   // ||q.arg1.contains("Temp")
+          //   // ||q.result.contains("Temp")
+          //   )
+          // {
+          //   continue;
+          // }
+          if(q.arg0.contains(r.name) && !q.arg0.contains("Temp") && !q.arg0.contains(funcName)){
+            q.arg0=q.arg0.replace(r.name,newName);
+          }
+          if(q.arg1.contains(r.name) && !q.arg1.contains("Temp") && !q.arg1.contains(funcName)){
+            q.arg1=q.arg1.replace(r.name,newName);
+          }
+          if(q.result.contains(r.name)&& !q.result.contains("Temp") && !q.result.contains(funcName)){
+            q.result=q.result.replace(r.name,newName);
+          }
+        }
+        r.name = newName;
+      }
+   }
+
+   result = "int targetLine=0;";
+   writeFinalCode(result);
+   result = "int main(){";
+   writeFinalCode(result);
+   result = "goto Line0;";
+   writeFinalCode(result);
+   List<CallTable.Record> callRecords = callTable.getAll();
+   for(int i=0;i<callRecords.size();i++){
+      result = "Call"+i;
+      result += ": if("+callRecords.get(i).name+"==targetLine) goto "+callRecords.get(i).value+";";
+      writeFinalCode(result);
+   }
+    for (int i=0;i<quadTable.size();i++) {
+       result = "Line"+i+":";
+       Quad current = quadTable.get(i);
+       if(current.operation.equals(Eval.castOP))
+       {
+         String type = "";
+         if(current.arg1.equals(Eval.INT)){
+           type = "int";
+         }else if(current.arg1.equals(Eval.REAL)){
+           type = "float";
+         }else if (current.arg1.equals(Eval.CHAR)) {
+           type = "char";
+         }
+         result += current.result+"="+"("+"("+type+")"+current.arg0+");";
+       }else if(current.operation.equals(Eval.assignOp)){
+         result += current.result+"="+current.arg0+";";
+       }else if (current.operation.equals(Eval.assignOp)) {
+         result += "const "+current.arg0+" "+current.result+"="+current.arg1;
+       }else if(current.operation.equals(Eval.andOp)){
+         result += current.result+"="+current.arg0+"&&"+current.arg1+";";
+       }else if(current.operation.equals(Eval.orOp)){
+         result += current.result+"="+current.arg0+"||"+current.arg1+";";
+       }else if(current.operation.equals(Eval.notOp)){
+         result += current.result+"="+"!"+current.arg0+";";
+      //  }else if (current.operation.equals(Eval.returnOp)) {
+      //    result += "return "+current.result+";";
+       }else if (current.operation.equals(Eval.initOp)) {
+         SymbolTable.Record record=symbolTable.getSymbol(current.result);
+         // if(record.isArray==true){
+         //   if(current.arg1.equals("")){
+         //      result += current.arg0+" "+current.result+"["+record.size+"]"+";";
+         //    }else{
+         //      result += current.arg0+" "+current.result+"["+record.size+"]"+"="+current.arg1+";";
+         //    }
+         // }else {
+         //  if(current.arg1.equals("")){
+         //   result += current.arg0+" "+current.result+";";
+         //  }else {
+         //   result += current.arg0+" "+current.result+"="+current.arg1+";";
+         //  }
+         // }
+         if(record.isArray==true){
+            result += current.arg0+" "+current.result+"["+record.size+"]"+";";
+            if(!current.arg1.equals("")){
+                for(int k=0;k<record.size;k++){
+                    result += "\n"+current.result+"["+k+"]"+"="+current.arg1+";";
+                }
+            }
+        }else {
+          result += current.arg0+" "+current.result+";";
+          if(!current.arg1.equals("")){
+            result += "\n"+current.result+"="+current.arg1+";";
+          }
+        }
+       }else if (current.operation.equals(Eval.ifOp)) {
+          result += "if("+current.arg0+")"+"goto Line"+current.result+";";
+       }else if (current.operation.equals(Eval.gotoOp)) {
+          result += "goto "+"Line"+current.result+";";
+       }else if(current.operation.equals(Eval.variableGotoOp)){
+         result += "goto "+current.result+";";
+       }else if (current.operation.equals(Eval.stackPop)) {
+          result+="top = top -1;\n";
+          result += current.result;
+         //result+="=globalStack.pop();";
+          if(current.arg0==Eval.INT){
+            result+="=stoi(globalStack[top]);";
+          }else if(current.arg0==Eval.CHAR){
+            result+="=stoc(globalStack[top]);";
+          }else if(current.arg0==Eval.REAL){
+            result+="stof(globalStack[top]);";
+          }else if(current.arg0==Eval.BOOL){
+            result+="=stoi(globalStack[top]);";
+          }
+       }else if (current.operation.equals(Eval.stackPush)) {
+       //  result+="globalStack.push("+current.result+");";
+          result+="globalStack[top]="+current.result+";\ntop = top+1;";
+       }else{
+         boolean isUsed = false;
+         for (int k=0;k<Eval.mathOpList.length;k++) {
+            if(current.operation.equals(Eval.mathOpList[k])){
+              isUsed = true;
+              result += current.result+"="+current.arg0+current.operation+current.arg1+";";
+              break;
+            }
+         }
+         if(isUsed){
+           writeFinalCode(result);
+           continue;
+         }
+         for (int k=0;k<Eval.unaryMathOPList.length;k++) {
+            if(current.operation.equals(Eval.unaryMathOPList[k])){
+              isUsed = true;
+              result += current.result+"="+current.result+current.operation+";";
+              break;
+            }
+         }
+         if(isUsed){
+           writeFinalCode(result);
+           continue;
+         }
+         for (int k=0;k<Eval.mathOpAssignList.length;k++) {
+            if(current.operation.equals(Eval.mathOpAssignList[k])){
+              isUsed = true;
+              result += current.result+current.operation+current.arg0+";";
+              break;
+            }
+         }
+         if(isUsed){
+           writeFinalCode(result);
+           continue;
+         }
+         for (int k=0;k<Eval.uniryOpList.length;k++) {
+            if(current.operation.equals(Eval.uniryOpList[k])){
+              isUsed = true;
+              result += current.result+"="+current.operation+current.arg0+";";
+              break;
+            }
+         }
+         for (int k=0;k<Eval.relopOpList.length;k++) {
+            if(current.operation.equals(Eval.relopOpList[k])){
+              isUsed = true;
+              String operation = "";
+              if(Eval.relopOpList[k].equals(".le")){
+                operation = "<=";
+              }else if(Eval.relopOpList[k].equals(".lt")) {
+                operation = "<";
+              }else if (Eval.relopOpList[k].equals(".gt")) {
+                operation = ">";
+              }else if (Eval.relopOpList[k].equals(".ge")) {
+                operation = ">=";
+              }else if (Eval.relopOpList[k].equals(".eq")) {
+                operation = "==";
+              }else if (Eval.relopOpList[k].equals(".ne")) {
+                operation = "!=";
+              }else {
+                System.out.println(ANSI_RED+"Error:Relop not found for "+current.operation+ANSI_RESET);
+               }
+              result += "if("+current.arg0+operation+current.arg1+")"+current.result+"=true;\n";
+              result += "else "+current.result+"=false;";
+              break;
+            }
+         }
+         if(!isUsed)
+         {
+           System.out.println(ANSI_RED+"Error:OpCode not found for "+current.operation+ANSI_RESET);
+         }
+      }
+     writeFinalCode(result);
+   }
+    result = "Line"+quadTable.size()+":return 0;\n}";
+    writeFinalCode(result);
+ }
 }
 // Precedences go increasing, so "then" < "else".
 %left OR_KW
