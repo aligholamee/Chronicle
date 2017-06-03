@@ -18,6 +18,53 @@
 
 %type <Eval> type_specifieirs initializer initializer_list declarator declarator_list dec range block statment_list statment case_element default expressions constant_expressions bool_expression arithmetic_expressions
 
+/* Dup Tokens */
+%token <Eval> LETTER
+%token <Eval> DIGIT
+%token <Eval> NON_ZERO_DIGIT
+%token <Eval> HASH_KW
+%token <Eval> BOOL_KW
+%token <Eval> WHITE_SPACE
+%token <Eval> LETDIG
+%token <Eval> ID_KW
+%token <Eval> NUMCONST
+%token <Eval> WITHOUT_N
+%token <Eval> CHARCONST
+%token <Eval> COMMENT
+%token <Eval> REALCONST
+%token <Eval> OR_KW
+%token <Eval> AND_KW
+%token <Eval> ELSE_KW
+%token <Eval> THEN_KW
+%token <Eval> NOT_KW
+%token <Eval> IF_KW
+%token <Eval> END_KW
+%token <Eval> SWITCH_KW
+%token <Eval> WHILE_KW
+%token <Eval> CASE_KW
+%token <Eval> DEFAULT_KW
+%token <Eval> BREAK_KW
+%token <Eval> REL_OP_KW
+%token <Eval> MATH_OP_KW
+%token <Eval> UNARY_MATH_OP_KW
+%token <Eval> MATH_OP_ASSIGN_KW
+%token <Eval> UNARY_OP_KW
+%token <Eval> RETURN_KW
+%token <Eval> RECORD_KW
+%token <Eval> STATIC_KW
+%token <Eval> TYPESPECIFIER_KW
+%token <Eval> PUNC_KW
+%token <Eval> ASSIGN_KW
+%token <Eval> SEMI_COLUMN_KW
+%token <Eval> LEFTAC RIGHTAC LEFTAR RIGHTAR COLUMN TWO_COLUMN LEFTPA RIGHTPA DOT_KW //"{" "}" "[" "]" "," ":" "(" ")" "."
+%type <Eval> Rectype ID TypeSpecifier ScopedTypeSpecifer VarDeclId VarDeclList
+%type <Eval> VarDeclInitialize ScopedVarDelaration VarDeclaration Constant
+%type <Eval> Immutable Factor UnaryExpression MathLogicExpression ASSIGNED_MATH_OP
+%type <Eval> Mutable Expression RelExpression SimpleExpression SelectionStmt
+%type <Eval> Statement rightPaQ StatementList IfExpression M ItereationStmt OrElseRel
+%type <Eval> AndThenRel N ParamId ParamList ParamIdList ParamTypeList Params FunPart
+%type <Eval> FunDeclaration Combo ReturnStmt CompoundStmt CaseElement DefaultElement
+%type <Eval> Call ArgList Args SwitchExpression BreakStmt RecDeclaration RecLocalDeclarations RecScopedVarDelaration
 
 %code {
   public static final String ANSI_RESET = "\u001B[0m";
