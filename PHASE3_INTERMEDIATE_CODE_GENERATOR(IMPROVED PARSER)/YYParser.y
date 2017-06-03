@@ -854,6 +854,92 @@ saved_boolean:
 
 %%
 
+/* Eval class */
+/* The ghost of anything :D */
+
+class Eval
+{
+  public static final String INT ="int";
+  public static final String BOOL = "bool";
+  public static final String REAL = "real";
+  public static final String CHAR = "char";
+  public static final String STRING = "string";
+  public static final String Func = "function";
+  public static final String rectype = "rectype";
+  public static final String unknownType = "unknown";
+
+  public static final String castOP = "cast";
+  public static final String constOp = "const";
+  public static final String assignOp = "=";
+  public static final String andOp = "and";
+  public static final String orOp = "or";
+  public static final String notOp = "not";
+  public static final String initOp = "init";
+  public static final String ifOp = "if";
+  public static final String stackPop = "stackPop";
+  public static final String stackPush = "stackPush";
+  public static final String gotoOp = "gotoOp";
+  public static final String variableGotoOp = "varGotoOp";
+
+  public static final String[] relopOpList = new String[]{".le",".lt",".gt",".ge",".eq",".ne"};
+  public static final String[] mathOpList = new String[]{"+","-","*","/","%"};
+  public static final String[] unaryMathOPList = new String[]{"++","--"};
+  public static final String[] mathOpAssignList = new String[]{"+=","-=","*=","/="};
+  public static final String[] uniryOpList = new String[]{"-","*","?"};
+
+  public String place;
+  public String type;
+  public boolean isArray;
+  public int size;
+  public int quad;
+  public int symbolTableQuad;
+  public int endOfFuncWaitingGoto;
+  public String place2;
+  public String returnName;
+  public int endOfBreakGoto=-1;
+
+  public Eval defaultInit;
+
+  public List<Eval> typeInitList;
+  public ArrayList<Integer> trueList;
+  public ArrayList<Integer> falseList;
+  public ArrayList<Integer> breakList;
+  public ArrayList<Integer> nextList;
+  public List<Integer> returnList;
+  public List<Eval> argsList;
+  public ArrayList<Quad> structList;
+
+  public int quadIndex;
+  public ArrayList<Integer> caseStartPoint;
+  public ArrayList<Eval> declaredCases;
+
+  public Eval()
+  {
+    typeInitList = new ArrayList<>();
+    falseList = new ArrayList<>();
+    nextList = new ArrayList<>();
+    returnList = new ArrayList<>();
+    argsList = new ArrayList<>();
+    breakList= new ArrayList<>();
+    structList= new ArrayList<>();
+  }
+  public static ArrayList<Integer> makeList(int i) {
+    ArrayList<Integer> list = new ArrayList<>();
+    list.add(i);
+    return list;
+  }
+  public static ArrayList<Integer> merge(List i , List j){
+      ArrayList<Integer> list = new ArrayList<>();
+      if(i!=null && i.size()>0){
+          list.addAll(i);
+      }
+      if(j!=null && j.size()>0){
+          list.addAll(j);
+      }
+      return list;
+  }
+}
+
 class SymbolTable {
 
 	public static final int NOT_IN_SYMBOL_TABLE = -1;
@@ -908,103 +994,6 @@ class SymbolTable {
         return res;
 	}
 
-}
-
-class Eval{
-    public static Vector<Integer> arrayIndexOutOfBoundList = new Vector<>();
-	public static Vector<Integer> invalidArraySizeList = new Vector<>();
-
-	public String place;
-	public int type;
-	public boolean array;
-
-	public int quad;
-
-	public Eval defaultInit;
-	public Vector<Eval> typeInitList = new Vector<>();
-	public Vector<Vector<Eval>> initializersList = new Vector<>();
-	public Vector<Eval> declareds = new Vector<>();
-	public Vector<Eval> initializers = new Vector<>();
-    public Vector<Integer> trueList = new Vector<>();
-    public Vector<Integer> falseList = new Vector<>();
-    public Vector<Integer> nextList = new Vector<>();
-
-    public static Vector<Integer> makeList(int i) {
-        Vector<Integer> list = new Vector<>();
-        list.add(i);
-        return list;
-    }
-
-    public static Vector<Integer> merge(Vector i , Vector j) {
-        Vector<Integer> list = new Vector<>();
-        if(i!=null && i.size()>0) {
-            list.addAll(i);
-        }
-        if(j!=null && j.size()>0) {
-            list.addAll(j);
-        }
-        return list;
-    }
-
-	public static enum TYPES {
-        INTEGER("int"),
-        BOOLEAN("bool"),
-        REAL("float"),
-        CHAR("char"),
-        STRING("string"),
-        Func("function"),
-        rectype("rectype"),
-        unknownType("unknown"),
-        constOp("const"),
-        assignOp(":="),
-        andOp("and"),
-        orOp("or"),
-        notOp("not"),
-        initOp("init"),
-        ifOp("if"),
-        stackPop("stackPop"),
-        stackPush("stackPush"),
-        castOP("cast"),
-        gotoOp("gotoOp"),
-        variableGotoOp("varGotoOp");
-        String[] relopOpList = new String[]{".lte",".lt",".gt",".gte",".eq",".ne"};
-        String[] mathOpList = new String[]{"+","-","*","/","%"};
-        String type;
-        TYPES(String type) {
-            this.type = type;
-        }
-        String getType() {
-            return type;
-        }
-
-    }
-    public static enum TYPECODES {
-        UNKNOWN(-1),
-        INTEGER(0),
-        REAL(1),
-        CHAR(2),
-        BOOLEAN(3),
-        RANGE(4);
-        int type;
-        TYPECODES(int type) {
-            this.type = type;
-        }
-        int getType() {
-            return type;
-        }
-    }
-
-	public static Vector<Vector<Eval>> makeInitializersList(Vector<Eval> initializers) {
-		Vector<Vector<Eval>> result = new Vector<>();
-		result.add(initializers);
-		return result;
-	}
-
-	public static Vector<Eval> makeInitializersOrDeclareds(Eval initializerOrdDeclared) {
-		Vector<Eval> result = new Vector<>();
-		result.add(initializerOrdDeclared);
-		return result;
-	}
 }
 
 class Quadruple {
