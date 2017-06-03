@@ -1035,6 +1035,22 @@ class CallTable{
   }
 }
 
+/* Quad class */
+class Quad
+{
+  public String operation;
+  public String arg0;
+  public String arg1;
+  public String result;
+  public Quad(String operation,String arg0,String arg1,String result)
+  {
+    this.operation = operation;
+    this.arg0 = arg0;
+    this.arg1 = arg1;
+    this.result = result;
+  }
+}
+
 class SymbolTable {
 
 	public static final int NOT_IN_SYMBOL_TABLE = -1;
