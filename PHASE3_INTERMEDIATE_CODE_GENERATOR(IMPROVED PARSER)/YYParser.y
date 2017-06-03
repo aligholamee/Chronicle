@@ -1009,6 +1009,31 @@ class ScopeTable {
   }
 }
 
+/* Call table material */
+
+class CallTable{
+  private List<Record> callRecords;
+  protected class Record{
+    public int name;
+    public String value;
+    public Record(int name,String value){
+      this.name = name;
+      this.value = value;
+    }
+  }
+  public CallTable()
+  {
+    callRecords = new ArrayList<>();
+  }
+  public void addNewCall(int name,String value)
+  {
+    callRecords.add(new Record(name,value));
+  }
+  public List<Record> getAll()
+  {
+    return callRecords;
+  }
+}
 
 class SymbolTable {
 
