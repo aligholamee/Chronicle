@@ -1050,61 +1050,80 @@ class Quad
     this.result = result;
   }
 }
+/* Symbol Table */
+class SymbolTable
+{
+  public static final int NOT_FOUND = -1;
+  public static final int ERROR = -2;
+  protected class Record
+  {
+      public String name;
+      public String type;
+      public boolean isArray;
+      public int size;
+      public String scope="";
+      public Record(String name,String type,boolean isArray,int size)
+      {
+          this.name = name;
+          this.type = type;
+          this.isArray = isArray;
+          this.size = size;
+      }
+  }
 
-class SymbolTable {
+  private List<Record> table;
 
-	public static final int NOT_IN_SYMBOL_TABLE = -1;
+  public SymbolTable()
+  {
+      table = new ArrayList<>();
+  }
 
-	public Vector<String> names;
-	public Vector<Integer> types;
-	public Vector<Boolean> arrays;
+  public Record getSymbol(String name)
+  {
+    int index = lookUp(name);
+    if(lookUp(name)!=NOT_FOUND){
+      return table.get(index);
+    }else {
+      return null;
+    }
+  }
 
-	public SymbolTable() {
-		names = new Vector<>();
-		types = new Vector<>();
-		arrays = new Vector<>();
-	}
+  public Record getByIndex(int index){
+    return table.get(index);
+  }
 
-	public int lookUp(String name) {
-		return names.indexOf(name);
-	}
+  public int lookUp(String name)
+  {
+    for(int i=0;i<table.size();i++){
+      if(table.get(i).name.equals(name)){
+        return i;
+      }
+    }
+    return NOT_FOUND;
+  }
 
-	public boolean setSymbol(String name, int type, boolean array) {
-		if (lookUp(name) == -1) {
-			names.add(name);
-			types.add(type);
-			arrays.add(array);
-			return true;
-		}
-		return false;
-	}
+  public int getSize()
+  {
+    return table.size();
+  }
 
-    public String print() {
-        if(names.size() == 0)
-            return null;
-        String res = "";
-        for(int i = 0; i < names.size(); i++) {
-            switch (types.get(i)) {
-                case 1://Eval.TYPECODES.INTEGER.getType():
-                    res += "\t" + Eval.TYPES.INTEGER.getType();
-                    break;
-                case 2://Eval.TYPECODES.REAL.getType():
-                    res += "\t" + Eval.TYPES.REAL.getType();
-                    break;
-                case 3://Eval.TYPECODES.CHAR.getType():
-                    res += "\t" + Eval.TYPES.CHAR.getType();
-                    break;
-                case 4://Eval.TYPECODES.BOOLEAN.getType():
-                    res += "\t" + Eval.TYPES.BOOLEAN.getType();
-                    break;
-                case 5://Eval.TYPECODES.RANGE.getType():
-                    continue;
-            }
-            res += (arrays.get(i) ? " *" : " ") + names.get(i) + ";\n";
-        }
-        return res;
-	}
-
+  public int addToSymbolTable(String name,String type,boolean isArray,int size)
+  {
+    boolean found = false;
+    for(int i=0;i<table.size();i++){
+      if(table.get(i).name.equals(name) && table.get(i).scope.equals("")){
+        found = true;
+        break;
+      }
+    }
+    if(!found)
+    {
+      Record p = new Record(name,type,isArray,size);
+      table.add(p);
+      return table.size()-1;
+    }
+    return ERROR;
+  }
 }
 
 class Quadruple {
