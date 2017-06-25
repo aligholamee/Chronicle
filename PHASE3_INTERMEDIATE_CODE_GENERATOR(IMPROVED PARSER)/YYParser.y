@@ -454,6 +454,82 @@ pair:
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
 	}
 %%
+class EVal {
+
+	public static final int TYPE_CODE_UNKNOWN = -1;
+	public static final int TYPE_CODE_INTEGER = 0;
+	public static final int TYPE_CODE_REAL = 1;
+	public static final int TYPE_CODE_CHAR = 2;
+	public static final int TYPE_CODE_BOOLEAN = 3;
+	public static final int TYPE_CODE_RANGE = 4;
+
+
+	public String place;
+
+	public String place1;
+
+
+
+	public int type;
+
+	public int type1;
+
+
+
+	public boolean array;
+
+	public boolean array1;
+
+
+
+	public int quad;
+
+	public int quad1;
+
+
+
+
+
+	public static ArrayList<Integer> arrayIndexOutOfBoundList = new ArrayList<>();
+	public static ArrayList<Integer> invalidArraySizeList = new ArrayList<>();
+	public ArrayList<Integer> initList;
+	public ArrayList<Integer> nextList;
+	public ArrayList<Integer> trueList;
+	public ArrayList<Integer> falseList;
+
+	public ArrayList<ArrayList<EVal>> initializersList;
+	public ArrayList<EVal> declareds;
+
+	public ArrayList<EVal> initializers;
+
+	public EVal() {
+	}
+
+	public static ArrayList<Integer> makeList(int number) {
+		ArrayList<Integer> result = new ArrayList<>();
+		result.add(number);
+		return result;
+	}
+
+	public static ArrayList<Integer> merge(ArrayList<Integer> al1, ArrayList<Integer> al2) {
+		ArrayList<Integer> result = new ArrayList<>();
+		result.addAll(al1);
+		result.addAll(al2);
+		return result;
+	}
+
+	public static ArrayList<ArrayList<EVal>> makeInitializersList(ArrayList<EVal> initializers) {
+		ArrayList<ArrayList<EVal>> result = new ArrayList<>();
+		result.add(initializers);
+		return result;
+	}
+
+	public static ArrayList<EVal> makeInitializersOrDeclareds(EVal initializerOrdDeclared) {
+		ArrayList<EVal> result = new ArrayList<>();
+		result.add(initializerOrdDeclared);
+		return result;
+	}
+}
 
 class Quadruple {
 
