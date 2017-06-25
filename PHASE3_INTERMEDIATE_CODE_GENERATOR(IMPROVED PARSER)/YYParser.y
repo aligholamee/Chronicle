@@ -5,11 +5,33 @@
 %}
 
 %token ID NUMCONST REALCONST CHARCONST BOOLCONST SHARP_KW MOD_KW DIV_KW MUL_KW SUB_KW ADD_KW SINGLE_QUOTE_KW DOT_KW LTE_KW GTE_KW NEQ_KW EQ_KW GT_KW LT_KW COMMA_KW CLOSEPARENTHESIS_KW OPENPARENTHESIS_KW CLOSEACCOLADE_KW OPENACCOLADE_KW CLOSEBRACKET_KW OPENBRACKET_KW ASSIGN_KW COLON_KW SEMICOLON_KW NOT_KW OR_KW AND_KW DOWNTO_KW UPTO_KW EXIT_KW RETURN_KW FOR_KW WHEN_KW END_KW DEFAULT_KW CASE_KW SWITCH_KW WHILE_KW DO_KW ELSE_KW THEN_KW IF_KW PROCEDURE_KW BOOLEAN_KW CHARACTER_KW REAL_KW INTEGER_KW MAIN_KW PROGRAM_KW DIGIT NONZERO_DIGIT LETTER
+%type <EVal> declarations_list declarations type_specifiers declarator_list declarator dec range initializer initializer_list procedure_list procedure parameters block statement_list statement arguments_list multi_arguments counter case_element expressions constant_expressions bool_expressions arithmetic_expressions
 
 %code {
-  private ArrayList<Quadruple> quadruples = new ArrayList<>();
-  private SymbolTable symbolTable = new SymbolTable();
+  public static final String TYPE_STRING_INTEGER = "int";
+	public static final String TYPE_STRING_REAL = "double";
+	public static final String TYPE_STRING_CHAR = "char";
+	public static final String TYPE_STRING_BOOLEAN = "int";
 
+	private static final String tempStr = "TempVar";
+	public static final String startStr = "StartVar";
+	public static final String sizeStr = "SizeVar";
+	public static final String indexStr = "IndexVar";
+	public static final String condStr = "ConditionVar";
+
+	public static String lexIdentifier;
+	public static int lexInt;
+	public static double lexReal;
+	public static boolean lexBoolean;
+	public static char lexChar;
+
+	private ArrayList<Quadruple> quadruples = new ArrayList<>();
+	private SymbolTable symbolTable = new SymbolTable();
+	public static PrintStream writer;
+
+	private int tempCounter = 0;
+
+	public String fileAddress;
 
   private void emit(String operation, String arg0, String arg1, String result) {
   		quadruples.add(new Quadruple(operation, arg0, arg1, result));
