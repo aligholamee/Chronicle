@@ -378,6 +378,17 @@ constant_expressions:
 	| REALCONST {
 		System.out.println("Rule 23.2: " +
 			"constant_expressions -> REALCONST");
+      $$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_REAL, false);
+  		((EVal)$$).type = EVal.TYPE_CODE_REAL;
+  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit(":=", String.valueOf(lexReal), null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+
 	}
 	| CHARCONST {
 		System.out.println("Rule 23.3: " +
