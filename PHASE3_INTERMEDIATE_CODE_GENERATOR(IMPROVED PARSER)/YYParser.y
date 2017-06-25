@@ -340,6 +340,12 @@ expressions:
 	constant_expressions {
 		System.out.println("Rule 22.1: " +
 			"expressions -> constant_expressions");
+      $$ = new EVal();
+  		((EVal)$$).place = $1.place;
+  		((EVal)$$).type = $1.type;
+  		((EVal)$$).nextList = $1.nextList;
+  		((EVal)$$).trueList = $1.trueList;
+  		((EVal)$$).falseList = $1.falseList;
 	}
 	| bool_expressions {
 		System.out.println("Rule 22.2: " +
