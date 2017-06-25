@@ -30,59 +30,63 @@
 	public static PrintStream writer;
 
 	private int tempCounter = 0;
-
 	public String fileAddress;
-  String inputCode = ".\\files\\Code.shl";
-  String outputCode = "E:\\Dev C++\\TEMP - Programs\\compiler.c";
-  String output = "output.txt";
+  
+  public static void main(String args[]) throws IOException {
+        YYParser yyparser;
+        final Yylex lexer;
 
-  if (args.length == 1) {
-      inputCode = args[0];
-      outputCode = args[0] + ".c";
-      output = args[0] + ".txt";
-  }
-  if (args.length == 2) {
-      inputCode = args[0];
-      outputCode = args[1];
-      output = args[0] + ".txt";
-  }
-  if (args.length == 3) {
-      inputCode = args[0];
-      outputCode = args[1];
-      output = args[2];
-  }
+        String inputCode = ".\\files\\Code.shl";
+        String outputCode = "E:\\Dev C++\\TEMP - Programs\\compiler.c";
+        String output = "output.txt";
 
-  writer = new PrintStream(new File(output));
-  lexer = new Yylex(new InputStreamReader(new FileInputStream(inputCode)));
+        if (args.length == 1) {
+            inputCode = args[0];
+            outputCode = args[0] + ".c";
+            output = args[0] + ".txt";
+        }
+        if (args.length == 2) {
+            inputCode = args[0];
+            outputCode = args[1];
+            output = args[0] + ".txt";
+        }
+        if (args.length == 3) {
+            inputCode = args[0];
+            outputCode = args[1];
+            output = args[2];
+        }
 
-  yyparser = new YYParser(new Lexer() {
+        writer = new PrintStream(new File(output));
+        lexer = new Yylex(new InputStreamReader(new FileInputStream(inputCode)));
 
-      @Override
-      public int yylex() {
-          int yyl_return = -1;
-          try {
-              yyl_return = lexer.yylex();
-          } catch (IOException e) {
-              System.err.println("IO error: " + e);
-          }
-          return yyl_return;
-      }
+        yyparser = new YYParser(new Lexer() {
 
-      @Override
-      public void yyerror(String error) {
-          System.err.println("Error! " + error);
-      }
+            @Override
+            public int yylex() {
+                int yyl_return = -1;
+                try {
+                    yyl_return = lexer.yylex();
+                } catch (IOException e) {
+                    System.err.println("IO error: " + e);
+                }
+                return yyl_return;
+            }
 
-      @Override
-      public Object getLVal() {
-          return null;
-      }
-  });
-  yyparser.fileAddress = outputCode;
-  yyparser.parse();
+            @Override
+            public void yyerror(String error) {
+                System.err.println("Error! " + error);
+            }
 
-  return;
-}
+            @Override
+            public Object getLVal() {
+                return null;
+            }
+        });
+        yyparser.fileAddress = outputCode;
+        yyparser.parse();
+
+        return;
+	}
 
   private void emit(String operation, String arg0, String arg1, String result) {
   		quadruples.add(new Quadruple(operation, arg0, arg1, result));
