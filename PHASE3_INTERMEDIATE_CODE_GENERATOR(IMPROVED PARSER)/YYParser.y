@@ -374,6 +374,17 @@ constant_expressions:
 	NUMCONST {
 		System.out.println("Rule 23.1: " +
 			"constant_expressions -> NUMCONST");
+      $$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_INTEGER, false);
+  		((EVal)$$).type = EVal.TYPE_CODE_INTEGER;
+  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit(":=", String.valueOf(lexInt), null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+
 	}
 	| REALCONST {
 		System.out.println("Rule 23.2: " +
