@@ -453,3 +453,61 @@ pair:
 		System.out.println("Rule 26.1: " +
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
 	}
+%%
+//SymbolTable
+class SymbolTable {
+
+	public static final int NOT_IN_SYMBOL_TABLE = -1;
+
+	public ArrayList<String> names;
+	public ArrayList<Integer> types;
+	public ArrayList<Boolean> arrays;
+
+	public SymbolTable() {
+		names = new ArrayList<>();
+		types = new ArrayList<>();
+		arrays = new ArrayList<>();
+	}
+
+	public int lookUp(String name) {
+		return names.indexOf(name);
+	}
+
+	public boolean addToSymbolTable(String name, int type, boolean array) {
+		if (lookUp(name) == -1) {
+			names.add(name);
+			types.add(type);
+			arrays.add(array);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+    public String toString() {
+        if(names.size() == 0)
+            return null;
+        String res = "";
+        for(int i = 0; i < names.size(); i++) {
+            switch (types.get(i)) {
+                case EVal.TYPE_CODE_INTEGER:
+                    res += "\t" + YYParser.TYPE_STRING_INTEGER;
+                    break;
+                case EVal.TYPE_CODE_REAL:
+                    res += "\t" + YYParser.TYPE_STRING_REAL;
+                    break;
+                case EVal.TYPE_CODE_CHAR:
+                    res += "\t" + YYParser.TYPE_STRING_CHAR;
+                    break;
+                case EVal.TYPE_CODE_BOOLEAN:
+                    res += "\t" + YYParser.TYPE_STRING_BOOLEAN;
+                    break;
+                case EVal.TYPE_CODE_RANGE:
+                    continue;
+            }
+            res += (arrays.get(i) ? " *" : " ") + names.get(i) + ";\n";
+        }
+        return res;
+	}
+
+}
