@@ -7,43 +7,106 @@
 %token ID NUMCONST REALCONST CHARCONST BOOLCONST SHARP_KW MOD_KW DIV_KW MUL_KW SUB_KW ADD_KW SINGLE_QUOTE_KW DOT_KW LTE_KW GTE_KW NEQ_KW EQ_KW GT_KW LT_KW COMMA_KW CLOSEPARENTHESIS_KW OPENPARENTHESIS_KW CLOSEACCOLADE_KW OPENACCOLADE_KW CLOSEBRACKET_KW OPENBRACKET_KW ASSIGN_KW COLON_KW SEMICOLON_KW NOT_KW OR_KW AND_KW DOWNTO_KW UPTO_KW EXIT_KW RETURN_KW FOR_KW WHEN_KW END_KW DEFAULT_KW CASE_KW SWITCH_KW WHILE_KW DO_KW ELSE_KW THEN_KW IF_KW PROCEDURE_KW BOOLEAN_KW CHARACTER_KW REAL_KW INTEGER_KW MAIN_KW PROGRAM_KW DIGIT NONZERO_DIGIT LETTER
 
 %code {
-    static PrintStream writer;
+  private ArrayList<Quadruple> quadruples = new ArrayList<>();
+  private SymbolTable symbolTable = new SymbolTable();
 
-    public static void main(String args[]) throws IOException, FileNotFoundException {
-        YYParser yyparser;
-        final Yylex lexer;
 
-        writer = new PrintStream(new File("yacc_tool_output.txt"));
-        lexer = new Yylex(new InputStreamReader(new FileInputStream(".\\Global_Test\\globalTest2.shl")));
+  private void emit(String operation, String arg0, String arg1, String result) {
+  		quadruples.add(new Quadruple(operation, arg0, arg1, result));
+  	}
 
-        yyparser = new YYParser(new Lexer() {
 
-            @Override
-            public int yylex() {
-                int yyl_return = -1;
-                try {
+  		private void backpatch(ArrayList<Integer> list, int quadNumber) {
+  		for (int i = 0; i < list.size(); i++)
+  			quadruples.get(list.get(i)).result = String.valueOf(quadNumber);
+  	}
 
-                    yyl_return = lexer.yylex();
-                } catch (IOException e) {
-                    System.err.println("IO error :" + e);
-                }
-                return yyl_return;
-            }
+  		private void backpatch(int quadNumber, int destination) {
+  		quadruples.get(quadNumber).result = String.valueOf(destination);
+  	}
 
-            @Override
-            public void yyerror(String error) {
-                System.err.println("Error : " + error);
-            }
+  		private String newTemp(int type, boolean array) {
+  		String name = tempStr + tempCounter++;
+  		symbolTable.addToSymbolTable(name, type, array);
+  		return name;
+  	}
 
-            @Override
-            public Object getLVal() {
-                return null;
-            }
-        });
-        yyparser.parse();
 
-        return;
-    }
+  		private int nextQuad() {
+  		return quadruples.size();
+  	}
+
+
+  		private String getTypeString(int typeCode){
+  		switch(typeCode){
+  			case EVal.TYPE_CODE_INTEGER:
+  				return TYPE_STRING_INTEGER;
+  			case EVal.TYPE_CODE_REAL:
+  				return TYPE_STRING_REAL;
+  			case EVal.TYPE_CODE_CHAR:
+  				return TYPE_STRING_CHAR;
+  			case EVal.TYPE_CODE_BOOLEAN:
+  				return TYPE_STRING_BOOLEAN;
+  			case EVal.TYPE_CODE_UNKNOWN:
+  			case EVal.TYPE_CODE_RANGE:
+  			default:
+  				return null;
+  		}
+  	}
+
+
+
+  		private void exportIntermediateCode() {
+  		DataOutputStream dos = null;
+  		try {
+  			dos = new DataOutputStream(new FileOutputStream(fileAddress));
+  		} catch (FileNotFoundException e) {
+  			e.printStackTrace();
+  		}
+
+  		try {
+  			dos.writeBytes("#include <stdio.h>\n\nint main() {\n\t// ////////////////// Symbol Table \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
+  			dos.writeBytes(symbolTable.toString());
+  			dos.writeBytes("\n\t// ////////////////// Quadruples \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ \\\\\n\n");
+  			// Backpatch of error controllers.
+  			backpatch(EVal.arrayIndexOutOfBoundList, (quadruples.size() + 1)); // Array index out of bound error.
+  			backpatch(EVal.invalidArraySizeList, (quadruples.size() + 2)); // Invalid array size error.
+  			for (int i = 0; i < quadruples.size() && i < 100; i++) {
+  				dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadruples.get(i) + "\n");
+  			}
+  			for (int i = 100; i < quadruples.size(); i++) {
+  				dos.writeBytes(Quadruple.LINE_STR + i + ":" + "\t\t" + quadruples.get(i) + "\n");
+  			}
+  			// Normal Finish
+  			if(quadruples.size() < 100)
+  				dos.writeBytes(Quadruple.LINE_STR + quadruples.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
+  					"\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
+  			else
+  				dos.writeBytes(Quadruple.LINE_STR + quadruples.size() + ":" + "\t\tprintf(\"Process is terminated with no error.\\n\");\n" +
+  					"\t\t\t\tgetchar();\n\t\t\t\treturn 0;\n");
+
+  			// Array index out of bound error.
+  			if(quadruples.size() < 100)
+  				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
+  					"\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
+  			else
+  				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 1) + ":" + "\t\tprintf(\"Array Error: Index out of bound!\\n\");\n" +
+  					"\t\t\t\tgetchar();\n\t\t\treturn -1;\n");
+
+  			// Invalid array size error.
+  			if(quadruples.size() < 100)
+  				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
+  					"\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
+  			else
+  				dos.writeBytes(Quadruple.LINE_STR + (quadruples.size() + 2) + ":" + "\t\tprintf(\"Array Error: Invalid array size!\\n\");\n" +
+  					"\t\t\t\tgetchar();\n\t\t\treturn -2;\n");
+
+  			dos.writeBytes("}\n");
+  		} catch (IOException e) {
+  			e.printStackTrace();
+  		}
+
+  	}
 }
 // Precedences go increasing, so "then" < "else".
 %left OR_KW
@@ -59,22 +122,27 @@ program:
     PROGRAM_KW ID MAIN_KW block {
 		System.out.println("Rule 1.2: " +
 			"program -> PROGRAM_KW ID MAIN_KW block");
+		exportIntermediateCode();
 	}
 	| PROGRAM_KW ID declarations_list MAIN_KW block {
 		System.out.println("Rule 1.3: " +
 			"program -> PROGRAM_KW ID declarations_list MAIN_KW block");
+		exportIntermediateCode();
 	}
 	| PROGRAM_KW ID procedure_list MAIN_KW block {
 		System.out.println("Rule 1.4: " +
 			"program -> PROGRAM_KW ID procedure_list MAIN_KW block");
+		exportIntermediateCode();
 	}
 	| PROGRAM_KW ID declarations_list procedure_list MAIN_KW block {
 		System.out.println("Rule 1.5: " +
 			"program -> PROGRAM_KW ID declarations_list procedure_list MAIN_KW block");
+		exportIntermediateCode();
 	}
   | PROGRAM_KW ID MAIN_KW {
   System.out.println("Rule 1.1: " +
     "program -> PROGRAM_KW ID MAIN_KW");
+		exportIntermediateCode();
 }
 
 declarations_list:
