@@ -446,6 +446,10 @@ arithmetic_expressions:
 	| SUB_KW expressions {
 		System.out.println("Rule 25.6: " +
 			"arithmetic_expressions -> SUB_KW expressions");
+      $$ = new EVal();
+  		((EVal)$$).place = newTemp($2.type, false);
+  		((EVal)$$).type = $2.type;
+  		emit("usub", $2.place, null, ((EVal)$$).place);
 	}
 
 pair:
