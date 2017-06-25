@@ -454,6 +454,81 @@ pair:
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
 	}
 %%
+
+class Quadruple {
+
+	public static final String LINE_STR = "Line";
+
+	public String operation;
+	public String arg0;
+	public String arg1;
+	public String result;
+
+	public Quadruple(String operation, String arg0, String arg1, String result) {
+		this.operation = operation;
+		this.arg0 = arg0;
+		this.arg1 = arg1;
+		this.result = result;
+	}
+
+	@Override
+	public String toString() {
+		switch(operation.toLowerCase()){
+			case "goto":
+				return operation + " " + LINE_STR + result + ";";
+			case "check":
+				return "if (" + arg0 + ") goto " + LINE_STR + result + ";";
+			case "<":
+			case "<=":
+			case ">":
+			case ">=":
+			case "+":
+			case "-":
+			case "*":
+			case "/":
+			case "%":
+				return result + " = " + arg0 + " " + operation + " " + arg1 + ";";
+			case "=":
+				return result + " = " + arg0 + " " + "==" + " " + arg1 + ";";
+			case "<>":
+				return result + " != " + arg0 + " " + "==" + " " + arg1 + ";";
+			case "usub":
+				return result + " = -" + arg0 + ";";
+			case ":=":
+				return result + " = " + arg0 + ";";
+			case "cast":
+				return result + " = (" + arg1 + ") " + arg0 + ";";
+			case "init":
+				return arg1 + " " + result + ";";
+			case "iprint":
+				return "printf(\"%s = %d\\n\", \"" + result + "\", " + result + ");";
+			case "rprint":
+				return "printf(\"%s = %f\\n\", \"" + result + "\", " + result + ");";
+			case "cprint":
+				return "printf(\"%s = '%c'\\n\", \"" + result + "\", " + result + ");";
+			case "bprint":
+				return "printf(\"%s = %s\\n\", \"" + result + "\", " + result + " ? \"true\" : \"false\");";
+			case "aiprint":
+				return "printf(\"%s[%d] = %d\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+			case "arprint":
+				return "printf(\"%s[%d] = %f\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+			case "acprint":
+				return "printf(\"%s[%d] = '%c'\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "]);";
+			case "abprint":
+				return "printf(\"%s[%d] = %s\\n\", \"" + result + "\", " + arg0 + ", " + result + "[" + arg1 + "] ? \"true\" : \"false\");";
+			case "[]=":
+				return "*(" + result + " + " + arg1 + ") = " + arg0 + ";";
+			case "=[]":
+				return result + " = *(" + arg0 + " + " + arg1 + ");";
+			case "malloc":
+				return result + " = " + "malloc(sizeof(" + arg0 + ") * " + arg1+ ");";
+			default:
+				return null;
+		}
+	}
+}
+
+
 //SymbolTable
 class SymbolTable {
 
