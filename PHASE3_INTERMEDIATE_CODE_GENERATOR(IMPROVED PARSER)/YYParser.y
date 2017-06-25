@@ -382,6 +382,17 @@ constant_expressions:
 	| CHARCONST {
 		System.out.println("Rule 23.3: " +
 			"constant_expressions -> CHARCONST");
+      $$ = new EVal();
+  		((EVal)$$).place = newTemp(EVal.TYPE_CODE_CHAR, false);
+  		((EVal)$$).type = EVal.TYPE_CODE_CHAR;
+  		((EVal)$$).trueList = EVal.makeList(nextQuad() + 1);
+  		((EVal)$$).falseList = EVal.makeList(nextQuad() + 2);
+  		((EVal)$$).nextList = EVal.merge(((EVal)$$).trueList, ((EVal)$$).falseList);
+
+  		emit(":=", "'" + String.valueOf(lexChar) + "'", null, ((EVal)$$).place);
+  		emit("check", ((EVal)$$).place, null, String.valueOf(nextQuad() + 2)); // result may be backpatched.
+  		emit("goto", null, null, String.valueOf(nextQuad() + 1)); // result may be backpatched.
+
 	}
 	| BOOLEAN_KW {
 		System.out.println("Rule 23.4: " +
