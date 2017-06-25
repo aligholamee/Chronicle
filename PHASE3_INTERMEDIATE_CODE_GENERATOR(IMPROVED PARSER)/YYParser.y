@@ -452,6 +452,16 @@ pair:
 	OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW {
 		System.out.println("Rule 26.1: " +
 			"pair: OPENPARENTHESIS_KW expressions COMMA_KW expressions CLOSEPARENTHESIS_KW");
+
+      $$ = new EVal();
+
+
+  		((EVal)$$).place = $2.place;
+  		((EVal)$$).type = $2.type;
+
+
+  		((EVal)$$).place1 = $4.place;
+  		((EVal)$$).type1 = $4.type;
 	}
 %%
 class EVal {
